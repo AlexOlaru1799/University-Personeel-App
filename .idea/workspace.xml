@@ -4,20 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de21c280-6d1a-432b-af63-a1aa009762ed" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/folder_proba/fisier" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="e079d6f7-b89d-4338-bba0-7c8a1ae51783" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/T1E1 - Universitate.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/pom.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="210ayuBn0Ylk2DjiEqdlCooA5E2" />
+  <component name="ProjectId" id="210xDwCZVBAC0px1cEfsknwSR0D" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -25,16 +37,19 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="advanced.settings" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="de21c280-6d1a-432b-af63-a1aa009762ed" name="Changes" comment="" />
-      <created>1637080718051</created>
+      <changelist id="e079d6f7-b89d-4338-bba0-7c8a1ae51783" name="Changes" comment="" />
+      <created>1637091690681</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1637080718051</updated>
+      <updated>1637091690681</updated>
     </task>
     <servers />
   </component>
