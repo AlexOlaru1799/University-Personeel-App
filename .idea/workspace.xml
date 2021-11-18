@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e079d6f7-b89d-4338-bba0-7c8a1ae51783" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/T1E1 - Universitate.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/T1E1 - Universitate/pom.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Materie.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Orar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Raport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -37,6 +34,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -52,5 +50,16 @@
       <updated>1637091690681</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
