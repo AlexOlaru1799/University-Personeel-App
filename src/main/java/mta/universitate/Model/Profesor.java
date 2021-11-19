@@ -1,4 +1,4 @@
-package universitate;
+package mta.universitate.Model;
 
 public class Profesor extends Angajat{
 

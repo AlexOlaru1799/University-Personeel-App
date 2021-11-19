@@ -1,4 +1,4 @@
-package main.java.universitate.Model;
+package mta.universitate.Model;
 
 public class Dotare {
     String denumire;

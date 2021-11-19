@@ -5,14 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e079d6f7-b89d-4338-bba0-7c8a1ae51783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/AnDeStudiu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universitate/Model/AnDeStudiu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Administrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Administrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Angajat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Angajat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Functie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Functie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/IPersoana.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/IPersoana.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/AnDeStudiu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/AnDeStudiu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/Dotare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Dotare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/GrupaDeStudiu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/GrupaDeStudiu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/SalaDeClasa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/SalaDeClasa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/Specializare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Specializare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Persoana.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Persoana.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Profesor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Profesor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Secretar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Secretar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Student.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,11 +63,11 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="universitate.Main" />
-      <module name="t1e1-c114c" />
+      <option name="MAIN_CLASS_NAME" value="mta.universitate.Model.Main" />
+      <module name="T1E1-Universitate" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="universitate.*" />
+          <option name="PATTERN" value="mta.universitate.Model.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

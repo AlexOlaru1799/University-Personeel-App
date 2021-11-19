@@ -1,4 +1,4 @@
-package main.java.universitate.Model;
+package mta.universitate.Model;
 
 enum TipSala{
     Amfiteatru,Laborator

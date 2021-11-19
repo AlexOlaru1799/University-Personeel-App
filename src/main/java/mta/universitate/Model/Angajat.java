@@ -1,4 +1,4 @@
-package universitate;
+package mta.universitate.Model;
 
 public class Angajat extends Persoana{
     private Functie functie;

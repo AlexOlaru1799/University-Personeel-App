@@ -1,4 +1,4 @@
-package universitate;
+package mta.universitate.Model;
 
 public interface IPersoana {
     public void adaugaPersoana(Persoana P);

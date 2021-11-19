@@ -1,4 +1,4 @@
-package universitate.Model;
+package mta.universitate.Model;
 
 public class GrupaDeStudiu {
 
