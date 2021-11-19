@@ -5,25 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e079d6f7-b89d-4338-bba0-7c8a1ae51783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Materie.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Orar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universitate/Module/Raport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Administrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Administrator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Angajat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Angajat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Functie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Functie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/IPersoana.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/IPersoana.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/AnDeStudiu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/AnDeStudiu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/Dotare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Dotare.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/GrupaDeStudiu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/GrupaDeStudiu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/SalaDeClasa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/SalaDeClasa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Model/Specializare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Specializare.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Persoana.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Persoana.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Profesor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Profesor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Secretar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Secretar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Module/Materie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Materie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Module/Orar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Orar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universitate/Module/Raport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mta/universitate/Model/Raport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
