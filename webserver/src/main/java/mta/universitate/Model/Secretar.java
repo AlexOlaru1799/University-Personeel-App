@@ -3,6 +3,13 @@ package mta.universitate.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * Clasa Secretar
+ *
+ * Clasa utilizata pentru a implementa utilitatile secretarului
+ *
+ */
 @RestController
 public class Secretar extends Angajat{
 
