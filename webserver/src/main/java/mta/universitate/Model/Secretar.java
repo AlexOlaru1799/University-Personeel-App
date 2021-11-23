@@ -1,5 +1,9 @@
 package mta.universitate.Model;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class Secretar extends Angajat{
 
     public Secretar()
@@ -12,6 +16,30 @@ public class Secretar extends Angajat{
         super(_nume,_prenume,_dataNasterii);
     }
 
+    @RequestMapping("/studenti")
+    public String afiseazaStudenti()
+    {
+
+        return "<table border >" +
+                "  <tr>" +
+                "    <th>Grupa</th>" +
+                "    <th>Nume</th>" +
+                "    <th>Prenume</th>" +
+                "  </tr>" +
+                "  <tr>" +
+                "    <td>C114C</td>" +
+                "    <td>Marian</td>" +
+                "    <td>Razvan</td>" +
+                "  </tr>" +
+                "  <tr>" +
+                "    <td>C114C</td>" +
+                "    <td>Chiforiuc</td>" +
+                "    <td>Gabriela</td>" +
+                "  </tr>" +
+                "</table>";
+    }
+
+
     public void afiseazaStatistici(Student S)
     {
         System.out.print("Afisare statistici student "+
@@ -19,18 +47,15 @@ public class Secretar extends Angajat{
     }
 
 
-
-    //TO DO statistici pentru grupa
-//    public void afiseazaStatistici(Grupa G)
-//    {
-//        System.out.print("Afisare statistici student "+
-//                G.getNume());
-//    }
+    public void afiseazaStatistici(GrupaDeStudiu G)
+    {
+        System.out.print("Afisare gurpa de studiu");
+    }
 
     //TO DO statistici pentru an de studiu
-//    public void afiseazaStatistici(AnDeStudiu A)
-//    {
-//        System.out.print("Afisare statistici student "+
-//                G.getNume());
-//    }
+    public void afiseazaStatistici(AnDeStudiu A)
+    {
+        System.out.print("An "+
+                A.getAn());
+    }
 }
