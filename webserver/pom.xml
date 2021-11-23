@@ -13,9 +13,15 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>T1E1 - C114C</name>
 	<description>Webserver</description>
+
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
+		<maven.compiler.version>3.8.1</maven.compiler.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -26,6 +32,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>9.5.0.jre17-preview</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.25</version>
 		</dependency>
 	</dependencies>
 
@@ -38,10 +55,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
+				<configuration>
+					<source>16</source>
+					<target>16</target>
+				</configuration>
             </plugin>
         </plugins>
 	</build>
