@@ -9,5 +9,11 @@ public class Main {
         A.adaugaPersoana(s);
         System.out.print("\n");
         A.afiseazaStudent(s);
+
+        Database db1;
+        // refers to the only object of Database
+        db1= Database.getInstance();
+        System.out.print(db1.getConnection());
+        db1.executeQuery("select * from studenti ");
     }
 }
