@@ -12,7 +12,7 @@ import java.sql.Statement;
 public class Database {
     private static Database dbObject;
     private Connection con;
-    Database() {
+    private Database() {
         String ConnectionUrl="jdbc:sqlserver://pituserver.database.windows.net:1433;database=secretariatatm;user=pituAdmin@pituserver;password=1q2w3e4rT;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
         try {
             con = DriverManager.getConnection(ConnectionUrl);
@@ -40,21 +40,22 @@ public class Database {
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             System.out.println("S-a facut conexiunea.Prima coloana este:");
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1)); //nu stiu daca aici ia doar prima coloana
-            }
+           /* while (resultSet.next()) {
+                System.out.println(resultSet.getString(2)); //nu stiu daca aici ia doar prima coloana
+            }*/
             System.out.println("Incerc sa afisez toate coloanele:");
             ResultSetMetaData metadata = resultSet.getMetaData();
             int columnCount = metadata.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-                System.out.print(metadata.getColumnName(i) + ", ");
+                System.out.print(metadata.getColumnName(i) + "\t");
                 }
             System.out.println();
                 while (resultSet.next()) {
                     String row = "";
                     for (int i = 1; i <= columnCount; i++) {
-                        row += resultSet.getString(i) + ", ";
+                        row += resultSet.getString(i) + "\t";
                     }
+                    System.out.println();
                     System.out.print(row);
                 }
             return resultSet;}
