@@ -1,30 +1,25 @@
 package mta.universitate.Model;
 
-public class Student extends Persoana{
-    private int numarMatricol;
+public class Student extends Person {
+    private String identifier;
 
     //To do adaugare grupa aici
     //private Grupa grupa;
 
-    public Student(String _nume,String _prenume,
-                   String _dataNasterii)
+    public Student(String name, String surname,
+                   String birthDate)
     {
-        super(_nume,_prenume,_dataNasterii);
+        super(name, surname, birthDate);
     }
 
     @Override
-    public void adaugaPersoana(Persoana P) {
-        System.out.print("adaugaPersoana din Student");
+    public void addDocument(){
+        System.out.print("AddDocument");
     }
 
-    @Override
-    public void adaugaDocument(){
-        System.out.print("adaugaDocument din Student");
-    }
-
-    public void solicitaRaport()
+    public void fillReport()
     {
-        System.out.print("solicitaRaport din Student");
+        System.out.print("fillReport");
     }
 
 }
