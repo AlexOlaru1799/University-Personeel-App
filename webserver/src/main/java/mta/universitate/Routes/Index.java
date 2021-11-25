@@ -14,7 +14,7 @@ public class Index {
     @RequestMapping("/")
     public String main() throws SQLException {
 
-        return "<h1>Hello<h1>";
+        return "<h1>Index page<h1>";
     }
 }
 

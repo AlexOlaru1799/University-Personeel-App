@@ -19,11 +19,6 @@ public class ReportsManager {
         Report rap2 = new Report("Studentul Mihai Ionescu solicita o adeverinta pentru medic", ReportType.MEDICAL_CERTIFICATE);
         Report rap3 = new Report("Studentul Iulia Ionel doreste sa se transfere la grupa C112C", ReportType.STUDY_GROUP_CHANGE);
 
-
-        reports.add(rap1);
-        reports.add(rap2);
-        reports.add(rap3);
-
         Database DB = Database.getInstance();
 
         ResultSet result = DB.executeQuery("Select rapoarte.ID_Raport as \"ID Raport\", tip_rapoarte.Tip_Raport as \"Tip Raport\", studenti.nume FROM rapoarte " +
@@ -73,13 +68,5 @@ public class ReportsManager {
         return  stringBuilder.toString();
 
     }
-
      */
-
-
-
-
-
-
-
 }
