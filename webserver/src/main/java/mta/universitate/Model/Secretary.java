@@ -28,7 +28,12 @@ public class Secretary extends Employee {
     }
 
 
+    public void viewStudentProfile()
+    {
 
+    }
+
+    //TO DO
     public void showStatistics(Student S)
     {
         System.out.print("Showing stats for student "+
