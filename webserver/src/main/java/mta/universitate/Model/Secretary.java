@@ -21,10 +21,9 @@ public class Secretary extends Employee {
     {
         super();
     }
-    public Secretary(String name, String surname,
-                     String birthDate)
+    public Secretary(String name, String surname)
     {
-        super(name, surname, birthDate);
+        super(name, surname);
     }
 
 

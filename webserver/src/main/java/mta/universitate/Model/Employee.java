@@ -7,10 +7,9 @@ public class Employee extends Person {
     {
         super();
     }
-    public Employee(String name, String surname,
-                    String birthDate)
+    public Employee(String name, String surname)
     {
-        super(name, surname, birthDate);
+        super(name, surname);
     }
 
 

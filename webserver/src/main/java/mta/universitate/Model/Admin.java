@@ -6,10 +6,9 @@ public class Admin extends Employee {
     {
         super();
     }
-    public Admin(String _nume, String _prenume,
-                 String _dataNasterii)
+    public Admin(String _nume, String _prenume)
     {
-        super(_nume,_prenume,_dataNasterii);
+        super(_nume,_prenume);
     }
 
     public void showProfessors()

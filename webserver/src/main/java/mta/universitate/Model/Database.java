@@ -1,5 +1,8 @@
 package mta.universitate.Model;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +16,7 @@ public class Database {
     private static Database dbObject;
     private Connection con;
     private Database() {
-        String ConnectionUrl="jdbc:sqlserver://pituserver.database.windows.net:1433;database=secretariatatm;user=pituAdmin@pituserver;password=1q2w3e4rT;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        String ConnectionUrl="jdbc:sqlserver://pituserver.database.windows.net:1433;database=secretariatatm1;user=pituAdmin@pituserver;password=1q2w3e4rT;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
         try {
             con = DriverManager.getConnection(ConnectionUrl);
         }
@@ -111,25 +114,67 @@ public class Database {
     }
 
 
-    public void createStudent(Student S)
-    {
-        String firstName=S.getName(), lastName=S.getSurname();
-        int studyYear=S.getStudyYear().getYear();
-        int idGroup=S.getStudyGroup().getId();
-        int idSpecialization=S.getSpecialization();
-        int income=S.getIncome();
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 
-        String username=firstName.toLowerCase(Locale.ROOT) + "."+lastName.toLowerCase(Locale.ROOT);
-        String password="student2021";
+    public String createStudent(Student S) throws NoSuchAlgorithmException, SQLException {
+        String firstName = S.getName(), lastName = S.getSurname();
+        int studyYear = S.getStudyYear().getYear();
+        int idGroup = S.getStudyGroup().getId();
+        int idSpecialization = S.getSpecialization();
+        int income = S.getIncome();
+
+        String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
+        String password = "student2021";
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+        String hashedPassword = bytesToHex(hash);
+        
+        
         int tipCont=100;
 
-        String query = "INSERT INTO utilizatori"+
-        "VALUES('"+username+"','"+password+"',"+String.valueOf(tipCont)+")";
+        //Adaugare cont student
+        String query = "INSERT INTO utilizatori "+
+        "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
+        executeQuery(query);
+
+        //Preluare ID cont student
+        query = "SELECT ID_User, Username\n" +
+                "FROM utilizatori\n" +
+                "WHERE Username = '"+ username + "' AND Password ='"+ hashedPassword + "'";
+
+        ResultSet result = executeQuery(query);
+
+        if(result == null)
+        {
+            System.out.print("Eroare la inserare student");
+            return "Error";
+        }
+
+        ResultSetMetaData metadata = result.getMetaData();
+        String idUser = result.getString(1);
+
+
+        //Adaugare student
+        query = "INSERT INTO studenti\n" +
+                "VALUES('" + lastName + "','" + firstName + "'," + String.valueOf(idSpecialization)
+                + "," + String.valueOf(idGroup) + "," + String.valueOf(income) + ","
+                + String.valueOf(studyYear) + ","+ idUser +")";
 
         executeQuery(query);
-        //TO DO adauga studentul
-//        query = "INSERT INTO studenti\n" +
-//                "VALUES('Marian','Razvan',2000,114,300,3,1010)";
+
+        return "OK";
     }
 
     public Connection getConnection() {
