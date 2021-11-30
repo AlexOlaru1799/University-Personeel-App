@@ -113,7 +113,6 @@ public class Database {
         return executeQuery(query);
     }
 
-
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {
@@ -176,6 +175,55 @@ public class Database {
 
         return "OK";
     }
+
+    public String createTeacher(Professor P) throws NoSuchAlgorithmException, SQLException {
+        String firstName = P.getName(), lastName = P.getSurname();
+        int salary = P.getSalary();
+        int tipCont = 200;
+
+        String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
+        String password = "profesor2021";
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+        String hashedPassword = bytesToHex(hash);
+
+        //Adaugare cont profesor
+        String query = "INSERT INTO utilizatori "+
+                "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
+        executeQuery(query);
+
+        //Preluare ID cont profesor
+        query = "SELECT ID_User, Username\n" +
+                "FROM utilizatori\n" +
+                "WHERE Username = '"+ username + "' AND Password ='"+ hashedPassword + "'";
+
+        ResultSet result = executeQuery(query);
+
+        if(result == null)
+        {
+            System.out.print("Eroare la inserare profesor");
+            return "Error";
+        }
+
+        ResultSetMetaData metadata = result.getMetaData();
+        String idUser = result.getString(1);
+
+
+        //Adaugare student
+        query = "INSERT INTO angajati\n" +
+                "VALUES(7,'" + lastName + "','" + firstName + "'," + String.valueOf(salary)
+                + "," + String.valueOf(idUser) + ")";
+
+        executeQuery(query);
+
+
+
+        return "OK";
+    }
+
+
 
     public Connection getConnection() {
         return con;

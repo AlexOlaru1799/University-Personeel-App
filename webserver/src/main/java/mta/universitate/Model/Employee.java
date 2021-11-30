@@ -2,6 +2,7 @@ package mta.universitate.Model;
 
 public class Employee extends Person {
     private Position position;
+    private int salary;
 
     public Employee()
     {
@@ -35,5 +36,13 @@ public class Employee extends Person {
     public void showGrades(Student S)
     {
 
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

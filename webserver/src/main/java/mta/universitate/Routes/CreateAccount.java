@@ -32,9 +32,14 @@ public class CreateAccount {
 
     @PostMapping("/createprofessor")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProfessor(@RequestBody Professor P)
-    {
-
+    public HttpStatus createProfessor(@RequestBody Professor P) throws SQLException, NoSuchAlgorithmException {
+        Database db1;
+        db1 = Database.getInstance();
+        String res = db1.createTeacher(P);
+        if (!Objects.equals(res, "OK")) {
+            return HttpStatus.NOT_FOUND;
+        }
+        return HttpStatus.OK;
     }
 
 }
