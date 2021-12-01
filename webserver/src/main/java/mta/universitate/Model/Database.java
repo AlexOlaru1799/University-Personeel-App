@@ -223,7 +223,41 @@ public class Database {
         return "OK";
     }
 
+    public String deleteStudent(String id) throws SQLException {
+        String query = "DELETE FROM note_studenti\n" +
+                "WHERE FK_Student = " + id;
 
+        executeQuery(query);
+
+        query="SELECT U.ID_User, S.ID_Student\n" +
+                "FROM studenti AS S\n" +
+                "INNER JOIN utilizatori AS U\n" +
+                "ON S.FK_ID_User = U.ID_User\n" +
+                "WHERE S.ID_Student = " + id;
+
+        ResultSet result = executeQuery(query);
+
+        if(result == null)
+        {
+            System.out.print("Eroare la inserare student");
+            return "Error";
+        }
+
+        ResultSetMetaData metadata = result.getMetaData();
+        String idUser = result.getString(1);
+
+        query = "DELETE FROM studenti\n" +
+                "WHERE ID_Student = " + id;
+        executeQuery(query);
+
+        query = "DELETE FROM utilizatori\n" +
+                "WHERE ID_User = " + id;
+
+        executeQuery(query);
+
+
+        return "OK";
+    }
 
     public Connection getConnection() {
         return con;
