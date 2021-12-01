@@ -6,16 +6,15 @@ public class Professor extends Employee {
     {
         super();
     }
-    public Professor(String name, String surname,
-                     String birthDate)
+    public Professor(String name, String surname, String birthDate)
     {
         super(name, surname, birthDate);
     }
 
-    public void giveGrade(Student S, int grade)
-    {
-        System.out.print("Professor gave grade " +
-                grade + "to student " +S.getName());
-    }
+//    public void giveGrade(Student S, int grade)
+//    {
+//        System.out.print("Professor gave grade " +
+//                grade + "to student " +S.getName());
+//    }
 
 }
