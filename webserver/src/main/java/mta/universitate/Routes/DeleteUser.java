@@ -23,7 +23,7 @@ public class DeleteUser {
             return HttpStatus.NOT_FOUND;
         }
 
-        
+
         return HttpStatus.OK;
     }
 

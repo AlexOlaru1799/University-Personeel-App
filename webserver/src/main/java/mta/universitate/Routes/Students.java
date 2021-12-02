@@ -14,6 +14,7 @@ public class Students {
     public String getStudents() throws SQLException {
         Database db1;
         db1 = Database.getInstance();
+
         ResultSet result = db1.executeQuery(
                 "SELECT [dbo].[studenti].Nume,[dbo].[studenti].Prenume,[dbo].[specializari].Denumire,[dbo].[grupe_studiu].denumire_grupa " +
                         "FROM [dbo].[studenti] " +

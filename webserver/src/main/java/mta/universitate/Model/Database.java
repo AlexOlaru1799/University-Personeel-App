@@ -36,6 +36,23 @@ public class Database {
         return dbObject;
     }
 
+    public String executeQueryDI(String query)
+    {
+        try {
+            if(con!=null){
+                Statement statement = con.createStatement();
+                statement.executeQuery(query);
+                return "OK";
+            }
+            else
+                System.out.println("Conexiunea nu s-a putut face");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Eroare";
+    }
+
     public ResultSet executeQuery(String query)
     {
         try {
@@ -135,7 +152,7 @@ public class Database {
         String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
         String password = "student2021";
 
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = MessageDigest.getInstance("MD5");
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
         String hashedPassword = bytesToHex(hash);
@@ -146,10 +163,10 @@ public class Database {
         //Adaugare cont student
         String query = "INSERT INTO utilizatori "+
         "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
-        executeQuery(query);
+        executeQueryDI(query);
 
         //Preluare ID cont student
-        query = "SELECT ID_User, Username\n" +
+        query = "SELECT ID_User as ID\n" +
                 "FROM utilizatori\n" +
                 "WHERE Username = '"+ username + "' AND Password ='"+ hashedPassword + "'";
 
@@ -160,9 +177,8 @@ public class Database {
             System.out.print("Eroare la inserare student");
             return "Error";
         }
-
-        ResultSetMetaData metadata = result.getMetaData();
-        String idUser = result.getString(1);
+        result.next();
+        String idUser = result.getString("ID");
 
 
         //Adaugare student
@@ -171,7 +187,7 @@ public class Database {
                 + "," + String.valueOf(idGroup) + "," + String.valueOf(income) + ","
                 + String.valueOf(studyYear) + ","+ idUser +")";
 
-        executeQuery(query);
+        executeQueryDI(query);
 
         return "OK";
     }
@@ -184,7 +200,7 @@ public class Database {
         String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
         String password = "profesor2021";
 
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = MessageDigest.getInstance("MD5");
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
         String hashedPassword = bytesToHex(hash);
@@ -192,10 +208,10 @@ public class Database {
         //Adaugare cont profesor
         String query = "INSERT INTO utilizatori "+
                 "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
-        executeQuery(query);
+        executeQueryDI(query);
 
         //Preluare ID cont profesor
-        query = "SELECT ID_User, Username\n" +
+        query = "SELECT ID_User as ID\n" +
                 "FROM utilizatori\n" +
                 "WHERE Username = '"+ username + "' AND Password ='"+ hashedPassword + "'";
 
@@ -207,8 +223,8 @@ public class Database {
             return "Error";
         }
 
-        ResultSetMetaData metadata = result.getMetaData();
-        String idUser = result.getString(1);
+        result.next();
+        String idUser = result.getString("ID");
 
 
         //Adaugare student
@@ -216,9 +232,7 @@ public class Database {
                 "VALUES(7,'" + lastName + "','" + firstName + "'," + String.valueOf(salary)
                 + "," + String.valueOf(idUser) + ")";
 
-        executeQuery(query);
-
-
+        executeQueryDI(query);
 
         return "OK";
     }
@@ -227,7 +241,7 @@ public class Database {
         String query = "DELETE FROM note_studenti\n" +
                 "WHERE FK_Student = " + id;
 
-        executeQuery(query);
+        executeQueryDI(query);
 
         query="SELECT U.ID_User, S.ID_Student\n" +
                 "FROM studenti AS S\n" +
@@ -248,16 +262,16 @@ public class Database {
 
         query = "DELETE FROM studenti\n" +
                 "WHERE ID_Student = " + id;
-        executeQuery(query);
+        executeQueryDI(query);
 
         query = "DELETE FROM utilizatori\n" +
                 "WHERE ID_User = " + id;
 
-        executeQuery(query);
-
-
+        executeQueryDI(query);
+        
         return "OK";
     }
+
 
     public Connection getConnection() {
         return con;
