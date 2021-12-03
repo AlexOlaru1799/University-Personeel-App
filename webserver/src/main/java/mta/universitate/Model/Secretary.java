@@ -17,14 +17,10 @@ import java.sql.SQLException;
 
 public class Secretary extends Employee {
 
-    public Secretary()
+    public Secretary(String name, String surname, String password,
+                     String birthDate, int salary)
     {
-        super();
-    }
-    public Secretary(String name, String surname,
-                     String birthDate)
-    {
-        super(name, surname, birthDate);
+        super(name, surname, password, birthDate, Position.SECRETARY, salary);
     }
 
 

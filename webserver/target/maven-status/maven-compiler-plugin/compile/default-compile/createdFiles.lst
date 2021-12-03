@@ -15,6 +15,7 @@ mta/universitate/Model/Position.class
 mta/universitate/Model/Report.class
 mta/universitate/Model/Professor.class
 mta/universitate/Model/ClassroomType.class
+mta/universitate/Routes/Admin.class
 mta/universitate/T1E1C114CApplication.class
 mta/universitate/Model/Classroom.class
 mta/universitate/Model/IPerson.class

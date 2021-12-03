@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @RestController
 public class Students {
-    @RequestMapping("/students")
+    @RequestMapping("/students/get-students")
     public String getStudents() throws SQLException {
         Database db1;
         db1 = Database.getInstance();

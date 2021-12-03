@@ -2,14 +2,10 @@ package mta.universitate.Model;
 
 public class Professor extends Employee {
 
-    public Professor()
+    public Professor(String name, String surname, String password,
+                     String birthDate, int salary)
     {
-        super();
-    }
-    public Professor(String name, String surname,
-                     String birthDate)
-    {
-        super(name, surname, birthDate);
+        super(name, surname, password, birthDate, Position.PROFESSOR, salary);
     }
 
     public void giveGrade(Student S, int grade)

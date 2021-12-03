@@ -2,15 +2,14 @@ package mta.universitate.Model;
 
 public class Employee extends Person {
     private Position position;
+    private int salary;
 
-    public Employee()
+    public Employee(String name, String surname, String password,
+                    String birthDate, Position position, int salary)
     {
-        super();
-    }
-    public Employee(String name, String surname,
-                    String birthDate)
-    {
-        super(name, surname, birthDate);
+        super(name, surname, password, birthDate);
+        this.position = position;
+        this.salary = salary;
     }
 
 

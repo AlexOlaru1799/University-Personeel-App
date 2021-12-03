@@ -6,10 +6,10 @@ public class Student extends Person {
     //To do adaugare grupa aici
     //private Grupa grupa;
 
-    public Student(String name, String surname,
+    public Student(String name, String surname, String password,
                    String birthDate)
     {
-        super(name, surname, birthDate);
+        super(name, surname, password, birthDate);
     }
 
     @Override

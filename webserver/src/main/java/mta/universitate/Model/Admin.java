@@ -2,32 +2,38 @@ package mta.universitate.Model;
 
 public class Admin extends Employee {
 
-    public Admin()
+    public Admin(String name, String surname, String password,
+                     String birthDate, int salary)
     {
-        super();
-    }
-    public Admin(String _nume, String _prenume,
-                 String _dataNasterii)
-    {
-        super(_nume,_prenume,_dataNasterii);
+        super(name, surname, password, birthDate, Position.ADMIN, salary);
     }
 
-    public void showProfessors()
-    {
+    public void getProfessors() {
         System.out.print("Show professors");
     }
 
-    public void showCourses()
-    {
+    public void getCourses() {
         System.out.print("Show courses");
     }
 
-    public void deletePerson(Person P)
-    {
+    public void deletePerson(Person P) {
         System.out.print("Delete persoan " + P.getName());
     }
 
-    public void showStudent(Student S){System.out.print("Showing student " + S.getName());
+    public void getStudent(Student S) {
+        System.out.print("Showing student " + S.getName());
     }
 
+    public void getStudentsByMajor(Major M){
+
+    }
+
+    public void deleteEmployee(Employee E) {
+    }
+
+    public void addEmployee(Employee E) {
+    }
+
+    public void resetUserPassword(String name, String surname, String newPassword) {
+    }
 }
