@@ -2,10 +2,9 @@ package mta.universitate.Model;
 
 public class Admin extends Employee {
 
-    public Admin(String name, String surname, String password,
-                     String birthDate, int salary)
+    public Admin(String name, String surname, int salary)
     {
-        super(name, surname, password, birthDate, Position.ADMIN, salary);
+        super(name, surname, Position.ADMIN, salary);
     }
 
     public void getProfessors() {

@@ -17,14 +17,18 @@ import java.sql.SQLException;
 
 public class Secretary extends Employee {
 
-    public Secretary(String name, String surname, String password,
-                     String birthDate, int salary)
+    public Secretary(String name, String surname, int salary)
     {
-        super(name, surname, password, birthDate, Position.SECRETARY, salary);
+        super(name, surname, Position.SECRETARY, salary);
     }
 
 
+    public void viewStudentProfile()
+    {
 
+    }
+
+    //TO DO
     public void showStatistics(Student S)
     {
         System.out.print("Showing stats for student "+

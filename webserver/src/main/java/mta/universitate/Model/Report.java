@@ -8,6 +8,8 @@ enum ReportType {
 
 
 public class Report {
+    private Student issuer;
+    private Secretary approver;
     String content;
     ReportType type;
 
@@ -61,6 +63,12 @@ public class Report {
     }
 
 
+    public Student getIssuer() {
+        return issuer;
+    }
 
 
+    public Secretary getApprover() {
+        return approver;
+    }
 }

@@ -1,15 +1,21 @@
 package mta.universitate.Model;
 
 public class Student extends Person {
-    private String identifier;
+    private String id;
+    private StudyGroup studyGroup;
+    private StudyYear studyYear;
+    private int income;
+    private int major;
+    
 
-    //To do adaugare grupa aici
-    //private Grupa grupa;
-
-    public Student(String name, String surname, String password,
-                   String birthDate)
+    public Student(String name, String surname,
+                   StudyGroup studyGroup, StudyYear studyYear, int income, int major)
     {
-        super(name, surname, password, birthDate);
+        super(name, surname);
+        this.studyGroup = studyGroup;
+        this.studyYear = studyYear;
+        this.income = income;
+        this.major = major;
     }
 
     @Override
@@ -22,4 +28,19 @@ public class Student extends Person {
         System.out.print("fillReport");
     }
 
+    public int getIncome() {
+        return income;
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public StudyGroup getStudyGroup() {
+        return studyGroup;
+    }
+
+    public StudyYear getStudyYear() {
+        return studyYear;
+    }
 }
