@@ -11,10 +11,12 @@ public class Professor extends Employee {
         super(name, surname, birthDate);
     }
 
-//    public void giveGrade(Student S, int grade)
-//    {
-//        System.out.print("Professor gave grade " +
-//                grade + "to student " +S.getName());
-//    }
+    public void giveGrade(Student S, int grade)
+    {
+        System.out.print("Professor gave grade " +
+                grade + "to student " +S.getName());
+    }
+
+
 
 }
