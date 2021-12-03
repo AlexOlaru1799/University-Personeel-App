@@ -2,15 +2,15 @@ package mta.universitate.Model;
 
 public class Employee extends Person {
     private Position position;
+    private int salary;
 
     public Employee()
     {
         super();
     }
-    public Employee(String name, String surname,
-                    String birthDate)
+    public Employee(String name, String surname)
     {
-        super(name, surname, birthDate);
+        super(name, surname);
     }
 
 
@@ -36,5 +36,13 @@ public class Employee extends Person {
     public void showGrades(Student S)
     {
 
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

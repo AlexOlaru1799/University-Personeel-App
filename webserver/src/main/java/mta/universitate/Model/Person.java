@@ -4,18 +4,15 @@ package mta.universitate.Model;
 public abstract class Person implements IPerson {
     private String name;
     private String surname;
-    private String birthDate;
 
     public Person()
     {
 
     }
-    public Person(String name, String surname,
-                  String birtDate)
+    public Person(String name, String surname)
     {
         this.name = name;
         this.surname = surname;
-        this.birthDate = birtDate;
     }
 
     public String getName()
@@ -28,8 +25,4 @@ public abstract class Person implements IPerson {
         return surname;
     }
 
-    public String getBirthDate()
-    {
-        return birthDate;
-    }
 }
