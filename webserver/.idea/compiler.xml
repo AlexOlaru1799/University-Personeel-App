@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="webserver" />
         <module name="t1e1-c114c" />
+        <module name="webserver" />
         <module name="T1E1 - Universitate" />
+        <module name="universitate" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -17,6 +18,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="universitate" options="-parameters" />
       <module name="webserver" options="-parameters" />
     </option>
   </component>
