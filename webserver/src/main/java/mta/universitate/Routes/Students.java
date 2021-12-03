@@ -15,6 +15,7 @@ public class Students {
     public String getStudents() throws SQLException {
         Database db1;
         db1 = Database.getInstance();
+
         ResultSet result = db1.executeQuery(
                 "SELECT [dbo].[studenti].Nume,[dbo].[studenti].Prenume,[dbo].[specializari].Denumire,[dbo].[grupe_studiu].denumire_grupa " +
                         "FROM [dbo].[studenti] " +
@@ -65,7 +66,7 @@ public class Students {
         String prenume="Cornel";
 
         Database db = Database.getInstance();
-        ResultSet result = db.getStudentInfo(nume,prenume);
+        ResultSet result = db.getStudentInfobyName(nume,prenume);
 
         if(result == null)
         {
@@ -111,7 +112,7 @@ public class Students {
         String prenume="Stefania";
 
         Database db = Database.getInstance();
-        ResultSet result = db.getGradesforStudent(nume,prenume);
+        ResultSet result = db.getStudentGradesbyName(nume,prenume);
 
         if(result == null)
         {
