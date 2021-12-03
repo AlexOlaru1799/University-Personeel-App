@@ -7,6 +7,11 @@ public class StudyYear {
     int year;
     ArrayList<Major> majors = new ArrayList<>();
 
+    public StudyYear(int year)
+    {
+        this.year=year;
+    }
+
     public int getYear()
     {
         return this.year;

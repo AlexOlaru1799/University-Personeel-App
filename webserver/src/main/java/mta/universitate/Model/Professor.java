@@ -6,9 +6,9 @@ public class Professor extends Employee {
     {
         super();
     }
-    public Professor(String name, String surname, String birthDate)
+    public Professor(String name, String surname)
     {
-        super(name, surname, birthDate);
+        super(name, surname);
     }
 
     public void giveGrade(Student S, int grade)
@@ -16,7 +16,5 @@ public class Professor extends Employee {
         System.out.print("Professor gave grade " +
                 grade + "to student " +S.getName());
     }
-
-
 
 }
