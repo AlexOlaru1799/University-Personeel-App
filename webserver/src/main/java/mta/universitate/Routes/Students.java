@@ -66,7 +66,7 @@ public class Students {
         String prenume="Cornel";
 
         Database db = Database.getInstance();
-        ResultSet result = db.getStudentInfobyName(nume,prenume);
+        ResultSet result = db.getStudentInfoByName(nume,prenume);
 
         if(result == null)
         {
@@ -112,7 +112,7 @@ public class Students {
         String prenume="Stefania";
 
         Database db = Database.getInstance();
-        ResultSet result = db.getStudentGradesbyName(nume,prenume);
+        ResultSet result = db.getStudentGradesByName(nume,prenume);
 
         if(result == null)
         {

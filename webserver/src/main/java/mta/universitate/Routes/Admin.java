@@ -18,7 +18,6 @@ public class Admin {
     @RequestMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
     public String resetPassword(@RequestParam String username, @RequestParam String new_pass) throws SQLException {
-        System.out.printf("Salut");
         if (this.db.resetUserPassword(username, new_pass))
             return "{'status' : 'SUCCESS'}";
         return "{'status' : 'FALSE'}";
@@ -44,7 +43,7 @@ public class Admin {
     /*
     @RequestMapping(value = "/admin/create-student", produces = "application/json")
     @ResponseBody
-    public HttpStatus createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String birthDate, @RequestParam String position, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
+    public HttpStatus createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
         db = Database.getInstance();
 
         String res = db.createStudent(S);

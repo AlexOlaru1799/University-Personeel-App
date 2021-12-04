@@ -90,7 +90,7 @@ public class Database {
         return null;
     }
 
-    public ResultSet getStudentInfobyName(String nume, String prenume) throws SQLException {
+    public ResultSet getStudentInfoByName(String nume, String prenume) throws SQLException {
         String query = "SELECT [dbo].[studenti].[Nume] + ' ' + [dbo].[studenti].[Prenume] as 'Student',[dbo].[studenti].[ID_Student],[dbo].[studenti].[An_de_Studiu],[dbo].[studenti].[Solda],[dbo].[grupe_studiu].[denumire_grupa], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate'\n" +
                 "FROM [dbo].[studenti]\n" +
                 "inner join [dbo].[grupe_studiu]\n" +
@@ -117,7 +117,7 @@ public class Database {
         return executeQuery(query);
     }
 
-    public ResultSet getStudentGradesbyName(String nume, String prenume) throws SQLException {
+    public ResultSet getStudentGradesByName(String nume, String prenume) throws SQLException {
             String query = "select [dbo].[note_studenti].[Valoare], [dbo].[note_studenti].[Data_calendar], [dbo].[materii].[NumeMaterie], [dbo].[angajati].[Nume] + ' ' + [dbo].[angajati].[Prenume] as 'Profesor', [dbo].[grupe_studiu].[denumire_grupa], [dbo].[studenti].[An_de_Studiu], [dbo].[specializari].[Denumire] as 'Specializare', [dbo].[facultati].[Denumire] as 'Facultate'\n" +
                     "from [dbo].[note_studenti]\n" +
                     "inner join [dbo].[materii]\n" +
@@ -314,50 +314,6 @@ public class Database {
 
         return "OK";
     }
-
-
-
-    public String createTeacher(Professor P) throws NoSuchAlgorithmException, SQLException {
-        String firstName = P.getName(), lastName = P.getSurname();
-        int salary = P.getSalary();
-        int tipCont = 200;
-
-        String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
-        String password = "profesor2021";
-        String hashedPassword = getHash(password);
-
-        //Adaugare cont profesor
-        String query = "INSERT INTO utilizatori "+
-                "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
-        execute(query);
-
-        //Preluare ID cont profesor
-        query = "SELECT ID_User as ID\n" +
-                "FROM utilizatori\n" +
-                "WHERE Username = '"+ username + "' AND Password ='"+ hashedPassword + "'";
-
-        ResultSet result = executeQuery(query);
-
-        if(result == null)
-        {
-            System.out.print("Eroare la inserare profesor");
-            return "Error";
-        }
-
-        result.next();
-        String idUser = result.getString("ID");
-
-
-        //Adaugare student
-        query = "INSERT INTO angajati\n" +
-                "VALUES(7,'" + lastName + "','" + firstName + "'," + String.valueOf(salary)
-                + "," + String.valueOf(idUser) + ")";
-
-        execute(query);
-
-        return "OK";
-    }
-
 
 
     public boolean createEmployee(String name, String surname, String password, String role, String position, int salary) throws NoSuchAlgorithmException, SQLException {
