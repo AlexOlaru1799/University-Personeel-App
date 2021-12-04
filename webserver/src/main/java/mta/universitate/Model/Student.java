@@ -5,11 +5,11 @@ public class Student extends Person {
     private StudyGroup studyGroup;
     private StudyYear studyYear;
     private int income;
-    private int major;
+    private Major major;
     
 
     public Student(String name, String surname,
-                   StudyGroup studyGroup, StudyYear studyYear, int income, int major)
+                   StudyGroup studyGroup, StudyYear studyYear, int income, Major major)
     {
         super(name, surname);
         this.studyGroup = studyGroup;
@@ -32,7 +32,7 @@ public class Student extends Person {
         return income;
     }
 
-    public int getMajor() {
+    public Major getMajor() {
         return major;
     }
 

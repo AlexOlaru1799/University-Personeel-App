@@ -1,5 +1,7 @@
 package mta.universitate.Model;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,36 +37,55 @@ public class Database {
         return dbObject;
     }
 
-    public String executeQueryDI(String query)
-    {
+    public Connection getConnection() {
+        return con;
+    }
+
+    private static String getHash(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("MD5");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    public boolean execute(String query) {
         try {
             if(con!=null){
                 Statement statement = con.createStatement();
-                statement.executeQuery(query);
-                return "OK";
+                statement.execute(query);
+                return true;
             }
             else
                 System.out.println("Conexiunea nu s-a putut face");
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.printf("Exception caught!");
+            //e.printStackTrace();
         }
-        return "Eroare";
+        return false;
     }
 
-    public ResultSet executeQuery(String query)
-    {
+    // Returns a ResultSet
+    public ResultSet executeQuery(String query) {
         try {
             if(con!=null){
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            return resultSet;
+                Statement statement = con.createStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+                return resultSet;
             }
             else
                 System.out.println("Conexiunea nu s-a putut face");
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -82,8 +103,7 @@ public class Database {
         return executeQuery(query);
     }
 
-    public ResultSet getStudentInfo(String id)
-    {
+    public ResultSet getStudentInfo(String id) {
         String query="SELECT S.Nume, S.Prenume,G.denumire_grupa,SP.Denumire, S.An_de_Studiu,U.Username " +
                 "FROM studenti as S " +
                 "INNER JOIN specializari as SP " +
@@ -118,8 +138,7 @@ public class Database {
         }
 
 
-    public ResultSet getStudentGrades(String id)
-    {
+    public ResultSet getStudentGrades(String id) {
         String query="SELECT M.NumeMaterie,NS.Valoare, NS.Data_calendar " +
                 "FROM studenti AS S " +
                 "INNER JOIN note_studenti AS NS " +
@@ -184,8 +203,7 @@ public class Database {
         return executeQuery(query);
     }
 
-    public ResultSet getProfessorInfo(String id)
-    {
+    public ResultSet getProfessorInfo(String id) {
         String query="SELECT A.ID_Angajat, A.Nume, A.Prenume, A.Salariu, U.Username " +
                 "FROM angajati AS A " +
                 "INNER JOIN functii AS F " +
@@ -196,8 +214,7 @@ public class Database {
         return executeQuery(query);
     }
 
-    public ResultSet getProfessorClasses(String id)
-    {
+    public ResultSet getProfessorClasses(String id) {
         String query="SELECT A.ID_Angajat,M.NumeMaterie,Tip_Ora, ORAR.Ora,G.denumire_grupa,S.Denumire\n" +
                 "FROM angajati AS A\n" +
                 "INNER JOIN functii AS F\n" +
@@ -216,32 +233,17 @@ public class Database {
         return executeQuery(query);
     }
 
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
     public String createStudent(Student S) throws NoSuchAlgorithmException, SQLException {
         String firstName = S.getName(), lastName = S.getSurname();
         int studyYear = S.getStudyYear().getYear();
         int idGroup = S.getStudyGroup().getId();
-        int idSpecialization = S.getMajor();
+        Major idSpecialization = S.getMajor();
         int income = S.getIncome();
 
         String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
         String password = "student2021";
 
-        MessageDigest digest = MessageDigest.getInstance("MD5");
-        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-
-        String hashedPassword = bytesToHex(hash);
+        String hashedPassword = getHash(password);
         
         
         int tipCont=100;
@@ -249,7 +251,7 @@ public class Database {
         //Adaugare cont student
         String query = "INSERT INTO utilizatori "+
         "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
-        executeQueryDI(query);
+        execute(query);
 
         //Preluare ID cont student
         query = "SELECT ID_User as ID\n" +
@@ -273,10 +275,47 @@ public class Database {
                 + "," + String.valueOf(idGroup) + "," + String.valueOf(income) + ","
                 + String.valueOf(studyYear) + ","+ idUser +")";
 
-        executeQueryDI(query);
+        execute(query);
 
         return "OK";
     }
+
+    public String deleteStudent(String id) throws SQLException {
+        String query = "DELETE FROM note_studenti\n" +
+                "WHERE FK_Student = " + id;
+
+        execute(query);
+
+        query="SELECT U.ID_User, S.ID_Student\n" +
+                "FROM studenti AS S\n" +
+                "INNER JOIN utilizatori AS U\n" +
+                "ON S.FK_ID_User = U.ID_User\n" +
+                "WHERE S.ID_Student = " + id;
+
+        ResultSet result = executeQuery(query);
+
+        if(result == null)
+        {
+            System.out.print("Eroare la inserare student");
+            return "Error";
+        }
+
+        ResultSetMetaData metadata = result.getMetaData();
+        String idUser = result.getString(1);
+
+        query = "DELETE FROM studenti\n" +
+                "WHERE ID_Student = " + id;
+        execute(query);
+
+        query = "DELETE FROM utilizatori\n" +
+                "WHERE ID_User = " + id;
+
+        execute(query);
+
+        return "OK";
+    }
+
+
 
     public String createTeacher(Professor P) throws NoSuchAlgorithmException, SQLException {
         String firstName = P.getName(), lastName = P.getSurname();
@@ -285,16 +324,12 @@ public class Database {
 
         String username = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT)+"@mta.ro";
         String password = "profesor2021";
-
-        MessageDigest digest = MessageDigest.getInstance("MD5");
-        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-
-        String hashedPassword = bytesToHex(hash);
+        String hashedPassword = getHash(password);
 
         //Adaugare cont profesor
         String query = "INSERT INTO utilizatori "+
                 "VALUES('" + username + "','" + hashedPassword + "'," + String.valueOf(tipCont) + ")";
-        executeQueryDI(query);
+        execute(query);
 
         //Preluare ID cont profesor
         query = "SELECT ID_User as ID\n" +
@@ -318,88 +353,101 @@ public class Database {
                 "VALUES(7,'" + lastName + "','" + firstName + "'," + String.valueOf(salary)
                 + "," + String.valueOf(idUser) + ")";
 
-        executeQueryDI(query);
+        execute(query);
 
         return "OK";
     }
 
-    public String deleteStudent(String id) throws SQLException {
-        String query = "DELETE FROM note_studenti\n" +
-                "WHERE FK_Student = " + id;
 
-        executeQueryDI(query);
 
-        query="SELECT U.ID_User, S.ID_Student\n" +
-                "FROM studenti AS S\n" +
-                "INNER JOIN utilizatori AS U\n" +
-                "ON S.FK_ID_User = U.ID_User\n" +
-                "WHERE S.ID_Student = " + id;
+    public boolean createEmployee(String name, String surname, String password, String role, String position, int salary) throws NoSuchAlgorithmException, SQLException {
+        // Returns: TRUE on success, FALSE on fail
 
-        ResultSet result = executeQuery(query);
+        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
+        String hashedPassword = getHash(password);
 
-        if(result == null)
+        // First creates the User
+        if (this.createUser(username, hashedPassword, role))
         {
-            System.out.print("Eroare la inserare student");
-            return "Error";
+            int userID = getUserID(username);
+            int positionID = getPositionID(position);
+            if(this.execute(String.format("INSERT INTO angajati(Nume, Prenume, FK_Functia, Salariu, FK_ID_User) VALUES ('%s', '%s', %d, %d, %d)", name, surname, positionID, salary, userID)))
+                return true;
+            else
+                this.deleteUser(username);
         }
 
-        ResultSetMetaData metadata = result.getMetaData();
-        String idUser = result.getString(1);
-
-        query = "DELETE FROM studenti\n" +
-                "WHERE ID_Student = " + id;
-        executeQueryDI(query);
-
-        query = "DELETE FROM utilizatori\n" +
-                "WHERE ID_User = " + id;
-
-        executeQueryDI(query);
-        
-        return "OK";
+        return false;
     }
 
-    public Connection getConnection() {
-        return con;
-    }
-
-    // TODO: Finish
-    public boolean addEmployee(String name, String surname, String password, String position, int salary) {
+    public boolean deleteEmployee(String name, String surname) {
         // Returns: TRUE on success, FALSE on fail
+        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
 
-        // Get 'functii' and get the ID of given Position
+        if(this.execute(String.format("DELETE FROM angajati WHERE Nume = '%s' AND Prenume = '%s'", name, surname))){
+            if(this.deleteUser(username)){
+                return true;
+            }
+        }
 
-        // Insert in 'utilizatori' name.lowercase().surname.lowercase()@mta.ro as Username, Password,
+        return false;
+    }
 
-        ResultSet rs = this.executeQuery(String.format("INSERT INTO angajati(Nume, Prenume, , Position, Salariu) VALUES (%s, %s, %s, %s, %d)", name, surname, password, position, salary));
+
+    public boolean createUser(String username, String password, String role) {
+        try
+        {
+            int role_id = getRoleID(role);
+            if(this.execute(String.format("INSERT INTO utilizatori (Username, Password, FK_TipCont) VALUES ('%s', '%s', %d)", username, password, role_id)))
+                return true;
+
+            return false;
+        }
+        catch (Exception exc)
+        {
+            return false;
+        }
+
+    }
+
+    public boolean deleteUser(String username) {
+        try
+        {
+            if(this.execute(String.format("DELETE FROM utilizatori WHERE Username = '%s'", username)))
+                return true;
+
+            return false;
+        }
+        catch (Exception exc)
+        {
+            return false;
+        }
+
+    }
+
+    public boolean resetUserPassword(String username, String new_password){
+        // Returns: TRUE on success, FALSE on fail
+        this.executeQuery(String.format("UPDATE utilizatori SET Password = %s WHERE Username = %s", new_password, username));
         return true;
     }
 
-    // TODO: Finish
-    public boolean addStudent(String name, String surname, String password, String birthDate, String position, int salary)
-    {
-        // Returns: TRUE on success, FALSE on fail
 
-        ResultSet rs = this.executeQuery(String.format("INSERT INTO Employees(Name, Surname, BirthDate, Position, Salary) VALUES (%s, %s, %s, %s, %d)", name, surname, password, birthDate, position, salary));
-        return true;
+    public int getRoleID(String role) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID_TipCont FROM tipuri_cont AS TC WHERE TC.Denumire_Cont = '%s'", role));
+        rs.next();
+        return rs.getInt("ID_TipCont");
     }
 
-    // TODO: Finish
-    public boolean deleteUser(String name, String surname)
-    {
-        // Returns: TRUE on success, FALSE on fail
-        // Search for User with Name = <name> and Surname = <surname> in Students and Employees and then deletes it
-        ResultSet rs = this.executeQuery(String.format("DELETE Employees, Students FROM Employees INNER JOIN Students WHERE Name = %s AND Surname = %s", name, surname));
-        return true;
+    public int getPositionID(String position) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID_Functie FROM functii AS F WHERE F.Denumire = '%s'", position));
+        rs.next();
+        return rs.getInt("ID_Functie");
     }
 
-    public boolean resetUserPassword(String name, String surname, String newPassword) {
-        // Returns: TRUE on success, FALSE on fail
-
-        // Check rows affected: 0 -> Failed - User does not exist, 1 -> Success
-        // Search for User with Name = <name> and Surname = <surname> in Students and Employees and then update password
-        ResultSet rs = this.executeQuery(String.format("UPDATE Users SET Password = %s WHERE Name = %s AND Surname = %s", newPassword, name, surname));
-
-        return true;
+    public int getUserID(String username) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID_User FROM utilizatori AS U WHERE U.Username = '%s'", username));
+        rs.next();
+        return rs.getInt("ID_User");
     }
 
 
