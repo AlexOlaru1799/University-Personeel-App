@@ -30,6 +30,8 @@ public class CreateAccount {
 
     }
 
+    // TODO: To be redone. createTeacher became createEmployee with the right parameters
+    /*
     @PostMapping("/createprofessor")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus createProfessor(@RequestBody Professor P) throws SQLException, NoSuchAlgorithmException {
@@ -41,5 +43,7 @@ public class CreateAccount {
         }
         return HttpStatus.OK;
     }
+
+     */
 
 }
