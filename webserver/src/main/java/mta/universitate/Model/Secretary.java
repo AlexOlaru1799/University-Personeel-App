@@ -1,12 +1,5 @@
 package mta.universitate.Model;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
 
 /**
  * Clasa Secretar
@@ -19,7 +12,7 @@ public class Secretary extends Employee {
 
     public Secretary(String name, String surname, int salary)
     {
-        super(name, surname, Position.SECRETARY, salary);
+        super(name, surname, Role.SECRETARY, salary);
     }
 
 

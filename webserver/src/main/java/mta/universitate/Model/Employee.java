@@ -1,12 +1,12 @@
 package mta.universitate.Model;
 
 public class Employee extends Person {
-    private Position position;
+    private Role role;
     private int salary;
 
-    public Employee(String name, String surname, Position position, int salary) {
+    public Employee(String name, String surname, Role role, int salary) {
         super(name, surname);
-        this.position = position;
+        this.role = role;
         this.salary = salary;
     }
 
@@ -38,7 +38,7 @@ public class Employee extends Person {
         return salary;
     }
 
-    public Position getPosition() {
-        return position;
+    public Role getPosition() {
+        return role;
     }
 }

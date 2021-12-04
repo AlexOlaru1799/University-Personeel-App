@@ -4,7 +4,7 @@ public class Admin extends Employee {
 
     public Admin(String name, String surname, int salary)
     {
-        super(name, surname, Position.ADMIN, salary);
+        super(name, surname, Role.ADMIN, salary);
     }
 
     public void getProfessors() {

@@ -4,7 +4,7 @@ public class Professor extends Employee {
 
     public Professor(String name, String surname, String password,
                      String birthDate, int salary) {
-        super(name, surname, Position.PROFESSOR, salary);
+        super(name, surname, Role.PROFESSOR, salary);
     }
 
 

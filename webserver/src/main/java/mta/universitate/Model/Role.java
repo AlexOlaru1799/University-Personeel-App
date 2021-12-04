@@ -1,6 +1,6 @@
 package mta.universitate.Model;
 
-public enum Position {
+public enum Role {
     STUDENT,
     PROFESSOR,
     SECRETARY,
