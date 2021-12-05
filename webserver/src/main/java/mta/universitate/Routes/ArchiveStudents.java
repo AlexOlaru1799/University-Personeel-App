@@ -53,29 +53,32 @@ public class ArchiveStudents {
         db1 = Database.getInstance();
 
         ResultSet res = db1.get4thYearStudents();
-        res.next();
-        res.next();
-
-        StringBuilder id = new StringBuilder();
-        String folderName = getStudentFolderName(res, id);
-
-
-        res = db1.getStudentGrades(id.toString());
-        String grades = getStudentGrades(res);
-
-        String zipTest = folderName + "/grades.txt";
-
         File f = new File(".\\test.zip");
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
-        ZipEntry e = new ZipEntry(zipTest);
-        out.putNextEntry(e);
+        while(res.next()) {
 
-        byte[] data = grades.toString().getBytes();
-        out.write(data, 0, data.length);
-        out.closeEntry();
+            StringBuilder id = new StringBuilder();
+
+            String folderName = getStudentFolderName(res, id);
+            System.out.print(folderName);
+            ResultSet result = db1.getStudentGrades(id.toString());
+
+
+            System.out.print(id.toString());
+
+            String grades = getStudentGrades(result);
+            String zipTest = folderName + "/grades.txt";
+
+            ZipEntry e = new ZipEntry(zipTest);
+            out.putNextEntry(e);
+
+            byte[] data = grades.toString().getBytes();
+            out.write(data, 0, data.length);
+            out.closeEntry();
+
+        }
         out.close();
-
-        return folderName;
+        return "OK";
         //return "{'status' : 'SUCCESS'}";
     }
 
