@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -53,23 +55,23 @@ public class ArchiveStudents {
         db1 = Database.getInstance();
 
         ResultSet res = db1.get4thYearStudents();
-        File f = new File(".\\test.zip");
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        String zipName=".\\promotia_" + year + ".zip";
+
+        File f = new File(zipName);
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
         while(res.next()) {
 
             StringBuilder id = new StringBuilder();
-
             String folderName = getStudentFolderName(res, id);
-            System.out.print(folderName);
+
             ResultSet result = db1.getStudentGrades(id.toString());
-
-
-            System.out.print(id.toString());
-
             String grades = getStudentGrades(result);
-            String zipTest = folderName + "/grades.txt";
+            String zipEntry = folderName + "/grades.txt";
 
-            ZipEntry e = new ZipEntry(zipTest);
+            ZipEntry e = new ZipEntry(zipEntry);
             out.putNextEntry(e);
 
             byte[] data = grades.toString().getBytes();
@@ -78,8 +80,7 @@ public class ArchiveStudents {
 
         }
         out.close();
-        return "OK";
-        //return "{'status' : 'SUCCESS'}";
+        return "{'status' : 'SUCCESS'}";
     }
 
 }
