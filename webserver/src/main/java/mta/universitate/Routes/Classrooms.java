@@ -21,6 +21,8 @@ public class Classrooms {
         if(result.next()==false)
             return "Empty result";
 
+//        comentariu de test
+
         StringBuilder stringBuilder=new StringBuilder();
 
         ResultSetMetaData metadata = result.getMetaData();
