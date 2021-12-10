@@ -1,6 +1,7 @@
 package com.example.application.views;     // To do modify for the current project
 
 
+
 import com.example.application.views.BackEnd.Database;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -70,7 +72,11 @@ public class LoginPage extends VerticalLayout {
                 String username = e.getUsername();
                 String password = e.getPassword();
 
+
+
                 Database DB = Database.getInstance();
+
+                String hashedPass =DB.getHash(password);
 
                 ResultSet res  = DB.executeQuery(" SELECT CASE WHEN EXISTS (" +
                         "    SELECT *" +
@@ -78,7 +84,7 @@ public class LoginPage extends VerticalLayout {
                         "    WHERE [Username] = '" +
                         username +
                         "' and [Password] = '" +
-                        password +
+                        hashedPass +
                         "'" +
                         ")" +
                         "THEN CAST(1 AS BIT)" +
@@ -130,7 +136,7 @@ public class LoginPage extends VerticalLayout {
 
                 }
             }
-            catch (SQLException throwables) {
+            catch (SQLException | NoSuchAlgorithmException throwables) {
                 throwables.printStackTrace();
             }
         });

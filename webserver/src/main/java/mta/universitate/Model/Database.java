@@ -258,7 +258,6 @@ public class Database {
             return executeQuery(query);
         }
 
-
     public ResultSet getStudentGrades(String id) {
         String query="SELECT M.NumeMaterie,NS.Valoare, NS.Data_calendar " +
                 "FROM studenti AS S " +
@@ -459,7 +458,6 @@ public class Database {
         return true;
     }
 
-
     public int getRoleID(String role) throws SQLException, SQLServerException{
         ResultSet rs = this.executeQuery(String.format("SELECT ID_TipCont FROM tipuri_cont AS TC WHERE TC.Denumire_Cont = '%s'", role));
         rs.next();
@@ -477,6 +475,7 @@ public class Database {
         rs.next();
         return rs.getInt("ID_User");
     }
+
 
     public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
         ResultSet rs = this.executeQuery(String.format("SELECT ID_Grupa FROM grupe_studiu AS GS WHERE GS.denumire_grupa = '%s'", study_group));
@@ -649,4 +648,16 @@ public class Database {
 
         return executeQuery(query);
     }
+
+    public ResultSet get4thYearStudents()
+    {
+        String query = "SELECT S.ID_Student AS ID, S.Nume AS Nume, S.Prenume AS Prenume, G.denumire_grupa AS Grupa\n" +
+                "FROM studenti AS S \n" +
+                "INNER JOIN grupe_studiu AS G\n" +
+                "ON S.FK_Grupa = G.ID_Grupa\n" +
+                "WHERE An_de_Studiu = 4";
+
+        return executeQuery(query);
+    }
+
 }
