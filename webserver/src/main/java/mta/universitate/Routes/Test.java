@@ -2,6 +2,7 @@ package mta.universitate.Routes;
 
 import mta.universitate.Model.Database;
 import mta.universitate.Model.Person;
+import mta.universitate.Model.User;
 import mta.universitate.Model.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,12 @@ public class Test {
 
     @RequestMapping("/test")
     public String test() throws SQLException {
-        int id = db.getRoleID("student");
-        return String.format("<h1>%d<h1>", id );
+        User U = new User();
+        U.setId(1005);
+        U = db.get(U);
+
+
+        return String.format("<h1>%s<h1>", U.getUsername() );
     }
 
 

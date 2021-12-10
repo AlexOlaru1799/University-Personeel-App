@@ -23,6 +23,7 @@ public class Admin {
         return "{'status' : 'FALSE'}";
     }
 
+
     @RequestMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
     public String addEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String role, @RequestParam String position, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
@@ -40,28 +41,26 @@ public class Admin {
         return "{'status' : 'FAILED'}";
     }
 
-    /*
+
     @RequestMapping(value = "/admin/create-student", produces = "application/json")
     @ResponseBody
-    public HttpStatus createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
-        db = Database.getInstance();
+    public String createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income, @RequestParam int study_year) throws SQLException, NoSuchAlgorithmException {
 
-        String res = db.createStudent(S);
-        if (!Objects.equals(res, "OK")) {
-            return HttpStatus.NOT_FOUND;
-        }
-        return HttpStatus.OK;
+        if (this.db.createStudent(name, surname, password, major, study_group, income, study_year))
+            return "{'status' : 'SUCCESS'}";
+        return "{'status' : 'FAILED'}";
 
     }
 
     @RequestMapping(value = "/admin/delete-student", produces = "application/json")
     @ResponseBody
-    public String deleteUser(@RequestParam String name, @RequestParam String surname) throws SQLException {
+    public String deleteStudent(@RequestParam String name, @RequestParam String surname) throws SQLException {
         if (this.db.deleteStudent(name, surname))
             return "{'status' : 'SUCCESS'}";
         return "{'status' : 'FALSE'}";
+
     }
-    */
+
 
 
     @GetMapping("/materii")

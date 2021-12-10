@@ -1,5 +1,7 @@
 package mta.universitate.Model;
 
+import java.sql.ResultSet;
+
 public class Student extends Person {
     private String id;
     private StudyGroup studyGroup;

@@ -12,7 +12,7 @@ public class Secretary extends Employee {
 
     public Secretary(String name, String surname, int salary)
     {
-        super(name, surname, Role.SECRETARY, salary);
+        super(name, surname, new Role("Secretary"), salary);
     }
 
 
