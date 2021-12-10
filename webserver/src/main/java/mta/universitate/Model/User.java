@@ -5,27 +5,19 @@ import mta.universitate.Utils.Hasher;
 
 import java.util.Locale;
 
-public class User {
+public class User{
     private int id;
     private String username;
     private String password;
     private Role role;
 
-    public User(){
-
-    }
-
-    static public User fromDB(int id)
+    public static User fromDB(int id)
     {
         User U = new User();
         U.id = id;
 
         return Database.getInstance().get(U);
     }
-
-
-
-
 
     public int getId() {
         return id;

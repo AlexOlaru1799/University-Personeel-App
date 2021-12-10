@@ -1,15 +1,12 @@
 package mta.universitate.Routes;
 
 import mta.universitate.Model.Database;
-import mta.universitate.Model.Person;
-import mta.universitate.Model.Student;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Objects;
 
 @RestController
 public class Admin {

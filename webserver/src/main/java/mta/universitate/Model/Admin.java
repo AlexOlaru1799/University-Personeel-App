@@ -2,10 +2,16 @@ package mta.universitate.Model;
 
 public class Admin extends Employee {
 
-    public Admin(String name, String surname, int salary)
+    public Admin(Employee E)
     {
-        super(name, surname, new Role("Admin"), salary);
+        super(E);
+    }
 
+    public static Admin fromEmployee(Employee E){
+        if (E.getPosition().getDescription().contentEquals("Administrator"))
+            return new Admin(E);
+        else
+            return null;
     }
 
     public void getProfessors() {
@@ -16,8 +22,8 @@ public class Admin extends Employee {
         System.out.print("Show courses");
     }
 
-    public void deletePerson(Person P) {
-        System.out.print("Delete persoan " + P.getName());
+    public void deletePerson() {
+        System.out.print("Delete persoan ");
     }
 
     public void getStudent(Student S) {

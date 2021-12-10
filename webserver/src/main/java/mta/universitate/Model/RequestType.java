@@ -1,22 +1,15 @@
 package mta.universitate.Model;
 
+public class RequestType {
+    private int id;
+    private String description;
 
-public class Role{
-    int id;
-    String description;
-
-    public Role(){}
-    public Role(String description)
+    static public RequestType fromDB(int id)
     {
-        this.description = description;
-    }
+        RequestType RT = new RequestType();
+        RT.id = id;
 
-    static public Role fromDB(int id)
-    {
-        Role R = new Role();
-        R.id = id;
-
-        return Database.getInstance().get(R);
+        return Database.getInstance().get(RT);
     }
 
     public int getId() {
@@ -35,5 +28,3 @@ public class Role{
         this.description = description;
     }
 }
-
-

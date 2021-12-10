@@ -2,28 +2,25 @@ package mta.universitate.Model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Map;
 
 public class Schedule {
-    private StudyGroup group;
-    Map<StudyGroup,Details>groupSchedule=new HashMap<>();
+    private int id;
+    private Date date;
+    private StudyGroup study_group;
+    private Classroom classroom;
+    private Module module;
 
-    public Schedule() {
+    static public Schedule fromDB(int id)
+    {
+        Schedule S = new Schedule();
+        S.id = id;
+
+        return Database.getInstance().get(S);
     }
 
-    public Schedule(StudyGroup group,Details details) {
-        this.group=group;
-        groupSchedule.put(this.group,details);
-    }
 
-    public StudyGroup getGroup(){
-        return this.group;
-    }
-
-    public Map getGroupSchedule(){
-        return groupSchedule;
-    }
 
     public ResultSet getTeacherSchedule(String surname, String name) throws SQLException {
         Database db = Database.getInstance();
@@ -37,5 +34,45 @@ public class Schedule {
         ResultSet result = db.getGroupSchedule(groupName);
 
         return result;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public StudyGroup getStudy_group() {
+        return study_group;
+    }
+
+    public void setStudy_group(StudyGroup study_group) {
+        this.study_group = study_group;
+    }
+
+    public Classroom getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 }

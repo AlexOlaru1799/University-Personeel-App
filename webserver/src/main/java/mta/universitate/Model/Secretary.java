@@ -1,18 +1,18 @@
 package mta.universitate.Model;
 
 
-/**
- * Clasa Secretar
- *
- * Clasa utilizata pentru a implementa utilitatile secretarului
- *
- */
-
 public class Secretary extends Employee {
 
-    public Secretary(String name, String surname, int salary)
+    public Secretary(Employee E)
     {
-        super(name, surname, new Role("Secretary"), salary);
+        super(E);
+    }
+
+    public static Secretary fromEmployee(Employee E){
+        if (E.getPosition().getDescription().contentEquals("Secretary"))
+            return new Secretary(E);
+        else
+            return null;
     }
 
 

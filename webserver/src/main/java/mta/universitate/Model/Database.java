@@ -4,14 +4,11 @@ import mta.universitate.Utils.Hasher;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Locale;
 
@@ -42,7 +39,6 @@ public class Database {
     public Connection getConnection() {
         return con;
     }
-
 
     public boolean execute(String query) {
         try {
@@ -84,32 +80,59 @@ public class Database {
     // public boolean add(Major M){ return true;}
     // public boolean add(Feature F) {return true;}
     // public boolean add(Report R){ return true;}
-    public boolean add(Role R){ return true;}
-    public boolean add(User U){ return true;}
+    public boolean add(Role R){
+        if(this.execute(String.format("INSERT INTO Roles(ID, Description) VALUES (%d,'%s')", R.getId(), R.getDescription())))
+            return true;
+        return false;
+    }
+    public boolean add(User U){
+        if (this.execute(String.format("INSERT INTO Users(Username, Password, [Role]) VALUES" +
+                "('%s', '%s', %d)", U.getUsername(), U.getPassword(), U.getRole().getId())))
+            return true;
+        return false;
+    }
 
     // public boolean delete(Student S){ return true;}
     // public boolean delete(Employee E){ return true;}
     // public boolean delete(Course C){ return true;}
     // public boolean delete(Major M){ return true;}
     // public boolean delete(Feature F) {return true;}
-    // public boolean delete(Role R){ return true;}
-    public boolean delete(Report R){ return true;}
-    public boolean delete(User U){ return true;}
+    // public boolean delete(Report R){ return true;}
+    public boolean delete(Role R){
+        if (this.execute(String.format("DELETE FROM Roles WHERE ID = %d", R.getId())))
+            return true;
+        return false;
+    }
+    public boolean delete(User U){
+        if (this.execute(String.format("DELETE FROM Users WHERE ID = %d", U.getId())))
+            return true;
+        return false;
+    }
 
-    // public Student get(Student S){ return true;}
-    // public Employee get(Employee E){ return true;}
-    // public Course get(Course C){ return true;}
-    // public Major get(Major M){ return true;}
-    // public Feature get(Feature F) {return true;}
-    // public Report get(Report R){ return true;}
-    public Role get(Role R){
-        Role to_return = new Role();
-        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Roles WHERE ID = %d", R.getId()));
+    public Student get(Student S){ return null;}
+    public Employee get(Employee E){
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Employees WHERE ID = %d", E.getId()));
 
         try{
+            User U = new User();
+            Position P = new Position();
+
+            Employee to_return = new Employee();
+
             rs.next();
             to_return.setId(rs.getInt("ID"));
-            to_return.setType(rs.getString("Description"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setSurname(rs.getString("Surname"));
+            to_return.setSalary(rs.getInt("Salary"));
+
+            U.setId(rs.getInt("[User]"));
+            U = this.get(U);
+            to_return.setUser(U);
+
+            P.setId(rs.getInt("[Position]"));
+            P = this.get(P);
+            to_return.setPosition(P);
+
 
             return to_return;
         }
@@ -118,7 +141,48 @@ public class Database {
         }
 
     }
+    public Course get(Course C){ return null;}
+    public Major get(Major M){ return null;}
+    public Feature get(Feature F) {return null;}
+    public Request get(Request R){ return null;}
+    public Position get(Position P) {
+        Position to_return = new Position();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Positions WHERE ID = %d", P.getId()));
 
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Description"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+    public Faculty get(Faculty F) {return null;}
+    public Document get(Document D) {return null;}
+    public Classroom get(Classroom C) {return null;}
+    public Grade get(Grade G) {return null;}
+    public StudyGroup get(StudyGroup SG) {return null;}
+    public Schedule get(Schedule S) {return null;}
+    public RequestType get(RequestType RT) {return null;}
+    public Role get(Role R){
+        Role to_return = new Role();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Roles WHERE ID = %d", R.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Description"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+
+    }
     public User get(User U) {
         User to_return = new User();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Users WHERE ID = %d", U.getId()));
@@ -145,6 +209,8 @@ public class Database {
 
 
 
+
+    //
     public ResultSet getStudentInfoByName(String nume, String prenume) throws SQLException {
         String query = "SELECT [dbo].[studenti].[Nume] + ' ' + [dbo].[studenti].[Prenume] as 'Student',[dbo].[studenti].[ID_Student],[dbo].[studenti].[An_de_Studiu],[dbo].[studenti].[Solda],[dbo].[grupe_studiu].[denumire_grupa], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate'\n" +
                 "FROM [dbo].[studenti]\n" +

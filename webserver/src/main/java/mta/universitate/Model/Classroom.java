@@ -3,21 +3,59 @@ package mta.universitate.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-enum ClassroomType {
-    AMPHITHEATER,
-    LABORATORY
-}
 
 @RestController
 public class Classroom {
-    String identifier;
+    int id;
     int capacity;
-    Feature features[ ];
-    ClassroomType type;
+    private ArrayList<Feature> features;
+    private String type;
+
+    public static Classroom fromDB(int id)
+    {
+        Classroom C = new Classroom();
+        C.id = id;
+
+        return Database.getInstance().get(C);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public ArrayList<Feature> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(ArrayList<Feature> features) {
+        this.features = features;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @RequestMapping("/sali")
     public String getEmptyClassrooms() throws SQLException {
@@ -58,11 +96,6 @@ public class Classroom {
         }while(result.next());
         stringBuilder.append("</table>");
         return stringBuilder.toString();
-    }
-
-    public void showIdentifier()
-    {
-        System.out.println(this.identifier);
     }
 
 }

@@ -1,14 +1,8 @@
 package mta.universitate.Model;
 import java.util.Vector;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 
 public class ReportsManager {
-    public Vector<Report> reports = new Vector<Report>();
+    public Vector<Request> reports = new Vector<Request>();
 
 
     // TODO: Do not use any HTML code. That will go in the Reports Class in Routes Package

@@ -2,16 +2,21 @@ package mta.universitate.Model;
 
 public class Professor extends Employee {
 
-    public Professor(String name, String surname, String password,
-                     String birthDate, int salary) {
-        super(name, surname, new Role("Professor"), salary);
+    public Professor(Employee E) {
+        super(E);
     }
 
+    public static Professor fromEmployee(Employee E){
+        if (E.getPosition().getDescription().contentEquals("Professor"))
+            return new Professor(E);
+        else
+            return null;
+    }
 
     public void giveGrade(Student S, int grade)
     {
         System.out.print("Professor gave grade " +
-                grade + "to student " +S.getName());
+                grade + "to student " + S.getName());
     }
 
 }

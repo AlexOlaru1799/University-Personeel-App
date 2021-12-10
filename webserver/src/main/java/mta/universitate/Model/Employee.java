@@ -1,44 +1,84 @@
 package mta.universitate.Model;
 
-public class Employee extends Person {
-    private Role role;
-    private int salary;
+import mta.universitate.Model.Document;
 
-    public Employee(String name, String surname, Role role, int salary) {
-        super(name, surname);
-        this.role = role;
-        this.salary = salary;
+public class Employee {
+    private int id;
+    private String name;
+    private String surname;
+    private Position position;
+    private int salary;
+    private User user;
+
+
+
+    public static Employee fromDB(int id){
+        Employee E = new Employee();
+        E.id = id;
+
+        return Database.getInstance().get(E);
     }
 
-    //TO DO Grupa
-    //private Grupa grupa
-    @Override
-    public void addDocument() {
+    public Employee(){}
+    public Employee(Employee E){
+        this.id = E.id;
+        this.name = E.name;
+        this.surname = E.surname;
+        this.position = E.position;
+        this.salary = E.salary;
+        this.user = E.user;
+    }
+
+    public void addDocument(Document D) {
         System.out.print("addDocument");
     }
 
-    //TO DO --> parametru anDeStudiu
-    public void showGrades()
-    {
 
+    public int getId() {
+        return id;
     }
 
-    //TO DO --> parametru Grupa
-//    public void showDrages(Grupa G)
-//    {
-//
-//    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public void showGrades(Student S)
-    {
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public int getSalary() {
         return salary;
     }
 
-    public Role getPosition() {
-        return role;
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
