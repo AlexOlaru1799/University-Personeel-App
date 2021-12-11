@@ -15,7 +15,7 @@ public class Admin extends Employee {
     }
 
     public static Admin fromEmployee(Employee E){
-        if (E.getPosition().getDescription().contentEquals("Administrator"))
+        if (E.getUser().getRole().getDescription().contentEquals("Admin"))
             return new Admin(E);
         else
             return null;
@@ -47,6 +47,10 @@ public class Admin extends Employee {
     public void addEmployee(Employee E) {
     }
 
-    public void resetUserPassword(String name, String surname, String newPassword) {
+    public boolean resetUserPassword(String username, String newPassword) {
+
+        if (Database.getInstance().resetUserPassword(username, newPassword))
+            return true;
+        return false;
     }
 }

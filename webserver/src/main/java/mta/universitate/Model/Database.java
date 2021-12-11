@@ -522,8 +522,11 @@ public class Database {
 
     public boolean resetUserPassword(String username, String new_password){
         // Returns: TRUE on success, FALSE on fail
-        this.executeQuery(String.format("UPDATE utilizatori SET Password = %s WHERE Username = %s", new_password, username));
-        return true;
+        String hashedPassword = Hasher.getHash(new_password);
+
+        if (this.execute(String.format("UPDATE Users SET Password = '%s' WHERE Username = '%s'", hashedPassword, username)))
+            return true;
+        return false;
     }
 
 
