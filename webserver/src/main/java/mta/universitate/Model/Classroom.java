@@ -15,7 +15,8 @@ public class Classroom {
     int id;
     int capacity;
     private ArrayList<Feature> features;
-    private String type;
+    private String name;
+    private boolean type;
 
     public static Classroom fromDB(int id)
     {
@@ -49,11 +50,19 @@ public class Classroom {
         this.features = features;
     }
 
-    public String getType() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(boolean type) {
         this.type = type;
     }
 

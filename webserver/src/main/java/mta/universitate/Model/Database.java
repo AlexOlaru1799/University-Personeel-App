@@ -164,8 +164,16 @@ public class Database {
     }
     // public boolean delete(Course C){ return true;}
     // public boolean delete(Major M){ return true;}
-    // public boolean delete(Feature F) {return true;}
-    // public boolean delete(Report R){ return true;}
+    public boolean delete(Feature F) {
+        if (this.execute(String.format("DELETE FROM Features WHERE ID = %d", F.getId())))
+            return true;
+        return false;
+    }
+    public boolean delete(Request R){
+        if (this.execute(String.format("DELETE FROM Requests WHERE ID = %d", R.getId())))
+            return true;
+        return false;
+    }
     public boolean delete(Role R){
         if (this.execute(String.format("DELETE FROM Roles WHERE ID = %d", R.getId())))
             return true;
@@ -257,7 +265,21 @@ public class Database {
             return null;
         }
     }
-    public Feature get(Feature F) {return null;}
+    public Feature get(Feature F) {
+        Feature to_return = new Feature();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Features WHERE ID = %d", F.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Description"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Request get(Request R){ return null;}
     public Position get(Position P) {
         Position to_return = new Position();
@@ -290,7 +312,23 @@ public class Database {
         }
     }
     public Document get(Document D) {return null;}
-    public Classroom get(Classroom C) {return null;}
+    public Classroom get(Classroom C) {
+        Classroom to_return = new Classroom();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setType(rs.getBoolean("Kind"));
+            to_return.setCapacity(rs.getInt("Capacity"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Grade get(Grade G) {return null;}
     public StudyGroup get(StudyGroup SG) {
         StudyGroup to_return = new StudyGroup();
@@ -310,7 +348,21 @@ public class Database {
         }
     }
     public Schedule get(Schedule S) {return null;}
-    public RequestType get(RequestType RT) {return null;}
+    public RequestType get(RequestType RT) {
+        RequestType to_return = new RequestType();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Majors WHERE ID = %d", RT.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Kind"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Role get(Role R){
         Role to_return = new Role();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Roles WHERE ID = %d", R.getId()));
@@ -498,27 +550,6 @@ public class Database {
     }
 
 
-/*
-    public boolean createEmployee(String name, String surname, String password, String role, String position, int salary) throws NoSuchAlgorithmException, SQLException {
-        // Returns: TRUE on success, FALSE on fail
-
-        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
-        String hashedPassword = Hasher.getHash(password);
-
-        // First creates the User
-        if (this.createUser(username, hashedPassword, role))
-        {
-            int userID = getUserID(username);
-            int positionID = getPositionID(position);
-            if(this.execute(String.format("INSERT INTO angajati(Nume, Prenume, FK_Functia, Salariu, FK_ID_User) VALUES ('%s', '%s', %d, %d, %d)", name, surname, positionID, salary, userID)))
-                return true;
-            else
-                this.deleteUser(username);
-        }
-
-        return false;
-    }
-*/
 
     public boolean resetUserPassword(String username, String new_password){
         // Returns: TRUE on success, FALSE on fail
