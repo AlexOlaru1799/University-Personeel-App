@@ -51,8 +51,7 @@ public class Database {
                 System.out.println("Conexiunea nu s-a putut face");
         }
         catch (Exception e) {
-            System.out.printf("Exception caught!");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return false;
     }
@@ -74,8 +73,63 @@ public class Database {
         return null;
     }
 
-    // public boolean add(Student S){return true;}
-    // public boolean add(Employee E){ return true;}
+
+    public boolean add(Student S){
+        try{
+            if (this.add(S.getUser()))
+            {
+                S.getUser().setId(this.getUserID(S.getUser().getUsername()));
+
+                if (this.execute(String.format("INSERT INTO Students(Name, Surname, Major, StudyGroup, Pay, User_ID) " +
+                                "VALUES('%s','%s', %d, %d, %d, %d)",
+                        S.getName(), S.getSurname(), S.getMajor().getId(), S.getStudyGroup().getId(),
+                        S.getIncome(), S.getUser().getId())))
+                    return true;
+            }
+            else {
+                this.delete(S.getUser());
+            }
+        }
+        catch (SQLServerException e)
+        {
+            return false;
+        }
+        catch (SQLException e)
+        {
+            return false;
+        }
+
+        return false;
+
+
+    }
+    public boolean add(Employee E){
+        try{
+            if (this.add(E.getUser()))
+            {
+                E.getUser().setId(this.getUserID(E.getUser().getUsername()));
+
+                if (this.execute(String.format("INSERT INTO Employees(Position_ID, Name, Surname, Salary, User_ID) " +
+                                "VALUES ( %d, '%s', '%s', %d, %d)",
+                        E.getPosition().getId(), E.getName(), E.getSurname(), E.getSalary(),
+                        E.getUser().getId())))
+                    return true;
+            }
+            else {
+                this.delete(E.getUser());
+            }
+        }
+        catch (SQLServerException e)
+        {
+            return false;
+        }
+        catch (SQLException e)
+        {
+            return false;
+        }
+
+        return false;
+    }
     // public boolean add(Course C){ return true;}
     // public boolean add(Major M){ return true;}
     // public boolean add(Feature F) {return true;}
@@ -86,14 +140,28 @@ public class Database {
         return false;
     }
     public boolean add(User U){
-        if (this.execute(String.format("INSERT INTO Users(Username, Password, [Role]) VALUES" +
+        if (this.execute(String.format("INSERT INTO Users(Username, Password, User_Role) VALUES" +
                 "('%s', '%s', %d)", U.getUsername(), U.getPassword(), U.getRole().getId())))
             return true;
         return false;
     }
 
-    // public boolean delete(Student S){ return true;}
-    // public boolean delete(Employee E){ return true;}
+    public boolean delete(Student S){
+
+        if (this.execute(String.format("DELETE FROM Students WHERE ID = %d", S.getId())))
+            if (this.delete(S.getUser())) {
+                return true;
+        }
+
+        return false;
+    }
+    public boolean delete(Employee E){
+        if (this.execute(String.format("DELETE FROM Employees WHERE ID = %d", E.getId())))
+                if (this.delete(E.getUser()))
+                    return true;
+
+        return false;
+    }
     // public boolean delete(Course C){ return true;}
     // public boolean delete(Major M){ return true;}
     // public boolean delete(Feature F) {return true;}
@@ -109,7 +177,37 @@ public class Database {
         return false;
     }
 
-    public Student get(Student S){ return null;}
+    public Student get(Student S){
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId()));
+
+        try{
+            User U = new User();
+            StudyGroup SG = new StudyGroup();
+
+            Student to_return = new Student();
+
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setSurname(rs.getString("Surname"));
+            to_return.setIncome(rs.getInt("Pay"));
+
+            U.setId(rs.getInt("User_ID"));
+            U = this.get(U);
+            to_return.setUser(U);
+
+            SG.setId(rs.getInt("StudyGroup"));
+            SG = this.get(SG);
+            to_return.setStudyGroup(SG);
+
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+
+    }
     public Employee get(Employee E){
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Employees WHERE ID = %d", E.getId()));
 
@@ -125,11 +223,11 @@ public class Database {
             to_return.setSurname(rs.getString("Surname"));
             to_return.setSalary(rs.getInt("Salary"));
 
-            U.setId(rs.getInt("[User]"));
+            U.setId(rs.getInt("User_ID"));
             U = this.get(U);
             to_return.setUser(U);
 
-            P.setId(rs.getInt("[Position]"));
+            P.setId(rs.getInt("Position_ID"));
             P = this.get(P);
             to_return.setPosition(P);
 
@@ -142,7 +240,23 @@ public class Database {
 
     }
     public Course get(Course C){ return null;}
-    public Major get(Major M){ return null;}
+    public Major get(Major M){
+        Major to_return = new Major();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Majors WHERE ID = %d", M.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setFaculty(Faculty.fromDB(rs.getInt("Faculty")));
+            to_return.setSecretary(Secretary.fromDB(rs.getInt("Secretary")));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Feature get(Feature F) {return null;}
     public Request get(Request R){ return null;}
     public Position get(Position P) {
@@ -160,11 +274,41 @@ public class Database {
             return null;
         }
     }
-    public Faculty get(Faculty F) {return null;}
+    public Faculty get(Faculty F) {
+        Faculty to_return = new Faculty();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Faculties WHERE ID = %d", F.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Document get(Document D) {return null;}
     public Classroom get(Classroom C) {return null;}
     public Grade get(Grade G) {return null;}
-    public StudyGroup get(StudyGroup SG) {return null;}
+    public StudyGroup get(StudyGroup SG) {
+        StudyGroup to_return = new StudyGroup();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM StudyGroups WHERE ID = %d", SG.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setStudy_year(rs.getInt("StudyYear"));
+            to_return.setMentor(Professor.fromDB(rs.getInt("Mentor")));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Schedule get(Schedule S) {return null;}
     public RequestType get(RequestType RT) {return null;}
     public Role get(Role R){
@@ -195,7 +339,7 @@ public class Database {
 
 
             Role R = new Role();
-            R.setId(rs.getInt("[Role]"));
+            R.setId(rs.getInt("User_Role"));
             R = this.get(R);
             to_return.setRole(R);
 
@@ -354,39 +498,7 @@ public class Database {
     }
 
 
-    public boolean createStudent(String name, String surname, String password, String major, String study_group, int income, int study_year) throws NoSuchAlgorithmException, SQLException {
-        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
-        String hashedPassword = Hasher.getHash(password);
-
-
-        if(createUser(username, hashedPassword, "student"))
-        {
-            int userID = getUserID("username");
-            int majorID = getMajorID(major);
-            int studyGroupID = getStudyGroupID(study_group);
-
-            if (this.execute(String.format("INSERT INTO studenti VALUES('%s','%s', %d, %d, %d, %d)", name, surname, majorID, studyGroupID, income, study_year, userID)))
-                return true;
-        }
-
-        return false;
-    }
-
-    public boolean deleteStudent(String name, String surname) throws SQLException {
-        // TODO: Update constraint to cascade delete
-
-        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
-
-        if(this.execute(String.format("DELETE FROM studenti WHERE Nume = '%s' AND Prenume = '%s'", name, surname))){
-            if(this.deleteUser(username)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
+/*
     public boolean createEmployee(String name, String surname, String password, String role, String position, int salary) throws NoSuchAlgorithmException, SQLException {
         // Returns: TRUE on success, FALSE on fail
 
@@ -406,51 +518,7 @@ public class Database {
 
         return false;
     }
-
-    public boolean deleteEmployee(String name, String surname) {
-        // Returns: TRUE on success, FALSE on fail
-        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
-
-        if(this.execute(String.format("DELETE FROM angajati WHERE Nume = '%s' AND Prenume = '%s'", name, surname))){
-            if(this.deleteUser(username)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    public boolean createUser(String username, String password, String role) {
-        try
-        {
-            int role_id = getRoleID(role);
-            if(this.execute(String.format("INSERT INTO utilizatori (Username, Password, FK_TipCont) VALUES ('%s', '%s', %d)", username, password, role_id)))
-                return true;
-
-            return false;
-        }
-        catch (Exception exc)
-        {
-            return false;
-        }
-
-    }
-
-    public boolean deleteUser(String username) {
-        try
-        {
-            if(this.execute(String.format("DELETE FROM utilizatori WHERE Username = '%s'", username)))
-                return true;
-
-            return false;
-        }
-        catch (Exception exc)
-        {
-            return false;
-        }
-
-    }
+*/
 
     public boolean resetUserPassword(String username, String new_password){
         // Returns: TRUE on success, FALSE on fail
@@ -458,35 +526,48 @@ public class Database {
         return true;
     }
 
+
     public int getRoleID(String role) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID_TipCont FROM tipuri_cont AS TC WHERE TC.Denumire_Cont = '%s'", role));
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
         rs.next();
-        return rs.getInt("ID_TipCont");
+        return rs.getInt("ID");
     }
 
     public int getPositionID(String position) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID_Functie FROM functii AS F WHERE F.Denumire = '%s'", position));
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Positions AS F WHERE Description = '%s'", position));
         rs.next();
-        return rs.getInt("ID_Functie");
+        return rs.getInt("ID");
     }
 
     public int getUserID(String username) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID_User FROM utilizatori AS U WHERE U.Username = '%s'", username));
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Users AS U WHERE U.Username = '%s'", username));
         rs.next();
-        return rs.getInt("ID_User");
+        return rs.getInt("ID");
+    }
+
+    public int getEmployeeID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Employees WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
+    }
+
+    public int getStudentID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Students WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
     }
 
 
     public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID_Grupa FROM grupe_studiu AS GS WHERE GS.denumire_grupa = '%s'", study_group));
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM StudyGroups WHERE Name = '%s'", study_group));
         rs.next();
-        return rs.getInt("IG_Grupa");
+        return rs.getInt("ID");
     }
 
     public int getMajorID(String major) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID_Specializare FROM specializari AS S WHERE S.Denumire = '%s'", major));
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Majors WHERE Name = '%s'", major));
         rs.next();
-        return rs.getInt("ID_Specializare");
+        return rs.getInt("ID");
     }
 
 

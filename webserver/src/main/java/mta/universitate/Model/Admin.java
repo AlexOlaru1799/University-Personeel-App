@@ -7,6 +7,13 @@ public class Admin extends Employee {
         super(E);
     }
 
+    public static Admin fromDB(int id)
+    {
+        Employee E = Employee.fromDB(id);
+
+        return fromEmployee(E);
+    }
+
     public static Admin fromEmployee(Employee E){
         if (E.getPosition().getDescription().contentEquals("Administrator"))
             return new Admin(E);

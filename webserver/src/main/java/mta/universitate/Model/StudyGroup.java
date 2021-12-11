@@ -6,6 +6,7 @@ public class StudyGroup {
     private int id;
     private String name;
     private Professor mentor;
+    private int study_year;
 
     public static StudyGroup fromDB(int id)
     {
@@ -39,5 +40,13 @@ public class StudyGroup {
 
     public void setMentor(Professor mentor) {
         this.mentor = mentor;
+    }
+
+    public int getStudy_year() {
+        return study_year;
+    }
+
+    public void setStudy_year(int study_year) {
+        this.study_year = study_year;
     }
 }

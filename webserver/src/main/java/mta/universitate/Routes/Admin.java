@@ -1,17 +1,19 @@
 package mta.universitate.Routes;
 
-import mta.universitate.Model.Database;
+import mta.universitate.Model.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Locale;
 
 @RestController
 public class Admin {
     Database db = Database.getInstance();
 
+    // TODO
     @RequestMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
     public String resetPassword(@RequestParam String username, @RequestParam String new_pass) throws SQLException {
@@ -23,17 +25,34 @@ public class Admin {
 
     @RequestMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
-    public String addEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String role, @RequestParam String position, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
-        if (this.db.createEmployee(name, surname, password, role, position, salary))
+    public String addEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam int salary) throws SQLException, NoSuchAlgorithmException {
+         Employee E = new Employee();
+        E.setName(name);
+        E.setSurname(surname);
+        E.setSalary(salary);
+        E.setPosition(Position.fromDB(db.getPositionID(position)));
+
+        User U = new User();
+        U.setPassword(password);
+        U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
+        U.setRole(Role.fromDB(db.getRoleID(position)));
+
+        E.setUser(U);
+
+        if (db.add(E))
+        {
             return "{'status' : 'SUCCESS'}";
+        }
         return "{'status' : 'FAILED'}";
 
     }
 
+
     @RequestMapping(value = "/admin/delete-employee", produces = "application/json")
     @ResponseBody
     public String deleteEmployee(@RequestParam String name, @RequestParam String surname) throws SQLException {
-        if (this.db.deleteEmployee(name, surname))
+
+        if (this.db.delete(Employee.fromDB(db.getEmployeeID(name, surname))))
             return "{'status' : 'SUCCESS'}";
         return "{'status' : 'FAILED'}";
     }
@@ -41,25 +60,40 @@ public class Admin {
 
     @RequestMapping(value = "/admin/create-student", produces = "application/json")
     @ResponseBody
-    public String createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income, @RequestParam int study_year) throws SQLException, NoSuchAlgorithmException {
+    public String createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income) throws SQLException, NoSuchAlgorithmException {
+        Student S = new Student();
+        S.setName(name);
+        S.setSurname(surname);
+        S.setIncome(income);
+        S.setMajor(Major.fromDB(db.getMajorID(major)));
+        S.setStudyGroup(StudyGroup.fromDB(db.getStudyGroupID(study_group)));
 
-        if (this.db.createStudent(name, surname, password, major, study_group, income, study_year))
+        User U = new User();
+        U.setPassword(password);
+        U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
+        U.setRole(Role.fromDB(db.getRoleID("Student")));
+
+        S.setUser(U);
+
+        if (db.add(S))
+        {
             return "{'status' : 'SUCCESS'}";
+        }
         return "{'status' : 'FAILED'}";
 
     }
 
+
     @RequestMapping(value = "/admin/delete-student", produces = "application/json")
     @ResponseBody
     public String deleteStudent(@RequestParam String name, @RequestParam String surname) throws SQLException {
-        if (this.db.deleteStudent(name, surname))
+        if (this.db.delete(Student.fromDB(db.getStudentID(name, surname))))
             return "{'status' : 'SUCCESS'}";
-        return "{'status' : 'FALSE'}";
-
+        return "{'status' : 'FAILED'}";
     }
 
 
-
+    /*
     @GetMapping("/materii")
     public String viewSubjects() throws SQLException {
         Database db = Database.getInstance();
@@ -96,5 +130,7 @@ public class Admin {
 
         return stringBuilder.toString();
     }
+
+    */
 
 }

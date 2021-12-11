@@ -7,9 +7,9 @@ public class Student {
     private String name;
     private String surname;
     private StudyGroup studyGroup;
-    private StudyYear studyYear;
     private int income;
     private Major major;
+    private User user;
 
     public static Student fromDB(int id){
         Student S = new Student();
@@ -56,14 +56,6 @@ public class Student {
         this.studyGroup = studyGroup;
     }
 
-    public StudyYear getStudyYear() {
-        return studyYear;
-    }
-
-    public void setStudyYear(StudyYear studyYear) {
-        this.studyYear = studyYear;
-    }
-
     public int getIncome() {
         return income;
     }
@@ -78,5 +70,13 @@ public class Student {
 
     public void setMajor(Major major) {
         this.major = major;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

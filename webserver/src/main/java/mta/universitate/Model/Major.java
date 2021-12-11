@@ -5,7 +5,7 @@ public class Major {
     private int id;
     private String name;
     private Faculty faculty;
-    private ArrayList<Course> courses = new ArrayList<>();
+    private Secretary secretary;
 
     public static Major fromDB(int id)
     {
@@ -40,11 +40,11 @@ public class Major {
         this.faculty = faculty;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
+    public Secretary getSecretary() {
+        return secretary;
     }
 
-    public void setCourses(ArrayList<Course> courses) {
-        this.courses = courses;
+    public void setSecretary(Secretary secretary) {
+        this.secretary = secretary;
     }
 }

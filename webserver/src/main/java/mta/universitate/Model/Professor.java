@@ -6,6 +6,14 @@ public class Professor extends Employee {
         super(E);
     }
 
+
+    public static Professor fromDB(int id)
+    {
+        Employee E = Employee.fromDB(id);
+
+        return fromEmployee(E);
+    }
+
     public static Professor fromEmployee(Employee E){
         if (E.getPosition().getDescription().contentEquals("Professor"))
             return new Professor(E);
