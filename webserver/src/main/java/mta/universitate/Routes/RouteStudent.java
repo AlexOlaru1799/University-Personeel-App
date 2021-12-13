@@ -11,6 +11,7 @@ import java.sql.SQLException;
 public class RouteStudent {
     Database db = Database.getInstance();
 
+    /*
     @RequestMapping(value = "/student/my-profile", produces = "application/json")
     @ResponseBody
     public String profile(){
@@ -27,5 +28,7 @@ public class RouteStudent {
 
         return "{'status' : 'FAILED'}";
     }
+
+     */
 
 }

@@ -4,7 +4,9 @@ import mta.universitate.Model.Database;
 import mta.universitate.Model.Employee;
 import mta.universitate.Model.Professor;
 import mta.universitate.Model.User;
+import mta.universitate.Utils.CookieManager;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.Cookie;
 
 import java.sql.SQLException;
 
@@ -13,17 +15,10 @@ public class Test {
     Database db = Database.getInstance();
 
     @RequestMapping("/test")
-    public String test() throws SQLException {
-        Employee E = new Employee();
-        E.setId(21);
-        E = db.get(E);
+    public String test(@CookieValue(value="uid", defaultValue = "hahaha") Cookie cookie) throws SQLException {
 
-        Professor prof = Professor.fromEmployee(E);
-
-
-
-
-        return String.format("<h1>%s<h1>", prof.getName() );
+        User U = CookieManager.getInstance().validateCookie(cookie);
+        return String.format("<h1>My name is %s<h1>", U.getUsername());
     }
 
 

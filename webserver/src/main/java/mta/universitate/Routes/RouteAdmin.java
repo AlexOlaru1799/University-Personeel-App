@@ -29,7 +29,7 @@ public class RouteAdmin {
             if (admin)
             {
                 Admin A = Admin.fromEmployee(Employee.fromDB(db.getEmployeeID("Anatol", "Basarab")));
-                if (A.resetUserPassword(username, new_pass))
+                if (A.resetUserPassword(username, Hasher.getHash(new_pass)))
                     return "{'status' : 'SUCCESS'}";
             }
         }
