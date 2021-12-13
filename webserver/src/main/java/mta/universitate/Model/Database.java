@@ -409,6 +409,42 @@ public class Database {
     }
 
 
+    public int getRoleID(String role) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getPositionID(String position) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Positions AS F WHERE Description = '%s'", position));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getUserID(String username) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Users AS U WHERE U.Username = '%s'", username));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getEmployeeID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Employees WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getStudentID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Students WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM StudyGroups WHERE Name = '%s'", study_group));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getMajorID(String major) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Majors WHERE Name = '%s'", major));
+        rs.next();
+        return rs.getInt("ID");
+    }
+
 
     //
     public ResultSet getStudentInfoByName(String nume, String prenume) throws SQLException {
@@ -439,24 +475,24 @@ public class Database {
     }
 
     public ResultSet getStudentGradesByName(String nume, String prenume) throws SQLException {
-            String query = "select [dbo].[note_studenti].[Valoare], [dbo].[note_studenti].[Data_calendar], [dbo].[materii].[NumeMaterie], [dbo].[angajati].[Nume] + ' ' + [dbo].[angajati].[Prenume] as 'Profesor', [dbo].[grupe_studiu].[denumire_grupa], [dbo].[studenti].[An_de_Studiu], [dbo].[specializari].[Denumire] as 'Specializare', [dbo].[facultati].[Denumire] as 'Facultate'\n" +
-                    "from [dbo].[note_studenti]\n" +
-                    "inner join [dbo].[materii]\n" +
-                    "on [dbo].[materii].[ID_Materie] = [dbo].[note_studenti].[FK_Materie]\n" +
-                    "inner join [dbo].[angajati]\n" +
-                    "on [dbo].[angajati].[ID_Angajat]=[dbo].[materii].[FK_Profesor]\n" +
-                    "inner join [dbo].[studenti]\n" +
-                    "on [dbo].[studenti].[ID_Student]=[dbo].[note_studenti].[FK_Student]\n" +
-                    "inner join [dbo].[grupe_studiu]\n" +
-                    "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
-                    "inner join [dbo].[specializari]\n" +
-                    "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
-                    "inner join [dbo].[facultati]\n" +
-                    "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]" +
-                    "where [dbo].[studenti].[Nume]='" + nume + "' and [dbo].[studenti].[Prenume]='" + prenume + "'\n";
+        String query = "select [dbo].[note_studenti].[Valoare], [dbo].[note_studenti].[Data_calendar], [dbo].[materii].[NumeMaterie], [dbo].[angajati].[Nume] + ' ' + [dbo].[angajati].[Prenume] as 'Profesor', [dbo].[grupe_studiu].[denumire_grupa], [dbo].[studenti].[An_de_Studiu], [dbo].[specializari].[Denumire] as 'Specializare', [dbo].[facultati].[Denumire] as 'Facultate'\n" +
+                "from [dbo].[note_studenti]\n" +
+                "inner join [dbo].[materii]\n" +
+                "on [dbo].[materii].[ID_Materie] = [dbo].[note_studenti].[FK_Materie]\n" +
+                "inner join [dbo].[angajati]\n" +
+                "on [dbo].[angajati].[ID_Angajat]=[dbo].[materii].[FK_Profesor]\n" +
+                "inner join [dbo].[studenti]\n" +
+                "on [dbo].[studenti].[ID_Student]=[dbo].[note_studenti].[FK_Student]\n" +
+                "inner join [dbo].[grupe_studiu]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
+                "inner join [dbo].[specializari]\n" +
+                "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
+                "inner join [dbo].[facultati]\n" +
+                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]" +
+                "where [dbo].[studenti].[Nume]='" + nume + "' and [dbo].[studenti].[Prenume]='" + prenume + "'\n";
 
-            return executeQuery(query);
-        }
+        return executeQuery(query);
+    }
 
     public ResultSet getStudentGrades(String id) {
         String query="SELECT M.NumeMaterie,NS.Valoare, NS.Data_calendar " +
@@ -472,46 +508,46 @@ public class Database {
 
     public ResultSet getStudentClasses(String nume, String prenume) throws SQLException {
         String query= "SELECT [dbo].[materii].[NumeMaterie],[dbo].[materii].[Nr_Credite],[dbo].[studenti].[An_de_Studiu],[dbo].[grupe_studiu].[denumire_grupa], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate',[dbo].[angajati].[Nume] +' '+[dbo].[angajati].[Prenume] as 'Profesor'\n "+
-        "FROM [dbo].[studenti]\n" +
-        "inner join [dbo].[grupe_studiu]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
-        "inner join [dbo].[orar]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
-        "inner join [dbo].[ore]\n" +
-        "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
-        "inner join [dbo].[materii]\n" +
-        "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
-        "inner join [dbo].[specializari]\n" +
-        "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
-        "inner join [dbo].[facultati]\n" +
-        "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
-        "inner join [dbo].[angajati]\n" +
-        "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
-        "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
+                "FROM [dbo].[studenti]\n" +
+                "inner join [dbo].[grupe_studiu]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
+                "inner join [dbo].[orar]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
+                "inner join [dbo].[ore]\n" +
+                "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
+                "inner join [dbo].[materii]\n" +
+                "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
+                "inner join [dbo].[specializari]\n" +
+                "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
+                "inner join [dbo].[facultati]\n" +
+                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
+                "inner join [dbo].[angajati]\n" +
+                "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
+                "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
 
         return executeQuery(query);
     }
 
     public ResultSet getStudentSchedule(String nume, String prenume) throws SQLException {
         String query= "SELECT [dbo].[orar].[Ora],[dbo].[grupe_studiu].[denumire_grupa],[dbo].[materii].[NumeMaterie],[dbo].[sali_de_clasa].[Denumire],[dbo].[studenti].[An_de_Studiu], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate',[dbo].[angajati].[Nume] +' '+[dbo].[angajati].[Prenume] as 'Profesor'\n" +
-        "FROM [dbo].[orar]\n" +
-        "inner join [dbo].[grupe_studiu]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
-        "inner join [dbo].[studenti]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
-        "inner join [dbo].[ore]\n" +
-        "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
-        "inner join [dbo].[materii]\n" +
-        "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
-        "inner join [dbo].[sali_de_clasa]\n" +
-        "on [dbo].[orar].[FK_Sala]=[dbo].[sali_de_clasa].[ID_Sala]\n" +
-        "inner join [dbo].[specializari]\n" +
-        "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
-        "inner join [dbo].[facultati]\n" +
-        "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
-        "inner join [dbo].[angajati]\n" +
-        "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
-        "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
+                "FROM [dbo].[orar]\n" +
+                "inner join [dbo].[grupe_studiu]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
+                "inner join [dbo].[studenti]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
+                "inner join [dbo].[ore]\n" +
+                "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
+                "inner join [dbo].[materii]\n" +
+                "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
+                "inner join [dbo].[sali_de_clasa]\n" +
+                "on [dbo].[orar].[FK_Sala]=[dbo].[sali_de_clasa].[ID_Sala]\n" +
+                "inner join [dbo].[specializari]\n" +
+                "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
+                "inner join [dbo].[facultati]\n" +
+                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
+                "inner join [dbo].[angajati]\n" +
+                "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
+                "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
 
         return executeQuery(query);
     }
@@ -552,53 +588,6 @@ public class Database {
                 "WHERE A.ID_Angajat=" +id;
         return executeQuery(query);
     }
-
-
-
-
-    public int getRoleID(String role) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getPositionID(String position) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Positions AS F WHERE Description = '%s'", position));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getUserID(String username) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Users AS U WHERE U.Username = '%s'", username));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getEmployeeID(String name, String surname) throws  SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Employees WHERE Name = '%s' AND Surname = '%s'", name, surname));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getStudentID(String name, String surname) throws  SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Students WHERE Name = '%s' AND Surname = '%s'", name, surname));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-
-    public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM StudyGroups WHERE Name = '%s'", study_group));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getMajorID(String major) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Majors WHERE Name = '%s'", major));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
 
     public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException {
         String query= "select [dbo].[orar].[Ora], [dbo].[sali_de_clasa].[Denumire] as 'Sala', [dbo].[ore].[Tip_Ora], [dbo].[materii].[NumeMaterie], [dbo].[angajati].[Nume] + ' ' + [dbo].[angajati].[Prenume] as 'Profesor', [dbo].[grupe_studiu].[denumire_grupa]\n" +
