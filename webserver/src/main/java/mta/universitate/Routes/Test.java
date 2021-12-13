@@ -18,7 +18,7 @@ public class Test {
         E.setId(21);
         E = db.get(E);
 
-        Professor prof = Professor.fromEmployee(E);
+       Professor prof = Professor.fromEmployee(E);
 
 
 

@@ -239,7 +239,30 @@ public class Database {
         }
 
     }
-    public Course get(Course C){ return null;}
+    public Course get(Course C){
+        Employee E=new Employee();
+
+        Course to_return = new Course();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Courses WHERE ID = %d", C.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setCredits(rs.getInt("Credits"));
+            to_return.setName(rs.getString("Name"));
+
+            E.setId(rs.getInt("Professor"));
+            E=this.get(E);
+
+            Professor prof=new Professor(E);
+            to_return.setProfessor(prof);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Major get(Major M){
         Major to_return = new Major();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Majors WHERE ID = %d", M.getId()));
@@ -257,8 +280,53 @@ public class Database {
             return null;
         }
     }
-    public Feature get(Feature F) {return null;}
-    public Request get(Request R){ return null;}
+    public Feature get(Feature F) {
+        Feature to_return = new Feature();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Features WHERE ID = %d", F.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Description"));
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+    public Request get(Request R){
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Requests WHERE ID = %d", R.getId()));
+
+        try{
+            User U = new User();
+            Employee E=new Employee();
+            RequestType T=new RequestType();
+
+            Request to_return = new Request();
+
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDate(rs.getDate("[Date]"));
+            to_return.setApproved(rs.getBoolean("Approved"));
+
+            U.setId(rs.getInt("Issuer"));
+            U = this.get(U);
+            to_return.setIssuer(U);
+
+            E.setId(rs.getInt("Supervisor"));
+            E = this.get(E);
+            to_return.setSupervisor(E);
+
+            T.setId(rs.getInt("Kind"));
+            T = this.get(T);
+            to_return.setKind(T);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public Position get(Position P) {
         Position to_return = new Position();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Positions WHERE ID = %d", P.getId()));
@@ -289,9 +357,83 @@ public class Database {
             return null;
         }
     }
-    public Document get(Document D) {return null;}
-    public Classroom get(Classroom C) {return null;}
-    public Grade get(Grade G) {return null;}
+    public Document get(Document D) {
+        User U = new User();
+
+        Document to_return = new Document();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Documents WHERE ID = %d", D.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setTitle(rs.getString("Title"));
+            to_return.setContent(rs.getString("Content"));
+
+            U.setId(rs.getInt("[User]"));
+            U=this.get(U);
+            to_return.setUser(U);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+
+    //TB IMPLEMENTATA
+    public Classroom get(Classroom C) {
+//        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
+//
+//        try{
+//
+//
+//            Classroom to_return = new Classroom();
+//
+//            rs.next();
+//
+//            //cred ca ar tb sa existe un setName in clasa Classroom
+//            to_return.setId(rs.getInt("ID"));
+//            to_return.setCapacity(rs.getInt("Capacity"));
+//
+//
+//
+//            return to_return;
+//        }
+//        catch (SQLException e) {
+//            return null;
+//        }
+
+        return null;
+
+    }
+
+    public Grade get(Grade G) {
+        Course C=new Course();
+        Student S=new Student();
+
+        Grade to_return = new Grade();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Grades WHERE ID = %d", G.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setValue(rs.getInt("Value"));
+            to_return.setDate(rs.getDate("[Date]"));
+
+            C.setId(rs.getInt("Course"));
+            C=this.get(C);
+            to_return.setCourse(C);
+
+            S.setId(rs.getInt("Student"));
+            S=this.get(S);
+            to_return.setStudent(S);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
     public StudyGroup get(StudyGroup SG) {
         StudyGroup to_return = new StudyGroup();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM StudyGroups WHERE ID = %d", SG.getId()));
@@ -309,8 +451,83 @@ public class Database {
             return null;
         }
     }
-    public Schedule get(Schedule S) {return null;}
-    public RequestType get(RequestType RT) {return null;}
+    public Module get(Module M){
+        Course C=new Course();
+        Employee E=new Employee();
+
+        Module to_return = new Module();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Modules WHERE ID = %d", M.getId()));
+
+        try{
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setKind(rs.getString("Kind"));
+
+            C.setId(rs.getInt("Course"));
+            C=this.get(C);
+            to_return.setCourse(C);
+
+            E.setId(rs.getInt("Professor"));
+            E=this.get(E);
+
+            Professor P=new Professor(E);
+            to_return.setProfessor(P);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+    public Schedule get(Schedule S) {
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Schedule WHERE ID = %d", S.getId()));
+
+        try{
+            Classroom C = new Classroom();
+            StudyGroup SG = new StudyGroup();
+            Module M=new Module();
+
+            Schedule to_return = new Schedule();
+
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDate(rs.getDate("[Time]"));
+
+            C.setId(rs.getInt("Classroom"));
+            C = this.get(C);
+            to_return.setClassroom(C);
+
+            SG.setId(rs.getInt("StudyGroup"));
+            SG = this.get(SG);
+            to_return.setStudy_group(SG);
+
+            M.setId(rs.getInt("Module"));
+            M = this.get(M);
+            to_return.setModule(M);
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+    public RequestType get(RequestType RT) {
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM RequestTypes WHERE ID = %d", RT.getId()));
+
+        try{
+            RequestType to_return = new RequestType();
+
+            rs.next();
+            to_return.setId(rs.getInt("ID"));
+            to_return.setDescription(rs.getString("Kind"));
+
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+
+    }
     public Role get(Role R){
         Role to_return = new Role();
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Roles WHERE ID = %d", R.getId()));
@@ -350,6 +567,8 @@ public class Database {
         }
     }
 
+
+    //
 
 
 
