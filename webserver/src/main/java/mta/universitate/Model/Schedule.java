@@ -1,11 +1,13 @@
 package mta.universitate.Model;
 
+import mta.universitate.Utils.JsonParser;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
-public class Schedule {
+public class Schedule extends JsonParser {
     private int id;
     private Date date;
     private StudyGroup study_group;
