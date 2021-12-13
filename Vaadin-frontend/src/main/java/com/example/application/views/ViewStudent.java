@@ -25,8 +25,6 @@ public class ViewStudent extends VerticalLayout {
     private Button searchButton;
 
 
-
-
     public ViewStudent() {
         name = new TextField("Student ID");
         searchButton = new Button("Search");
@@ -40,7 +38,6 @@ public class ViewStudent extends VerticalLayout {
         H5 denumire = new H5("");
         H5 an = new H5("");
         H5 username = new H5("");
-
 
 
         add(new H3("Search the student using his ID"));
@@ -227,13 +224,6 @@ public class ViewStudent extends VerticalLayout {
 
 
         });
-
-
-
-        //add(name, sayHello);
-
-
-
 
     }
 

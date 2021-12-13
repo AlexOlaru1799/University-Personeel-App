@@ -1,34 +1,26 @@
 package com.example.application.views;
 
 
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The main view is a top-level placeholder for other views.
  */
-@PWA(name = "University App-Secretary", shortName = "University App-Secretary", enableInstallPrompt = false)
-
 @Theme(themeFolder = "myapp")
 @PageTitle("University App-Secretary")
-public class MainLayout extends AppLayout {
+@Route(value = "adminLayout")
+public class AdminLayout extends AppLayout {
 
     public static class MenuItemInfo {
 
@@ -58,7 +50,7 @@ public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
 
-    public MainLayout() {
+    public AdminLayout() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerContent());
@@ -80,7 +72,7 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("University App-Secretary");
+        H2 appName = new H2("University App - Admin Menu");
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
         com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
@@ -110,27 +102,20 @@ public class MainLayout extends AppLayout {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
 
 
-                new MenuItemInfo("Create Student Account", "la la-smile-o", CreateStudentAccount.class), //
+                new MenuItemInfo("Create User", "la la-smile-o", CreateUserAccount.class), //
 
-                new MenuItemInfo("Create Teacher Account", "la la-briefcase", CreateTeacherAccount.class), //
+                new MenuItemInfo("Reset Account Password", "la la-legal", ResetAccountPassword.class), //
 
-                new MenuItemInfo("Delete Student Account", "la la-legal", DeleteStudentAccount.class), //
+                new MenuItemInfo("Reset Username", "la la-magic", ResetUsername.class), //
 
-                new MenuItemInfo("Delete Teacher Account", "la la-magic", DeleteTeacherAccount.class), //
+                new MenuItemInfo("Archive Student", "la la-certificate", ArchiveStudent.class), //
 
-                new MenuItemInfo("View Student Account", "la la-certificate", ViewStudent.class), //
+                new MenuItemInfo("Update Classroom", "la la-search", UpdateClassroom.class), //
 
-                new MenuItemInfo("View Teacher Account", "la la-search", ViewTeacher.class), //
-
-                new MenuItemInfo("Create Student Medical Certificate", "la la-edit", CreateStudentMedicalCertificate.class), //
-
-                new MenuItemInfo("Create Teacher Salary Certificate", "la la-cc-visa", CreateTeacherSalryCertificate.class), //
-
-                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
-
-
+                new MenuItemInfo("Update Schedule", "la la-edit", UpdateSchedule.class), //
 
         };
+
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : menuItems) {
             links.add(createLink(menuItemInfo));
