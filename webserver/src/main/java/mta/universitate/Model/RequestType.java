@@ -1,6 +1,8 @@
 package mta.universitate.Model;
 
-public class RequestType {
+import mta.universitate.Utils.JsonParser;
+
+public class RequestType extends JsonParser {
     private int id;
     private String description;
 

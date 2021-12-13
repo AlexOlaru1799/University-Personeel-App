@@ -1,7 +1,9 @@
 package mta.universitate.Model;
+import mta.universitate.Utils.JsonParser;
+
 import java.util.ArrayList;
 
-public class Major {
+public class Major extends JsonParser {
     private int id;
     private String name;
     private Faculty faculty;

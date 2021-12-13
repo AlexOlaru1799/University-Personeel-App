@@ -1,8 +1,10 @@
 package mta.universitate.Model;
 
+import mta.universitate.Utils.JsonParser;
+
 import java.util.ArrayList;
 
-public class StudyGroup {
+public class StudyGroup extends JsonParser {
     private int id;
     private String name;
     private Professor mentor;

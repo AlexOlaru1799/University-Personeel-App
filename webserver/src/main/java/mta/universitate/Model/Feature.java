@@ -1,6 +1,8 @@
 package mta.universitate.Model;
 
-public class Feature {
+import mta.universitate.Utils.JsonParser;
+
+public class Feature extends JsonParser {
     private int id;
     private String description;
 

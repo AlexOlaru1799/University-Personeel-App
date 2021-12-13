@@ -1,5 +1,6 @@
 package mta.universitate.Model;
 
+import mta.universitate.Utils.JsonParser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,8 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-@RestController
-public class Classroom {
+public class Classroom extends JsonParser {
     int id;
     int capacity;
     private ArrayList<Feature> features;
