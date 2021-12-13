@@ -403,7 +403,7 @@ public class Database {
     }
 
     public boolean update(User U){
-        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
+        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
         return false;
     }

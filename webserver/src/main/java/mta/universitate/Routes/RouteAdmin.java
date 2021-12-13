@@ -1,6 +1,7 @@
 package mta.universitate.Routes;
 
 import mta.universitate.Model.*;
+import mta.universitate.Utils.Hasher;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -15,7 +16,6 @@ import mta.universitate.Model.Admin.*;
 public class RouteAdmin {
     Database db = Database.getInstance();
 
-    // TODO
     @RequestMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
     public String resetPassword(@RequestParam String username, @RequestParam String new_pass) throws SQLException {
@@ -41,7 +41,7 @@ public class RouteAdmin {
 
     @RequestMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
-    public String addEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam int salary)  {
+    public String createEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam int salary)  {
         try
         {
             Employee E = new Employee();
@@ -51,7 +51,7 @@ public class RouteAdmin {
             E.setPosition(Position.fromDB(db.getPositionID(position)));
 
             User U = new User();
-            U.setPassword(password);
+            U.setPassword(Hasher.getHash(password));
             U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
             U.setRole(Role.fromDB(db.getRoleID(position)));
 
@@ -95,7 +95,7 @@ public class RouteAdmin {
             S.setStudyGroup(StudyGroup.fromDB(db.getStudyGroupID(study_group)));
 
             User U = new User();
-            U.setPassword(password);
+            U.setPassword(Hasher.getHash(password));
             U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
             U.setRole(Role.fromDB(db.getRoleID("Student")));
 
@@ -123,6 +123,8 @@ public class RouteAdmin {
 
         return "{'status' : 'FAILED'}";
     }
+
+
 
 
     /*
