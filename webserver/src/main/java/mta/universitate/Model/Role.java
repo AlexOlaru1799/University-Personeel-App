@@ -1,7 +1,10 @@
 package mta.universitate.Model;
 
 
-public class Role{
+import com.fasterxml.jackson.core.JsonFactory;
+import mta.universitate.Utils.JsonParser;
+
+public class Role extends JsonParser {
     int id;
     String description;
 
@@ -19,6 +22,7 @@ public class Role{
         return Database.getInstance().get(R);
     }
 
+
     public int getId() {
         return id;
     }
@@ -33,6 +37,12 @@ public class Role{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "\"Role [id=%d, description='%s']".formatted(id, description);
+
     }
 }
 
