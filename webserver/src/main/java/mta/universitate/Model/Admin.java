@@ -1,5 +1,9 @@
 package mta.universitate.Model;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
+import java.sql.SQLException;
+
 public class Admin extends Employee {
 
     public Admin(Employee E)
@@ -49,8 +53,19 @@ public class Admin extends Employee {
 
     public boolean resetUserPassword(String username, String newPassword) {
 
-        if (Database.getInstance().resetUserPassword(username, newPassword))
-            return true;
+        try
+        {
+            Database db = Database.getInstance();
+            User U = db.get(User.fromDB(db.getUserID(username)));
+            U.setPassword(newPassword);
+            if (Database.getInstance().update(U))
+                return true;
+        }
+        catch (SQLException e)
+        {
+            return false;
+        }
+
         return false;
     }
 }

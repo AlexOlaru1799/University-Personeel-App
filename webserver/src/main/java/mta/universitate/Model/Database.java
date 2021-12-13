@@ -402,7 +402,11 @@ public class Database {
         }
     }
 
-
+    public boolean update(User U){
+        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
+            return true;
+        return false;
+    }
 
 
 
@@ -550,15 +554,6 @@ public class Database {
     }
 
 
-
-    public boolean resetUserPassword(String username, String new_password){
-        // Returns: TRUE on success, FALSE on fail
-        String hashedPassword = Hasher.getHash(new_password);
-
-        if (this.execute(String.format("UPDATE Users SET Password = '%s' WHERE Username = '%s'", hashedPassword, username)))
-            return true;
-        return false;
-    }
 
 
     public int getRoleID(String role) throws SQLException, SQLServerException{
