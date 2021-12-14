@@ -1,5 +1,6 @@
 package mta.universitate.Model;
 
+import mta.universitate.Utils.JsonParser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,12 +11,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-@RestController
-public class Classroom {
+public class Classroom extends JsonParser {
     int id;
     int capacity;
     private ArrayList<Feature> features;
-    private String type;
+    private String name;
+    private boolean type;
 
     public static Classroom fromDB(int id)
     {
@@ -49,11 +50,19 @@ public class Classroom {
         this.features = features;
     }
 
-    public String getType() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(boolean type) {
         this.type = type;
     }
 

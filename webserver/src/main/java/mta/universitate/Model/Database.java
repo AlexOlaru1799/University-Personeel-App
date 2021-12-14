@@ -164,8 +164,16 @@ public class Database {
     }
     // public boolean delete(Course C){ return true;}
     // public boolean delete(Major M){ return true;}
-    // public boolean delete(Feature F) {return true;}
-    // public boolean delete(Report R){ return true;}
+    public boolean delete(Feature F) {
+        if (this.execute(String.format("DELETE FROM Features WHERE ID = %d", F.getId())))
+            return true;
+        return false;
+    }
+    public boolean delete(Request R){
+        if (this.execute(String.format("DELETE FROM Requests WHERE ID = %d", R.getId())))
+            return true;
+        return false;
+    }
     public boolean delete(Role R){
         if (this.execute(String.format("DELETE FROM Roles WHERE ID = %d", R.getId())))
             return true;
@@ -380,7 +388,7 @@ public class Database {
         }
     }
 
-    //TB IMPLEMENTATA
+    //TODO
     public Classroom get(Classroom C) {
 //        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
 //
@@ -526,7 +534,6 @@ public class Database {
         catch (SQLException e) {
             return null;
         }
-
     }
     public Role get(Role R){
         Role to_return = new Role();
@@ -567,10 +574,50 @@ public class Database {
         }
     }
 
+    public boolean update(User U){
+        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
+            return true;
+        return false;
+    }
 
     //
 
 
+    public int getRoleID(String role) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getPositionID(String position) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Positions AS F WHERE Description = '%s'", position));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getUserID(String username) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Users AS U WHERE U.Username = '%s'", username));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getEmployeeID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Employees WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getStudentID(String name, String surname) throws  SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Students WHERE Name = '%s' AND Surname = '%s'", name, surname));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM StudyGroups WHERE Name = '%s'", study_group));
+        rs.next();
+        return rs.getInt("ID");
+    }
+    public int getMajorID(String major) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Majors WHERE Name = '%s'", major));
+        rs.next();
+        return rs.getInt("ID");
+    }
 
 
     //
@@ -617,9 +664,8 @@ public class Database {
                     "inner join Faculties as F\n" +
                     "on F.ID=M.Faculty\n" +
                     "where S.Name='" + nume + "' and S.Surname='" + prenume + "'";
-
-            return executeQuery(query);
-        }
+        return executeQuery(query);
+    }
 
     public ResultSet getStudentGrades(String id) {
         String query="SELECT M.Name, NS.Value, NS.[[Date]]]  \n" +
@@ -635,22 +681,22 @@ public class Database {
 
     public ResultSet getStudentClasses(String nume, String prenume) throws SQLException {
         String query= "SELECT [dbo].[materii].[NumeMaterie],[dbo].[materii].[Nr_Credite],[dbo].[studenti].[An_de_Studiu],[dbo].[grupe_studiu].[denumire_grupa], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate',[dbo].[angajati].[Nume] +' '+[dbo].[angajati].[Prenume] as 'Profesor'\n "+
-        "FROM [dbo].[studenti]\n" +
-        "inner join [dbo].[grupe_studiu]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
-        "inner join [dbo].[orar]\n" +
-        "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
-        "inner join [dbo].[ore]\n" +
-        "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
-        "inner join [dbo].[materii]\n" +
-        "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
-        "inner join [dbo].[specializari]\n" +
-        "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
-        "inner join [dbo].[facultati]\n" +
-        "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
-        "inner join [dbo].[angajati]\n" +
-        "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
-        "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
+                "FROM [dbo].[studenti]\n" +
+                "inner join [dbo].[grupe_studiu]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
+                "inner join [dbo].[orar]\n" +
+                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
+                "inner join [dbo].[ore]\n" +
+                "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
+                "inner join [dbo].[materii]\n" +
+                "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
+                "inner join [dbo].[specializari]\n" +
+                "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
+                "inner join [dbo].[facultati]\n" +
+                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
+                "inner join [dbo].[angajati]\n" +
+                "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
+                "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
 
         return executeQuery(query);
     }
@@ -715,83 +761,6 @@ public class Database {
                 "WHERE E.ID= " +id;
         return executeQuery(query);
     }
-
-
-/*
-    public boolean createEmployee(String name, String surname, String password, String role, String position, int salary) throws NoSuchAlgorithmException, SQLException {
-        // Returns: TRUE on success, FALSE on fail
-
-        String username = name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro";
-        String hashedPassword = Hasher.getHash(password);
-
-        // First creates the User
-        if (this.createUser(username, hashedPassword, role))
-        {
-            int userID = getUserID(username);
-            int positionID = getPositionID(position);
-            if(this.execute(String.format("INSERT INTO angajati(Nume, Prenume, FK_Functia, Salariu, FK_ID_User) VALUES ('%s', '%s', %d, %d, %d)", name, surname, positionID, salary, userID)))
-                return true;
-            else
-                this.deleteUser(username);
-        }
-
-        return false;
-    }
-*/
-
-    public boolean resetUserPassword(String username, String new_password){
-        // Returns: TRUE on success, FALSE on fail
-        String hashedPassword = Hasher.getHash(new_password);
-
-        if (this.execute(String.format("UPDATE Users SET Password = '%s' WHERE Username = '%s'", hashedPassword, username)))
-            return true;
-        return false;
-    }
-
-
-    public int getRoleID(String role) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getPositionID(String position) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Positions AS F WHERE Description = '%s'", position));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getUserID(String username) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Users AS U WHERE U.Username = '%s'", username));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getEmployeeID(String name, String surname) throws  SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Employees WHERE Name = '%s' AND Surname = '%s'", name, surname));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getStudentID(String name, String surname) throws  SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Students WHERE Name = '%s' AND Surname = '%s'", name, surname));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-
-    public int getStudyGroupID(String study_group) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM StudyGroups WHERE Name = '%s'", study_group));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
-    public int getMajorID(String major) throws SQLException, SQLServerException{
-        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Majors WHERE Name = '%s'", major));
-        rs.next();
-        return rs.getInt("ID");
-    }
-
 
     public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException {
         String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +

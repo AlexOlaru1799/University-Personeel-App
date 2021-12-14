@@ -1,7 +1,9 @@
 package mta.universitate.Model;
+import mta.universitate.Utils.JsonParser;
+
 import java.util.Date;
 
-public class Grade {
+public class Grade extends JsonParser {
     private int id;
     private int value;
     private Course course;

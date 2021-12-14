@@ -1,6 +1,8 @@
 package mta.universitate.Model;
 
-public class Position {
+import mta.universitate.Utils.JsonParser;
+
+public class Position extends JsonParser {
     private int id;
     private String description;
 

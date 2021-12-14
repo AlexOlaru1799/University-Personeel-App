@@ -1,8 +1,9 @@
 package mta.universitate.Model;
 
 import mta.universitate.Model.Document;
+import mta.universitate.Utils.JsonParser;
 
-public class Employee {
+public class Employee extends JsonParser {
     private int id;
     private String name;
     private String surname;

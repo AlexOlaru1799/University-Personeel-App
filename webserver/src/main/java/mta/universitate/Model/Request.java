@@ -1,7 +1,9 @@
 package mta.universitate.Model;
+import mta.universitate.Utils.JsonParser;
+
 import java.util.Date;
 
-public class Request {
+public class Request extends JsonParser {
 
         private int id;
         private RequestType kind;

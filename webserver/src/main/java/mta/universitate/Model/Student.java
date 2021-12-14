@@ -1,8 +1,10 @@
 package mta.universitate.Model;
 
+import mta.universitate.Utils.JsonParser;
+
 import java.sql.ResultSet;
 
-public class Student {
+public class Student extends JsonParser {
     private int id;
     private String name;
     private String surname;
