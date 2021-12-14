@@ -11,7 +11,7 @@ import java.sql.SQLException;
 @RestController
 public class Secretary {
     @GetMapping("/materiiSpecializare")
-    public String viewSubjects(/*String specialization*/) throws SQLException {
+    public String viewCourses(/*String major*/) throws SQLException {
 
         String specialization="Calculatoare";
 

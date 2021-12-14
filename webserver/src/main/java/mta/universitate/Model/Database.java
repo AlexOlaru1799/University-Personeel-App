@@ -2,6 +2,7 @@ package mta.universitate.Model;
 import mta.universitate.Utils.Hasher;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Locale;
+import java.util.*;
 
 public class Database {
     private static Database dbObject;
@@ -189,25 +190,18 @@ public class Database {
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId()));
 
         try{
-            User U = new User();
-            StudyGroup SG = new StudyGroup();
 
             Student to_return = new Student();
 
             rs.next();
+
             to_return.setId(rs.getInt("ID"));
             to_return.setName(rs.getString("Name"));
             to_return.setSurname(rs.getString("Surname"));
             to_return.setIncome(rs.getInt("Pay"));
-
-            U.setId(rs.getInt("User_ID"));
-            U = this.get(U);
-            to_return.setUser(U);
-
-            SG.setId(rs.getInt("StudyGroup"));
-            SG = this.get(SG);
-            to_return.setStudyGroup(SG);
-
+            to_return.setUser(User.fromDB(rs.getInt("User_ID")));
+            to_return.setStudyGroup(StudyGroup.fromDB(rs.getInt("StudyGroup")));
+            to_return.setMajor(Major.fromDB(rs.getInt("Major")));
 
             return to_return;
         }
@@ -387,34 +381,33 @@ public class Database {
             return null;
         }
     }
-
-    //TODO
     public Classroom get(Classroom C) {
-//        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
-//
-//        try{
-//
-//
-//            Classroom to_return = new Classroom();
-//
-//            rs.next();
-//
-//            //cred ca ar tb sa existe un setName in clasa Classroom
-//            to_return.setId(rs.getInt("ID"));
-//            to_return.setCapacity(rs.getInt("Capacity"));
-//
-//
-//
-//            return to_return;
-//        }
-//        catch (SQLException e) {
-//            return null;
-//        }
+
+        Classroom to_return = new Classroom();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
+
+        try{
+            rs.next();
+
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setCapacity(rs.getInt("Capacity"));
+            to_return.setKind(rs.getBoolean("Kind"));
+
+            List<Feature> features = new ArrayList<Feature>();
+            rs = this.executeQuery(String.format("SELECT * FROM ClassroomsFeatures WHERE Classroom = %d", C.getId()));
+
+            while(rs.next())
+                features.add(Feature.fromDB(rs.getInt("Feature")));
+
+            to_return.setFeatures(features);
+            return to_return;
+        }
+        catch (SQLException e) {}
 
         return null;
 
     }
-
     public Grade get(Grade G) {
         Course C=new Course();
         Student S=new Student();
@@ -574,6 +567,39 @@ public class Database {
         }
     }
 
+    public ArrayList<Student> getAllStudents(){
+        ArrayList<Student> students = new ArrayList<Student>();
+
+        try{
+            ResultSet rs = executeQuery("" +
+                    "SELECT" +
+                    "S.ID AS S_ID, S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
+                    "M.ID AS M_ID, M.Name AS M_Name, " +
+                    "F.ID AS F_ID, F.Name AS F_Name, " +
+                    "SG.ID AS SG_ID, SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
+                    "E.ID AS Secretary_ID, E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
+                    "X.ID AS Mentor_ID, X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
+                    "FROM Students AS S " +
+                    "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
+                    "INNER JOIN Majors AS M ON S.Major = M.ID " +
+                    "INNER JOIN Employees AS E ON M.Secretary = E.ID " +
+                    "INNER JOIN Employees AS X ON SG.Mentor = X.ID " +
+                    "INNER JOIN Faculties AS F ON M.Faculty = F.ID"
+            );
+
+
+            while(rs.next())
+            {
+                Student student = Student.fromDB(rs.getInt("ID"));
+                students.add(student);
+            }
+            return students;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
@@ -618,6 +644,13 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
+    public int getClassroomID(String classroom) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Classrooms WHERE Name = '%s'", classroom));
+        rs.next();
+        return rs.getInt("ID");
+    }
+
+
 
 
     //
