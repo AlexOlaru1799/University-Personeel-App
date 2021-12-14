@@ -34,29 +34,33 @@ public class RouteAdmin {
         return "{'status' : 'FAILED'}";
     }
 
+    @RequestMapping(value = "/admin/reset-username", produces = "application/json")
+    @ResponseBody
+    public String resetUsername(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String username, @RequestParam String new_username){
+
+        try
+        {
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.resetUsername(username, new_username))
+                return "{'status' : 'SUCCESS'}";
+        }
+        catch (Exception exc){}
+
+        return "{'status' : 'FAILED'}";
+    }
+
 
     @RequestMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
-    public String createEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam String role, @RequestParam int salary)  {
+    public String createEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam String role, @RequestParam int salary)  {
+
         try
         {
-            Employee E = new Employee();
-            E.setName(name);
-            E.setSurname(surname);
-            E.setSalary(salary);
-            E.setPosition(Position.fromDB(db.getPositionID(position)));
-
-            User U = new User();
-            U.setPassword(Hasher.getHash(password));
-            U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
-            U.setRole(Role.fromDB(db.getRoleID(role)));
-
-            E.setUser(U);
-
-            if (db.add(E))
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.createEmployee(name, surname, password, position, role, salary))
                 return "{'status' : 'SUCCESS'}";
         }
-        catch (SQLException exc){}
+        catch (Exception exc){}
 
         return "{'status' : 'FAILED'}";
 
@@ -65,14 +69,15 @@ public class RouteAdmin {
 
     @RequestMapping(value = "/admin/delete-employee", produces = "application/json")
     @ResponseBody
-    public String deleteEmployee(@RequestParam String name, @RequestParam String surname) {
+    public String deleteEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
 
         try
         {
-            if (this.db.delete(Employee.fromDB(db.getEmployeeID(name, surname))))
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.deleteEmployee(name, surname))
                 return "{'status' : 'SUCCESS'}";
         }
-        catch (SQLException exc){}
+        catch (Exception exc){}
 
         return "{'status' : 'FAILED'}";
     }
@@ -80,42 +85,30 @@ public class RouteAdmin {
 
     @RequestMapping(value = "/admin/create-student", produces = "application/json")
     @ResponseBody
-    public String createStudent(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income) {
+    public String createStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income) {
+
         try
         {
-            Student S = new Student();
-            S.setName(name);
-            S.setSurname(surname);
-            S.setIncome(income);
-            S.setMajor(Major.fromDB(db.getMajorID(major)));
-            S.setStudyGroup(StudyGroup.fromDB(db.getStudyGroupID(study_group)));
-
-            User U = new User();
-            U.setPassword(Hasher.getHash(password));
-            U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
-            U.setRole(Role.fromDB(db.getRoleID("Student")));
-
-            S.setUser(U);
-
-            if (db.add(S))
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.createStudent(name, surname, password, major, study_group, income))
                 return "{'status' : 'SUCCESS'}";
         }
-        catch (SQLException e){}
+        catch (Exception exc){}
 
         return "{'status' : 'FAILED'}";
-
     }
 
 
     @RequestMapping(value = "/admin/delete-student", produces = "application/json")
     @ResponseBody
-    public String deleteStudent(@RequestParam String name, @RequestParam String surname) {
+    public String deleteStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
         try
         {
-            if (this.db.delete(Student.fromDB(db.getStudentID(name, surname))))
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.deleteStudent(name, surname))
                 return "{'status' : 'SUCCESS'}";
         }
-        catch (SQLException exc){}
+        catch (Exception exc){}
 
         return "{'status' : 'FAILED'}";
     }
