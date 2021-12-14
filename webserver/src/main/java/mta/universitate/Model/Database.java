@@ -567,6 +567,39 @@ public class Database {
         }
     }
 
+    public ArrayList<Student> getAllStudents(){
+        ArrayList<Student> students = new ArrayList<Student>();
+
+        try{
+            ResultSet rs = executeQuery("" +
+                    "SELECT" +
+                    "S.ID AS S_ID, S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
+                    "M.ID AS M_ID, M.Name AS M_Name, " +
+                    "F.ID AS F_ID, F.Name AS F_Name, " +
+                    "SG.ID AS SG_ID, SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
+                    "E.ID AS Secretary_ID, E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
+                    "X.ID AS Mentor_ID, X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
+                    "FROM Students AS S " +
+                    "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
+                    "INNER JOIN Majors AS M ON S.Major = M.ID " +
+                    "INNER JOIN Employees AS E ON M.Secretary = E.ID " +
+                    "INNER JOIN Employees AS X ON SG.Mentor = X.ID " +
+                    "INNER JOIN Faculties AS F ON M.Faculty = F.ID"
+            );
+
+
+            while(rs.next())
+            {
+                Student student = Student.fromDB(rs.getInt("ID"));
+                students.add(student);
+            }
+            return students;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
