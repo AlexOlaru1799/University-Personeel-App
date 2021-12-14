@@ -1,6 +1,7 @@
 package mta.universitate.Routes;
 
 import mta.universitate.Model.*;
+import mta.universitate.Utils.CookieManager;
 import mta.universitate.Utils.Hasher;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,28 +13,23 @@ import java.util.Locale;
 
 import mta.universitate.Model.Admin.*;
 
+import javax.servlet.http.Cookie;
+
 @RestController
 public class RouteAdmin {
     Database db = Database.getInstance();
 
     @RequestMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
-    public String resetPassword(@RequestParam String username, @RequestParam String new_pass) throws SQLException {
+    public String resetPassword(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String username, @RequestParam String new_pass){
 
         try
         {
-            // Check cookie to see if I am admin and create Admin object
-            // CookieManager.getInstance().checkCookie()
-
-            boolean admin = true;
-            if (admin)
-            {
-                Admin A = Admin.fromEmployee(Employee.fromDB(db.getEmployeeID("Anatol", "Basarab")));
-                if (A.resetUserPassword(username, Hasher.getHash(new_pass)))
-                    return "{'status' : 'SUCCESS'}";
-            }
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (A.resetUserPassword(username, Hasher.getHash(new_pass)))
+                return "{'status' : 'SUCCESS'}";
         }
-        catch (SQLException e){}
+        catch (Exception exc){}
 
         return "{'status' : 'FAILED'}";
     }
@@ -41,7 +37,7 @@ public class RouteAdmin {
 
     @RequestMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
-    public String createEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam int salary)  {
+    public String createEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam String role, @RequestParam int salary)  {
         try
         {
             Employee E = new Employee();
@@ -53,7 +49,7 @@ public class RouteAdmin {
             User U = new User();
             U.setPassword(Hasher.getHash(password));
             U.setUsername(name.toLowerCase(Locale.ROOT) + "." + surname.toLowerCase(Locale.ROOT)+"@mta.ro");
-            U.setRole(Role.fromDB(db.getRoleID(position)));
+            U.setRole(Role.fromDB(db.getRoleID(role)));
 
             E.setUser(U);
 

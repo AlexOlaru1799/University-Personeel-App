@@ -14,11 +14,13 @@ import java.sql.SQLException;
 public class Test {
     Database db = Database.getInstance();
 
-    @RequestMapping("/test")
-    public String test(@CookieValue(value="uid", defaultValue = "hahaha") Cookie cookie) throws SQLException {
+    @GetMapping("/test")
+    public String test() throws SQLException {
+        User U = new User();
+        U.setUsername("mirela.ghica@mta.ro");
+        Employee E = Employee.fromUser(U);
 
-        User U = CookieManager.getInstance().validateCookie(cookie);
-        return String.format("<h1>My name is %s<h1>", U.getUsername());
+        return String.format("<h1>My name is %s %s<h1>", E.getName(), E.getSurname());
     }
 
 

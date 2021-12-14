@@ -19,7 +19,7 @@ public class Admin extends Employee {
     }
 
     public static Admin fromEmployee(Employee E){
-        if (E.getUser().getRole().getDescription().contentEquals("Admin"))
+        if (E.getUser().getRole().getDescription().contentEquals("Administrator"))
             return new Admin(E);
         else
             return null;
