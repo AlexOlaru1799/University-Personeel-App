@@ -57,6 +57,17 @@ public class Employee extends JsonParser {
         System.out.print("addDocument");
     }
 
+    public String viewStudent(String name, String surname) {
+        try{
+            Database db = Database.getInstance();
+            Student S = Student.fromDB(db.getStudentID(name, surname));
+
+            return S.toJson();
+        }
+        catch (Exception exc){}
+        return null;
+    }
+
 
     public int getId() {
         return id;

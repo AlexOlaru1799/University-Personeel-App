@@ -3,9 +3,7 @@ package mta.universitate.Routes;
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
 import org.springframework.web.bind.annotation.*;
-
 import mta.universitate.Model.Secretary;
-
 import javax.servlet.http.Cookie;
 
 @RestController
@@ -92,4 +90,27 @@ public class RouteSecretary {
         return "{'status' : 'FAILED'}";
     }
 
+    @RequestMapping(value = "/secretary/view-student", produces = "application/json")
+    @ResponseBody
+    public String viewStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
+        try
+        {
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            return S.viewStudent(name, surname);
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{'status' : 'FAILED'}";
+    }
+
+
+    // TODO
+    @RequestMapping(value = "/secretary/view-courses", produces = "application/json")
+    @ResponseBody
+    public String viewCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String major)
+    {
+        return "";
+    }
 }

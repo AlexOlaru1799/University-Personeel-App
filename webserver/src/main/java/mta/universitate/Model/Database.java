@@ -189,25 +189,18 @@ public class Database {
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId()));
 
         try{
-            User U = new User();
-            StudyGroup SG = new StudyGroup();
 
             Student to_return = new Student();
 
             rs.next();
+
             to_return.setId(rs.getInt("ID"));
             to_return.setName(rs.getString("Name"));
             to_return.setSurname(rs.getString("Surname"));
             to_return.setIncome(rs.getInt("Pay"));
-
-            U.setId(rs.getInt("User_ID"));
-            U = this.get(U);
-            to_return.setUser(U);
-
-            SG.setId(rs.getInt("StudyGroup"));
-            SG = this.get(SG);
-            to_return.setStudyGroup(SG);
-
+            to_return.setUser(User.fromDB(rs.getInt("User_ID")));
+            to_return.setStudyGroup(StudyGroup.fromDB(rs.getInt("StudyGroup")));
+            to_return.setMajor(Major.fromDB(rs.getInt("Major")));
 
             return to_return;
         }
