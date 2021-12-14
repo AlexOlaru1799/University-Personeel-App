@@ -105,6 +105,21 @@ public class RouteSecretary {
         return "{'status' : 'FAILED'}";
     }
 
+    @RequestMapping(value = "/secretary/view-classroom", produces = "application/json")
+    @ResponseBody
+    public String viewClassroom(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name)
+    {
+        try
+        {
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            return S.viewClassroom(name);
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{'status' : 'FAILED'}";
+    }
 
     // TODO
     @RequestMapping(value = "/secretary/view-courses", produces = "application/json")

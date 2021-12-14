@@ -68,6 +68,19 @@ public class Employee extends JsonParser {
         return null;
     }
 
+    public String viewClassroom(String name){
+        try{
+            Database db = Database.getInstance();
+            Classroom C = Classroom.fromDB(db.getClassroomID(name));
+
+            return C.toJson();
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        return null;
+    }
+
 
     public int getId() {
         return id;

@@ -2,6 +2,7 @@ package mta.universitate.Model;
 import mta.universitate.Utils.Hasher;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Locale;
+import java.util.*;
 
 public class Database {
     private static Database dbObject;
@@ -380,34 +381,33 @@ public class Database {
             return null;
         }
     }
-
-    //TODO
     public Classroom get(Classroom C) {
-//        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
-//
-//        try{
-//
-//
-//            Classroom to_return = new Classroom();
-//
-//            rs.next();
-//
-//            //cred ca ar tb sa existe un setName in clasa Classroom
-//            to_return.setId(rs.getInt("ID"));
-//            to_return.setCapacity(rs.getInt("Capacity"));
-//
-//
-//
-//            return to_return;
-//        }
-//        catch (SQLException e) {
-//            return null;
-//        }
+
+        Classroom to_return = new Classroom();
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Classrooms WHERE ID = %d", C.getId()));
+
+        try{
+            rs.next();
+
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setCapacity(rs.getInt("Capacity"));
+            to_return.setKind(rs.getBoolean("Kind"));
+
+            List<Feature> features = new ArrayList<Feature>();
+            rs = this.executeQuery(String.format("SELECT * FROM ClassroomsFeatures WHERE Classroom = %d", C.getId()));
+
+            while(rs.next())
+                features.add(Feature.fromDB(rs.getInt("Feature")));
+
+            to_return.setFeatures(features);
+            return to_return;
+        }
+        catch (SQLException e) {}
 
         return null;
 
     }
-
     public Grade get(Grade G) {
         Course C=new Course();
         Student S=new Student();
@@ -611,6 +611,13 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
+    public int getClassroomID(String classroom) throws SQLException, SQLServerException{
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Classrooms WHERE Name = '%s'", classroom));
+        rs.next();
+        return rs.getInt("ID");
+    }
+
+
 
 
     //
