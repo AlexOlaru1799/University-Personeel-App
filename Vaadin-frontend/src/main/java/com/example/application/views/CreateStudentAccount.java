@@ -1,7 +1,6 @@
 package com.example.application.views;
 
 
-
 import com.example.application.views.BackEnd.Database;
 import com.example.application.views.BackEnd.Student;
 import com.example.application.views.BackEnd.StudyGroup;

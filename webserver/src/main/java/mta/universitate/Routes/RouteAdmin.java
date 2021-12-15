@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import mta.universitate.Model.Admin.*;
@@ -114,6 +115,65 @@ public class RouteAdmin {
     }
 
 
+    @RequestMapping(value = "/admin/averageGrade", produces = "application/json")
+    @ResponseBody
+    public Integer averageGrade(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name) {
+        try
+        {
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            ArrayList<Grade>grades=A.getGradesForSubject(name);
+
+            int avg=0;
+            for(int i=0;i<grades.size();i++)
+            {
+                avg += grades.get(i).getValue();
+            }
+            avg/=grades.size();
+
+            return avg;
+        }
+        catch (Exception exc){}
+
+        return -1;
+    }
+
+    @RequestMapping(value = "/admin/failedOneSubject", produces = "application/json")
+    @ResponseBody
+    public Integer failedOneSubject(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            int nr=A.failedOneSubject();
+
+            return nr;
+        }
+        catch (Exception exc){}
+
+        return -1;
+    }
+
+    @RequestMapping(value = "/admin/subjectStatistics", produces = "application/json")
+    @ResponseBody
+    public Integer subjectStatistics(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name) {
+        try
+        {
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            ArrayList<Grade>grades=A.getGradesForSubject(name);
+
+            int nr=0;
+            for(int i=0;i<grades.size();i++) {
+                if (grades.get(i).getValue() <5) {
+                    nr++;
+                }
+            }
+
+            return nr;
+        }
+        catch (Exception exc){}
+
+        return -1;
+    }
 
 
     /*
