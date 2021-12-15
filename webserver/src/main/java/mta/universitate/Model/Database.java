@@ -576,13 +576,15 @@ public class Database {
                     "F.Name AS F_Name, " +
                     "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
                     "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
-                    "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
+                    "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname, " +
+                    "U.ID AS U_ID " +
                     "FROM Students AS S " +
                     "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
                     "INNER JOIN Majors AS M ON S.Major = M.ID " +
                     "INNER JOIN Employees AS E ON M.Secretary = E.ID " +
                     "INNER JOIN Employees AS X ON SG.Mentor = X.ID " +
-                    "INNER JOIN Faculties AS F ON M.Faculty = F.ID"
+                    "INNER JOIN Faculties AS F ON M.Faculty = F.ID " +
+                    "INNER JOIN Users as U ON S.User_ID = U.ID"
             );
 
 
@@ -592,6 +594,9 @@ public class Database {
                 S.setName(rs.getString("S_Name"));
                 S.setSurname(rs.getString("S_Surname"));
                 S.setIncome(rs.getInt("S_Pay"));
+
+                User U = new User();
+                U.setId(rs.getInt("U_ID"));
 
                 StudyGroup SG = new StudyGroup();
                 SG.setName(rs.getString("SG_Name"));
@@ -616,6 +621,7 @@ public class Database {
 
                 S.setMajor(M);
                 S.setStudyGroup(SG);
+                S.setUser(U);
 
                 students.add(S);
             }
@@ -688,13 +694,45 @@ public class Database {
         return null;
     }
 
+    public ArrayList<Document> getAllDocuments()
+    {
+        ArrayList<Document> documents = new ArrayList<Document>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT D.Title as D_Title, D.Content as D_Content, U.ID as U_ID " +
+                    "FROM Documents as D " +
+                    "INNER JOIN Users as U ON D.[[User]]]=U.ID"
+            );
+
+
+            while(rs.next())
+            {
+                Document D = new Document();
+                D.setContent(rs.getString("D_content"));
+                D.setTitle(rs.getString("D_Title"));
+
+                User U = new User();
+                U.setId(rs.getInt("U_ID"));
+
+                D.setUser(U);
+
+                documents.add(D);
+            }
+            return documents;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
         return false;
     }
 
-    //
 
 
     public int getRoleID(String role) throws SQLException, SQLServerException{
