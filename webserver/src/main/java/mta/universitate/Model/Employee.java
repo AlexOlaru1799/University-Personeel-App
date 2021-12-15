@@ -1,7 +1,9 @@
 package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
+import java.sql.Array;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Employee extends JsonParser {
@@ -134,4 +136,55 @@ public class Employee extends JsonParser {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public ArrayList getGradesForSubject(String name) {
+        Database db = Database.getInstance();
+        Course C = new Course();
+        C.setName(name);
+
+        ArrayList<Grade> gradesfromDB = db.getAllGrades();
+
+        ArrayList<Grade> gradesforSubject=new ArrayList<>();
+
+        for(int i=0;i<gradesfromDB.size();i++)
+        {
+            if(gradesfromDB.get(i).getCourse().getName().equals(C.getName()))
+            {
+                gradesforSubject.add(gradesfromDB.get(i));
+            }
+        }
+        return gradesforSubject;
+    }
+
+    public Integer failedOneSubject() {
+        Database db = Database.getInstance();
+
+        ArrayList<Student> students=db.getAllStudents();
+        ArrayList<Grade> grades = db.getAllGrades();
+
+        int nr=0;
+
+        for (int i = 0; i < students.size(); i++)
+        {
+            int nrFailedSubj=0;
+
+            for (int k = 0; k < grades.size(); k++)
+            {
+                if (students.get(i).getName().equals(grades.get(k).getStudent().getName()) && students.get(i).getSurname().equals(grades.get(k).getStudent().getSurname())  )
+                {
+                    if(grades.get(k).getValue()<5)
+                    {
+                        nrFailedSubj++;
+                    }
+                }
+            }
+
+            if(nrFailedSubj==1)
+            {
+                nr++;
+            }
+        }
+        return nr;
+    }
+
 }
