@@ -24,15 +24,15 @@ public class ResetUsername extends VerticalLayout{
 
     public ResetUsername() {
         username = new TextField("Username");
-        newUsername = new TextField("Type new password");
-        resUsername = new Button("Reset Password");
+        newUsername = new TextField("Type new username");
+        resUsername = new Button("Reset Username");
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Reset the password by pressing the button"));
+        add(new H2("Reset the Username by pressing the button"));
 
-        VerticalLayout layout = createLayout("Reset Password");
+        VerticalLayout layout = createLayout("Reset Username");
         layout.setPadding(true);
         layout.add(username, newUsername , resUsername);
 

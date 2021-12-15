@@ -105,7 +105,7 @@ public class AdminLayout extends AppLayout {
 
                 new MenuItemInfo("Add new Employee", "la la-smile-o", CreateEmployee.class), //
 
-                new MenuItemInfo("Delete Employee", "la la-smile-o", DeleteEmployee.class), //
+                new MenuItemInfo("Delete Employee", "la la-magic", DeleteEmployee.class), //
 
                 new MenuItemInfo("Reset Account Password", "la la-legal", ResetAccountPassword.class), //
 
