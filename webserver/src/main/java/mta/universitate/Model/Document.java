@@ -1,9 +1,8 @@
 package mta.universitate.Model;
-import mta.universitate.Model.User;
 import mta.universitate.Utils.JsonParser;
 
 public class Document extends JsonParser {
-    private int id;
+    private Integer id;
     private String title;
     private String content;
     private User user;
@@ -15,11 +14,11 @@ public class Document extends JsonParser {
         return Database.getInstance().get(D);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

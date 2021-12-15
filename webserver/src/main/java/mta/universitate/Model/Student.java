@@ -2,14 +2,12 @@ package mta.universitate.Model;
 
 import mta.universitate.Utils.JsonParser;
 
-import java.sql.ResultSet;
-
 public class Student extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
     private String surname;
     private StudyGroup studyGroup;
-    private int income;
+    private Integer income;
     private Major major;
     private User user;
 
@@ -38,11 +36,11 @@ public class Student extends JsonParser {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -70,11 +68,11 @@ public class Student extends JsonParser {
         this.studyGroup = studyGroup;
     }
 
-    public int getIncome() {
+    public Integer getIncome() {
         return income;
     }
 
-    public void setIncome(int income) {
+    public void setIncome(Integer income) {
         this.income = income;
     }
 

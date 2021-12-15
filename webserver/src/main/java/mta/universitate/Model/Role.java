@@ -1,11 +1,10 @@
 package mta.universitate.Model;
 
 
-import com.fasterxml.jackson.core.JsonFactory;
 import mta.universitate.Utils.JsonParser;
 
 public class Role extends JsonParser {
-    int id;
+    Integer id;
     String description;
 
     public Role(){}
@@ -24,11 +23,11 @@ public class Role extends JsonParser {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

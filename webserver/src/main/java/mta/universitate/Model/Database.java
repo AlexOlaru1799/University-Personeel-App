@@ -1,11 +1,8 @@
 package mta.universitate.Model;
-import mta.universitate.Utils.Hasher;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.jetbrains.annotations.NotNull;
 
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -574,12 +571,12 @@ public class Database {
 
             ResultSet rs = executeQuery("" +
                     "SELECT " +
-                    "S.ID AS S_ID, S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
-                    "M.ID AS M_ID, M.Name AS M_Name, " +
-                    "F.ID AS F_ID, F.Name AS F_Name, " +
-                    "SG.ID AS SG_ID, SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
-                    "E.ID AS Secretary_ID, E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
-                    "X.ID AS Mentor_ID, X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
+                    "S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
+                    "M.Name AS M_Name, " +
+                    "F.Name AS F_Name, " +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
+                    "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
+                    "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
                     "FROM Students AS S " +
                     "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
                     "INNER JOIN Majors AS M ON S.Major = M.ID " +
@@ -592,31 +589,27 @@ public class Database {
             while(rs.next())
             {
                 Student S = new Student();
-                S.setId(rs.getInt("S_ID"));
                 S.setName(rs.getString("S_Name"));
                 S.setSurname(rs.getString("S_Surname"));
                 S.setIncome(rs.getInt("S_Pay"));
 
                 StudyGroup SG = new StudyGroup();
-                SG.setId(rs.getInt("SG_ID"));
                 SG.setName(rs.getString("SG_Name"));
                 SG.setStudy_year(rs.getInt("SG_StudyYear"));
 
                 Major M = new Major();
-                M.setId(rs.getInt("M_ID"));
                 M.setName(rs.getString("M_Name"));
 
-                Faculty F = new Faculty(rs.getInt("F_ID"), rs.getString("F_Name"));
+                Faculty F = new Faculty();
+                F.setName(rs.getString("F_Name"));
                 M.setFaculty(F);
 
                 Employee secretary = new Employee();
-                secretary.setId(rs.getInt("Secretary_ID"));
                 secretary.setName(rs.getString("Secretary_Name"));
                 secretary.setSurname(rs.getString("Secretary_Surname"));
                 M.setSecretary(new Secretary(secretary));
 
                 Employee mentor = new Employee();
-                mentor.setId(rs.getInt("Mentor_ID"));
                 mentor.setName(rs.getString("Mentor_Name"));
                 mentor.setSurname(rs.getString("Mentor_Surname"));
                 SG.setMentor(new Professor(mentor));
