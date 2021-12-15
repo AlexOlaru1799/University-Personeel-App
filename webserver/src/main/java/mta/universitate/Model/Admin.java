@@ -3,6 +3,7 @@ package mta.universitate.Model;
 import mta.universitate.Utils.Hasher;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Admin extends Employee {
@@ -156,4 +157,5 @@ public class Admin extends Employee {
 
         return false;
     }
+
 }
