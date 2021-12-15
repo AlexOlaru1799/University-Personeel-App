@@ -626,6 +626,68 @@ public class Database {
         return null;
     }
 
+    public ArrayList<Grade> getAllGrades(){
+        ArrayList<Grade> grades = new ArrayList<Grade>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT " +
+                    "G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
+                    "C.Credits AS C_Credits, C.Name AS C_Name,\n" +
+                    "E.Name AS Professor_Name, E.Surname AS Professor_Surname,\n" +
+                    "S.Name AS Student_Name, S.Surname AS Student_Surname,\n" +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear,\n" +
+                    "M.Name AS M_Name, M.Surname AS M_Surname\n" +
+                    "FROM Grades AS G\n" +
+                    "INNER JOIN Courses AS C ON C.ID=G.Course\n" +
+                    "INNER JOIN Employees AS E ON C.Professor=E.ID\n" +
+                    "INNER JOIN Students AS S ON G.Student=S.ID\n" +
+                    "INNER JOIN StudyGroups AS SG ON S.StudyGroup=SG.ID\n" +
+                    "INNER JOIN Employees AS M ON SG.Mentor=M.ID"
+            );
+
+
+            while(rs.next())
+            {
+                Grade G = new Grade();
+                G.setValue(rs.getInt("G_Value"));
+                G.setDate(rs.getDate("G_Date"));
+
+                Course C=new Course();
+                C.setCredits(rs.getInt("C_Credits"));
+                C.setName(rs.getString("C_Name"));
+                G.setCourse(C);
+
+                Employee professor=new Employee();
+                professor.setName(rs.getString("Professor_Name"));
+                professor.setSurname(rs.getString("Professor_Surname"));
+                C.setProfessor(new Professor(professor));
+
+                Student S=new Student();
+                S.setName(rs.getString("Student_Name"));
+                S.setSurname(rs.getString("Student_Surname"));
+                G.setStudent(S);
+
+                StudyGroup SG = new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+                S.setStudyGroup(SG);
+
+                Employee mentor = new Employee();
+                mentor.setName(rs.getString("M_Name"));
+                mentor.setSurname(rs.getString("M_Surname"));
+                SG.setMentor(new Professor(mentor));
+
+                grades.add(G);
+            }
+            return grades;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;

@@ -34,6 +34,22 @@ public class Test {
 
     }
 
+    @RequestMapping(value = "/test2", produces = "application/json")
+    @ResponseBody
+    public String test2() throws SQLException {
 
+        try
+        {
+            ArrayList<Grade> grades = db.getAllGrades();
+            StringBuilder response = new StringBuilder();
 
+            for (Grade grad : grades)
+                response.append(grad.toJson());
+
+            return response.toString();
+        }
+        catch (JsonProcessingException exc){}
+
+        return null;
+    }
 }
