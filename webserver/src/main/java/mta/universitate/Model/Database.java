@@ -571,8 +571,9 @@ public class Database {
         ArrayList<Student> students = new ArrayList<Student>();
 
         try{
+
             ResultSet rs = executeQuery("" +
-                    "SELECT" +
+                    "SELECT " +
                     "S.ID AS S_ID, S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
                     "M.ID AS M_ID, M.Name AS M_Name, " +
                     "F.ID AS F_ID, F.Name AS F_Name, " +
@@ -590,8 +591,40 @@ public class Database {
 
             while(rs.next())
             {
-                Student student = Student.fromDB(rs.getInt("ID"));
-                students.add(student);
+                Student S = new Student();
+                S.setId(rs.getInt("S_ID"));
+                S.setName(rs.getString("S_Name"));
+                S.setSurname(rs.getString("S_Surname"));
+                S.setIncome(rs.getInt("S_Pay"));
+
+                StudyGroup SG = new StudyGroup();
+                SG.setId(rs.getInt("SG_ID"));
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Major M = new Major();
+                M.setId(rs.getInt("M_ID"));
+                M.setName(rs.getString("M_Name"));
+
+                Faculty F = new Faculty(rs.getInt("F_ID"), rs.getString("F_Name"));
+                M.setFaculty(F);
+
+                Employee secretary = new Employee();
+                secretary.setId(rs.getInt("Secretary_ID"));
+                secretary.setName(rs.getString("Secretary_Name"));
+                secretary.setSurname(rs.getString("Secretary_Surname"));
+                M.setSecretary(new Secretary(secretary));
+
+                Employee mentor = new Employee();
+                mentor.setId(rs.getInt("Mentor_ID"));
+                mentor.setName(rs.getString("Mentor_Name"));
+                mentor.setSurname(rs.getString("Mentor_Surname"));
+                SG.setMentor(new Professor(mentor));
+
+                S.setMajor(M);
+                S.setStudyGroup(SG);
+
+                students.add(S);
             }
             return students;
         }

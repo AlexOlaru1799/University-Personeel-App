@@ -9,8 +9,9 @@ public class Role extends JsonParser {
     String description;
 
     public Role(){}
-    public Role(String description)
+    public Role(int id, String description)
     {
+        this.id = id;
         this.description = description;
     }
 

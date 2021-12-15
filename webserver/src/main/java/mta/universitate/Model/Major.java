@@ -9,6 +9,14 @@ public class Major extends JsonParser {
     private Faculty faculty;
     private Secretary secretary;
 
+    public Major(){}
+    public Major(int id, String name, Faculty faculty, Secretary secretary){
+        this.id = id;
+        this.name = name;
+        this.faculty = faculty;
+        this.secretary = secretary;
+    }
+
     public static Major fromDB(int id)
     {
         Major M = new Major();

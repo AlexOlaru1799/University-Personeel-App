@@ -13,6 +13,18 @@ public class Student extends JsonParser {
     private Major major;
     private User user;
 
+    public Student(){}
+    public Student(int id, String name, String surname, StudyGroup studyGroup, int income, Major major, User user)
+    {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.studyGroup = studyGroup;
+        this.income = income;
+        this.major = major;
+        this.user = user;
+    }
+
     public static Student fromDB(int id){
         Student S = new Student();
         S.id = id;

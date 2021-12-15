@@ -6,6 +6,12 @@ public class Faculty extends JsonParser {
     private int id;
     private String name;
 
+    public Faculty(){}
+    public Faculty(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public static Faculty fromDB(int id)
     {
         Faculty F = new Faculty();

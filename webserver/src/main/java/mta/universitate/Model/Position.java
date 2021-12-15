@@ -6,6 +6,12 @@ public class Position extends JsonParser {
     private int id;
     private String description;
 
+    public Position(){}
+    public Position(int id, String description){
+        this.id = id;
+        this.description = description;
+    }
+
     public static Position fromDB(int id){
         Position P = new Position();
         P.setId(id);

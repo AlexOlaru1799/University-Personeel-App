@@ -44,6 +44,15 @@ public class Employee extends JsonParser {
 
 
     public Employee(){}
+    public Employee(int id, String name, String surname, Position position, int salary, User user){
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.position = position;
+        this.salary = salary;
+        this.user = user;
+    }
+
     public Employee(Employee E){
         this.id = E.id;
         this.name = E.name;
