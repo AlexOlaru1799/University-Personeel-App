@@ -105,6 +105,8 @@ public class AdminLayout extends AppLayout {
 
                 new MenuItemInfo("Add new Employee", "la la-smile-o", CreateEmployee.class), //
 
+                new MenuItemInfo("Delete Employee", "la la-smile-o", DeleteEmployee.class), //
+
                 new MenuItemInfo("Reset Account Password", "la la-legal", ResetAccountPassword.class), //
 
                 new MenuItemInfo("Reset Username", "la la-magic", ResetUsername.class), //
@@ -114,6 +116,10 @@ public class AdminLayout extends AppLayout {
                 new MenuItemInfo("Update Classroom", "la la-search", UpdateClassroom.class), //
 
                 new MenuItemInfo("Update Schedule", "la la-edit", UpdateSchedule.class), //
+
+                new MenuItemInfo("Add Student", "la la-magic", AddStudent.class), //
+
+                new MenuItemInfo("Delete Student", "la la-edit", DeleteStudent.class), //
 
         };
 
@@ -159,25 +165,5 @@ public class AdminLayout extends AppLayout {
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
-    }
-
-    @PageTitle("Update Schedule")
-    @Route(value = "updateSchedule", layout = AdminLayout.class)
-    public static class UpdateSchedule extends VerticalLayout {
-        public UpdateSchedule() {
-            setSpacing(false);
-
-            Image img = new Image("images/empty-plant.png", "placeholder plant");
-            img.setWidth("200px");
-            add(img);
-
-            add(new H2("This place intentionally left empty"));
-            add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
-
-            setSizeFull();
-            setJustifyContentMode(JustifyContentMode.CENTER);
-            setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-            getStyle().set("text-align", "center");
-        }
     }
 }

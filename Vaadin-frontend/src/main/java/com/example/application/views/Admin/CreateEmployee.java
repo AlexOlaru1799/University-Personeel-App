@@ -39,6 +39,11 @@ public class CreateEmployee extends VerticalLayout{
         position.setItems("Administrator", "Secretary", "Mentor", "Professor", "Janitor");
         position.setValue("Administrator");
 
+        Select<String> role = new Select<String>();
+        role.setLabel("Employee Role");
+        role.setItems("Administrator", "Secretary", "Professor", "Student");
+        role.setValue("Professor");
+
         setPadding(true);
         setSpacing(true);
 
@@ -46,7 +51,7 @@ public class CreateEmployee extends VerticalLayout{
 
         VerticalLayout layout = createLayout("Insert employee data here");
         layout.setPadding(true);
-        layout.add(employeeName, employeeSurname, password, position, salary,addEmployee);
+        layout.add(employeeName, employeeSurname, password, position, role, salary,addEmployee);
 
 
         addEmployee.addClickListener(e -> {
@@ -55,6 +60,7 @@ public class CreateEmployee extends VerticalLayout{
             String surname = employeeSurname.getValue();
             String passwd = password.getValue();
             String pos = position.getValue();
+            String role1 = role.getValue();
             Integer sal = salary.getValue();
 
             //Database DB = Database.getInstance();
@@ -66,7 +72,7 @@ public class CreateEmployee extends VerticalLayout{
             if(name != "" && surname!= "" && passwd != "" && sal != null)
             {
                 Notification.show("Employee with name:" + name + " " + surname + " " + passwd + " " + pos +
-                         " " + sal +" has been added");
+                         " " + role1 + " " + sal +" has been added");
             }
             else
             {
