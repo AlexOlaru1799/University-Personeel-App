@@ -1,11 +1,8 @@
 package mta.universitate.Model;
-import mta.universitate.Utils.Hasher;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.jetbrains.annotations.NotNull;
 
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -571,14 +568,15 @@ public class Database {
         ArrayList<Student> students = new ArrayList<Student>();
 
         try{
+
             ResultSet rs = executeQuery("" +
-                    "SELECT" +
-                    "S.ID AS S_ID, S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
-                    "M.ID AS M_ID, M.Name AS M_Name, " +
-                    "F.ID AS F_ID, F.Name AS F_Name, " +
-                    "SG.ID AS SG_ID, SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
-                    "E.ID AS Secretary_ID, E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
-                    "X.ID AS Mentor_ID, X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
+                    "SELECT " +
+                    "S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
+                    "M.Name AS M_Name, " +
+                    "F.Name AS F_Name, " +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
+                    "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
+                    "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname " +
                     "FROM Students AS S " +
                     "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
                     "INNER JOIN Majors AS M ON S.Major = M.ID " +
@@ -590,10 +588,100 @@ public class Database {
 
             while(rs.next())
             {
-                Student student = Student.fromDB(rs.getInt("ID"));
-                students.add(student);
+                Student S = new Student();
+                S.setName(rs.getString("S_Name"));
+                S.setSurname(rs.getString("S_Surname"));
+                S.setIncome(rs.getInt("S_Pay"));
+
+                StudyGroup SG = new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Major M = new Major();
+                M.setName(rs.getString("M_Name"));
+
+                Faculty F = new Faculty();
+                F.setName(rs.getString("F_Name"));
+                M.setFaculty(F);
+
+                Employee secretary = new Employee();
+                secretary.setName(rs.getString("Secretary_Name"));
+                secretary.setSurname(rs.getString("Secretary_Surname"));
+                M.setSecretary(new Secretary(secretary));
+
+                Employee mentor = new Employee();
+                mentor.setName(rs.getString("Mentor_Name"));
+                mentor.setSurname(rs.getString("Mentor_Surname"));
+                SG.setMentor(new Professor(mentor));
+
+                S.setMajor(M);
+                S.setStudyGroup(SG);
+
+                students.add(S);
             }
             return students;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
+    public ArrayList<Grade> getAllGrades(){
+        ArrayList<Grade> grades = new ArrayList<Grade>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT " +
+                    "G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
+                    "C.Credits AS C_Credits, C.Name AS C_Name,\n" +
+                    "E.Name AS Professor_Name, E.Surname AS Professor_Surname,\n" +
+                    "S.Name AS Student_Name, S.Surname AS Student_Surname,\n" +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear,\n" +
+                    "M.Name AS M_Name, M.Surname AS M_Surname\n" +
+                    "FROM Grades AS G\n" +
+                    "INNER JOIN Courses AS C ON C.ID=G.Course\n" +
+                    "INNER JOIN Employees AS E ON C.Professor=E.ID\n" +
+                    "INNER JOIN Students AS S ON G.Student=S.ID\n" +
+                    "INNER JOIN StudyGroups AS SG ON S.StudyGroup=SG.ID\n" +
+                    "INNER JOIN Employees AS M ON SG.Mentor=M.ID"
+            );
+
+
+            while(rs.next())
+            {
+                Grade G = new Grade();
+                G.setValue(rs.getInt("G_Value"));
+                G.setDate(rs.getDate("G_Date"));
+
+                Course C=new Course();
+                C.setCredits(rs.getInt("C_Credits"));
+                C.setName(rs.getString("C_Name"));
+                G.setCourse(C);
+
+                Employee professor=new Employee();
+                professor.setName(rs.getString("Professor_Name"));
+                professor.setSurname(rs.getString("Professor_Surname"));
+                C.setProfessor(new Professor(professor));
+
+                Student S=new Student();
+                S.setName(rs.getString("Student_Name"));
+                S.setSurname(rs.getString("Student_Surname"));
+                G.setStudent(S);
+
+                StudyGroup SG = new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+                S.setStudyGroup(SG);
+
+                Employee mentor = new Employee();
+                mentor.setName(rs.getString("M_Name"));
+                mentor.setSurname(rs.getString("M_Surname"));
+                SG.setMentor(new Professor(mentor));
+
+                grades.add(G);
+            }
+            return grades;
         }
         catch (SQLException e){}
 

@@ -1,13 +1,19 @@
 package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
-import java.util.ArrayList;
-
 public class Major extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
     private Faculty faculty;
     private Secretary secretary;
+
+    public Major(){}
+    public Major(int id, String name, Faculty faculty, Secretary secretary){
+        this.id = id;
+        this.name = name;
+        this.faculty = faculty;
+        this.secretary = secretary;
+    }
 
     public static Major fromDB(int id)
     {
@@ -18,11 +24,11 @@ public class Major extends JsonParser {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,20 +1,13 @@
 package mta.universitate.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import mta.universitate.Utils.JsonParser;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.crypto.Data;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.List;
 
 
 public class Classroom extends JsonParser {
-    int id;
-    int capacity;
+    Integer id;
+    Integer capacity;
     private String name;
     private boolean kind;
     private List<Feature> features;
@@ -28,19 +21,19 @@ public class Classroom extends JsonParser {
         return Database.getInstance().get(C);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 

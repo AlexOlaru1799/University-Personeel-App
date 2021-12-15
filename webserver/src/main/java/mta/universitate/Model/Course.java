@@ -3,9 +3,9 @@ package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
 public class Course extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
-    private int credits;
+    private Integer credits;
     private Professor professor;
 
     public static Course fromDB(int id){
@@ -15,11 +15,11 @@ public class Course extends JsonParser {
         return Database.getInstance().get(C);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -31,11 +31,11 @@ public class Course extends JsonParser {
         this.name = name;
     }
 
-    public int getCredits() {
+    public Integer getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(Integer credits) {
         this.credits = credits;
     }
 

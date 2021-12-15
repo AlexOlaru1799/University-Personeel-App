@@ -3,8 +3,14 @@ package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
 public class Faculty extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
+
+    public Faculty(){}
+    public Faculty(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
     public static Faculty fromDB(int id)
     {
@@ -14,11 +20,11 @@ public class Faculty extends JsonParser {
         return Database.getInstance().get(F);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

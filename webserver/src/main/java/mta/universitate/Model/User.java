@@ -12,8 +12,15 @@ public class User extends JsonParser{
     private String password;
     private Role role;
 
-    public static User fromDB(int id)
-    {
+    public User(){}
+    public User(int id, String username, String password, Role role){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public static User fromDB(int id) {
         User U = new User();
         U.id = id;
 

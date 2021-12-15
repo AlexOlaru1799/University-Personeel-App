@@ -1,19 +1,15 @@
 package mta.universitate.Model;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.microsoft.sqlserver.jdbc.StringUtils;
-import mta.universitate.Model.Document;
 import mta.universitate.Utils.JsonParser;
 
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.Locale;
 
 public class Employee extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
     private String surname;
     private Position position;
-    private int salary;
+    private Integer salary;
     private User user;
 
 
@@ -44,6 +40,15 @@ public class Employee extends JsonParser {
 
 
     public Employee(){}
+    public Employee(int id, String name, String surname, Position position, int salary, User user){
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.position = position;
+        this.salary = salary;
+        this.user = user;
+    }
+
     public Employee(Employee E){
         this.id = E.id;
         this.name = E.name;
@@ -82,11 +87,11 @@ public class Employee extends JsonParser {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -114,11 +119,11 @@ public class Employee extends JsonParser {
         this.position = position;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 

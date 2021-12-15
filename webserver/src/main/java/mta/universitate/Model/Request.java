@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Request extends JsonParser {
 
-        private int id;
+        private Integer id;
         private RequestType kind;
         private Date date;
         private User issuer;
@@ -22,11 +22,11 @@ public class Request extends JsonParser {
 
 
 
-    public int getId() {
+    public Integer getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(Integer id) {
             this.id = id;
         }
 

@@ -2,13 +2,11 @@ package mta.universitate.Model;
 
 import mta.universitate.Utils.JsonParser;
 
-import java.util.ArrayList;
-
 public class StudyGroup extends JsonParser {
-    private int id;
+    private Integer id;
     private String name;
     private Professor mentor;
-    private int study_year;
+    private Integer study_year;
 
     public static StudyGroup fromDB(int id)
     {
@@ -20,11 +18,11 @@ public class StudyGroup extends JsonParser {
 
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,11 +42,11 @@ public class StudyGroup extends JsonParser {
         this.mentor = mentor;
     }
 
-    public int getStudy_year() {
+    public Integer getStudy_year() {
         return study_year;
     }
 
-    public void setStudy_year(int study_year) {
+    public void setStudy_year(Integer study_year) {
         this.study_year = study_year;
     }
 }

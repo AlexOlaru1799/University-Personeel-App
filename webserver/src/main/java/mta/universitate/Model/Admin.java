@@ -1,8 +1,6 @@
 package mta.universitate.Model;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mta.universitate.Utils.Hasher;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
 import java.util.Locale;

@@ -2,7 +2,6 @@ package mta.universitate.Model;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mta.universitate.Utils.Hasher;
 
 import java.sql.SQLException;

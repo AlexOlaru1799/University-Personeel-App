@@ -3,7 +3,7 @@ package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
 public class Feature extends JsonParser {
-    private int id;
+    private Integer id;
     private String description;
 
     public static Feature fromDB(int id)
@@ -14,11 +14,11 @@ public class Feature extends JsonParser {
         return Database.getInstance().get(F);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

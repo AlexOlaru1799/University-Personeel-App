@@ -5,10 +5,9 @@ import mta.universitate.Utils.JsonParser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Map;
 
 public class Schedule extends JsonParser {
-    private int id;
+    private Integer id;
     private Date date;
     private StudyGroup study_group;
     private Classroom classroom;
@@ -38,11 +37,11 @@ public class Schedule extends JsonParser {
         return result;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

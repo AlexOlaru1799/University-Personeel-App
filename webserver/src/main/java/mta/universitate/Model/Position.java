@@ -3,8 +3,14 @@ package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
 public class Position extends JsonParser {
-    private int id;
+    private Integer id;
     private String description;
+
+    public Position(){}
+    public Position(int id, String description){
+        this.id = id;
+        this.description = description;
+    }
 
     public static Position fromDB(int id){
         Position P = new Position();
@@ -12,11 +18,11 @@ public class Position extends JsonParser {
 
         return Database.getInstance().get(P);
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

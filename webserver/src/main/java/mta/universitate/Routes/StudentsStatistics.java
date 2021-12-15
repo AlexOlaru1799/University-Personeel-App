@@ -1,8 +1,6 @@
 package mta.universitate.Routes;
 
 import mta.universitate.Model.*;
-import mta.universitate.Model.Module;
-import mta.universitate.Model.Professor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

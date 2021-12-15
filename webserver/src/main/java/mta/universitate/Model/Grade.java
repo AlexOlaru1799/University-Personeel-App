@@ -4,8 +4,8 @@ import mta.universitate.Utils.JsonParser;
 import java.util.Date;
 
 public class Grade extends JsonParser {
-    private int id;
-    private int value;
+    private Integer id;
+    private Integer value;
     private Course course;
     private Date date;
     private Student student;
@@ -17,19 +17,19 @@ public class Grade extends JsonParser {
         return Database.getInstance().get(G);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

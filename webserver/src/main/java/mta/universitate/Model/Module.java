@@ -3,7 +3,7 @@ package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
 public class Module extends JsonParser {
-    private int id;
+    private Integer id;
     private String kind;
     private Course course;
     private Professor professor;
@@ -15,7 +15,7 @@ public class Module extends JsonParser {
         return Database.getInstance().get(M);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -31,7 +31,7 @@ public class Module extends JsonParser {
         return professor;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
