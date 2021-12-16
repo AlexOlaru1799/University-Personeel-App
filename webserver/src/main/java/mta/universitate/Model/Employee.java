@@ -1,4 +1,5 @@
 package mta.universitate.Model;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import mta.universitate.Utils.JsonParser;
 
 import java.sql.Array;
@@ -88,6 +89,85 @@ public class Employee extends JsonParser {
         return null;
     }
 
+    public String viewScheduleForProfessor(String name, String surname, String initDate){
+        try{
+            Database db = Database.getInstance();
+
+            ArrayList<Schedule> schedules = db.getAllSchedule();
+            StringBuilder response = new StringBuilder();
+
+            for(int i=0;i<schedules.size();i++)
+            {
+                String dateDB = schedules.get(i).getDate().toString();
+
+                if(dateDB.equals(initDate)) {
+                    if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                        response.append(schedules.get(i).toJson());
+                    }
+                }
+            }
+
+            return response.toString();
+
+        }
+        catch (JsonProcessingException exc){}
+
+        return null;
+    }
+
+    public ArrayList getGradesForSubject(String name) {
+        Database db = Database.getInstance();
+        Course C = new Course();
+        C.setName(name);
+
+        ArrayList<Grade> gradesfromDB = db.getAllGrades();
+
+        ArrayList<Grade> gradesforSubject=new ArrayList<>();
+
+        for(int i=0;i<gradesfromDB.size();i++)
+        {
+            if(gradesfromDB.get(i).getCourse().getName().equals(C.getName()))
+            {
+                gradesforSubject.add(gradesfromDB.get(i));
+            }
+        }
+        return gradesforSubject;
+    }
+
+    public ArrayList<Student> failedOneSubject() {
+        Database db = Database.getInstance();
+
+        ArrayList<Student> students=db.getAllStudents();
+        ArrayList<Student> students2=new ArrayList<Student>();
+
+        ArrayList<Grade> grades = db.getAllGrades();
+
+        int nr=0;
+
+        for (int i = 0; i < students.size(); i++)
+        {
+            int nrFailedSubj=0;
+
+            for (int k = 0; k < grades.size(); k++)
+            {
+                if (students.get(i).getName().equals(grades.get(k).getStudent().getName()) && students.get(i).getSurname().equals(grades.get(k).getStudent().getSurname())  )
+                {
+                    if(grades.get(k).getValue()<5)
+                    {
+                        nrFailedSubj++;
+                    }
+                }
+            }
+
+            if(nrFailedSubj==1)
+            {
+                nr++;
+                students2.add(students.get(i));
+            }
+        }
+        return students2;
+    }
+
 
     public Integer getId() {
         return id;
@@ -137,54 +217,5 @@ public class Employee extends JsonParser {
         this.user = user;
     }
 
-    public ArrayList getGradesForSubject(String name) {
-        Database db = Database.getInstance();
-        Course C = new Course();
-        C.setName(name);
-
-        ArrayList<Grade> gradesfromDB = db.getAllGrades();
-
-        ArrayList<Grade> gradesforSubject=new ArrayList<>();
-
-        for(int i=0;i<gradesfromDB.size();i++)
-        {
-            if(gradesfromDB.get(i).getCourse().getName().equals(C.getName()))
-            {
-                gradesforSubject.add(gradesfromDB.get(i));
-            }
-        }
-        return gradesforSubject;
-    }
-
-    public Integer failedOneSubject() {
-        Database db = Database.getInstance();
-
-        ArrayList<Student> students=db.getAllStudents();
-        ArrayList<Grade> grades = db.getAllGrades();
-
-        int nr=0;
-
-        for (int i = 0; i < students.size(); i++)
-        {
-            int nrFailedSubj=0;
-
-            for (int k = 0; k < grades.size(); k++)
-            {
-                if (students.get(i).getName().equals(grades.get(k).getStudent().getName()) && students.get(i).getSurname().equals(grades.get(k).getStudent().getSurname())  )
-                {
-                    if(grades.get(k).getValue()<5)
-                    {
-                        nrFailedSubj++;
-                    }
-                }
-            }
-
-            if(nrFailedSubj==1)
-            {
-                nr++;
-            }
-        }
-        return nr;
-    }
 
 }

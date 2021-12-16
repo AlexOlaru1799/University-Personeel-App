@@ -727,6 +727,70 @@ public class Database {
         return null;
     }
 
+    public ArrayList<Schedule> getAllSchedule(){
+        ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT S.ID AS S_ID, S.[[Time]]] AS S_Time,\n" +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear,\n" +
+                    "C.Name AS C_Name, C.Capacity AS C_Capacity,\n" +
+                    "M.Kind AS M_Kind,    \n" +
+                    "C2.Name AS C2_Name, C2.Credits AS C2_Credits,  \n" +
+                    "E.Name AS E_Name, E.Surname AS E_Surname   \n" +
+                    "FROM Schedule AS S   \n" +
+                    "INNER JOIN Modules AS M ON M.ID=S.Module   \n" +
+                    "INNER JOIN StudyGroups AS SG ON SG.ID=S.StudyGroup   \n" +
+                    "INNER JOIN Classrooms AS C ON C.ID=S.Classroom   \n" +
+                    "INNER JOIN Courses AS C2 ON M.Course=C2.ID   \n" +
+                    "INNER JOIN Employees AS E ON M.Professor=E.ID \n" +
+                    "INNER JOIN Employees AS E2 ON SG.Mentor=E2.ID "
+            );
+
+
+            while(rs.next())
+            {
+                Module M=new Module();
+                M.setKind(rs.getString("M_Kind"));
+
+                StudyGroup SG=new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Classroom C=new Classroom();
+                C.setName(rs.getString("C_Name"));
+                C.setCapacity(rs.getInt("C_Capacity"));
+
+                Course C2=new Course();
+                C2.setName(rs.getString("C2_Name"));
+                C2.setCredits(rs.getInt("C2_Credits"));
+                M.setCourse(C2);
+
+                Employee E=new Employee();
+                E.setName(rs.getString("E_Name"));
+                E.setSurname(rs.getString("E_Surname"));
+                M.setProfessor(new Professor(E));
+                C2.setProfessor(new Professor(E));
+
+                Schedule S=new Schedule();
+                S.setTime(rs.getTime("S_Time"));
+                S.setDate(rs.getDate("S_Time"));
+                S.setId(rs.getInt("S_ID"));
+
+                S.setModule(M);
+                S.setClassroom(C);
+                S.setStudy_group(SG);
+
+                schedules.add(S);
+            }
+            return schedules;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
