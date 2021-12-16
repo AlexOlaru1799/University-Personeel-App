@@ -10,6 +10,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 
+import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,11 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("GradesProfessorStudyGroup", "la la-smile-o", GradesProfessorStudyGroup.class), //
 
+                new MenuItemInfo("AverageGradeSubject", "la la-search", AverageGradeSubject.class), //
+
+                new MenuItemInfo("Subject Failed", "la la-search", SubjectFailed.class), //
+
+                new MenuItemInfo("Subject Statistics", "la la-search", SubjectStatistics.class), //
         };
 
         List<RouterLink> links = new ArrayList<>();

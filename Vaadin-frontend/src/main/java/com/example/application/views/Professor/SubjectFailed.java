@@ -4,38 +4,32 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("Professor Grade")
-@Route(value = "professorGrade", layout = ProfessorLayout.class)
+@PageTitle("Subject Failed")
+@Route(value = "subjectFailed", layout = ProfessorLayout.class)
 
-public class GradesProfessorStudyGroup extends VerticalLayout {
-    private TextField studyGroupName;
-    private Button showGroupAverage;
+public class SubjectFailed extends VerticalLayout{
+    private Button showSubjects;
 
-    public GradesProfessorStudyGroup() {
+    public SubjectFailed() {
 
-        studyGroupName = new TextField("Group Name");
-        showGroupAverage = new Button("Show Average");
+        showSubjects = new Button("Show Failed Subject");
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Show group average!"));
+        add(new H2("Show students who failed at a single subject!"));
 
-        VerticalLayout layout = createLayout("Group Average");
+        VerticalLayout layout = createLayout("Subject failed");
         layout.setPadding(true);
-        layout.add(studyGroupName, showGroupAverage);
+        layout.add(showSubjects);
 
 
-        showGroupAverage.addClickListener(e -> {
-
-            String group = studyGroupName.getValue();
+        showSubjects.addClickListener(e -> {
 
             //Database DB = Database.getInstance();
 
@@ -57,5 +51,3 @@ public class GradesProfessorStudyGroup extends VerticalLayout {
         return hl;
     }
 }
-
-

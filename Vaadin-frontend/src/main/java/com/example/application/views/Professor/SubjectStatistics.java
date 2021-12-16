@@ -2,40 +2,39 @@ package com.example.application.views.Professor;
 
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("Professor Grade")
-@Route(value = "professorGrade", layout = ProfessorLayout.class)
+@PageTitle("Subject Statitics")
+@Route(value = "subjectStatitics", layout = ProfessorLayout.class)
 
-public class GradesProfessorStudyGroup extends VerticalLayout {
-    private TextField studyGroupName;
-    private Button showGroupAverage;
+public class SubjectStatistics extends VerticalLayout {
+    private TextField subjectName;
+    private Button showSubjects;
 
-    public GradesProfessorStudyGroup() {
+    public SubjectStatistics() {
 
-        studyGroupName = new TextField("Group Name");
-        showGroupAverage = new Button("Show Average");
+        subjectName = new TextField("Subject Name");
+        showSubjects = new Button("Show Statistics");
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Show group average!"));
+        add(new H2("Show students who failed some exams!"));
 
-        VerticalLayout layout = createLayout("Group Average");
+        VerticalLayout layout = createLayout("Subject Statitics");
         layout.setPadding(true);
-        layout.add(studyGroupName, showGroupAverage);
+        layout.add(subjectName, showSubjects);
 
 
-        showGroupAverage.addClickListener(e -> {
+        showSubjects.addClickListener(e -> {
 
-            String group = studyGroupName.getValue();
+            String subject = subjectName.getValue();
 
             //Database DB = Database.getInstance();
 
@@ -57,5 +56,3 @@ public class GradesProfessorStudyGroup extends VerticalLayout {
         return hl;
     }
 }
-
-

@@ -4,38 +4,36 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("Professor Grade")
-@Route(value = "professorGrade", layout = ProfessorLayout.class)
+@PageTitle("Professor Schedule")
+@Route(value = "averageGroup", layout = ProfessorLayout.class)
 
-public class GradesProfessorStudyGroup extends VerticalLayout {
-    private TextField studyGroupName;
-    private Button showGroupAverage;
+public class AverageGradeSubject extends VerticalLayout {
+    private TextField subjectName;
+    private Button showSubjects;
 
-    public GradesProfessorStudyGroup() {
+    public AverageGradeSubject() {
 
-        studyGroupName = new TextField("Group Name");
-        showGroupAverage = new Button("Show Average");
+        subjectName = new TextField("Subject Name");
+        showSubjects = new Button("Show Subject Average");
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Show group average!"));
+        add(new H2("Show subject statistics!"));
 
-        VerticalLayout layout = createLayout("Group Average");
+        VerticalLayout layout = createLayout("Subject Statistics");
         layout.setPadding(true);
-        layout.add(studyGroupName, showGroupAverage);
+        layout.add(subjectName, showSubjects);
 
 
-        showGroupAverage.addClickListener(e -> {
+        showSubjects.addClickListener(e -> {
 
-            String group = studyGroupName.getValue();
+            String subject = subjectName.getValue();
 
             //Database DB = Database.getInstance();
 
@@ -57,5 +55,3 @@ public class GradesProfessorStudyGroup extends VerticalLayout {
         return hl;
     }
 }
-
-
