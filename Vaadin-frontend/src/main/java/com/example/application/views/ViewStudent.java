@@ -100,25 +100,11 @@ public class ViewStudent extends VerticalLayout {
 
         layH5.add(materie5,nota5,data5);
 
-
-
-
         layout.add(layH);
         layout.add(layH2);
         layout.add(layH3);
         layout.add(layH4);
         layout.add(layH5);
-
-
-
-
-
-
-
-
-
-
-
 
         searchButton.addClickListener(e -> {
 
@@ -140,8 +126,6 @@ public class ViewStudent extends VerticalLayout {
             data3.setText("");
             data4.setText("");
             data5.setText("");
-
-
 
             String ID = name.getValue();
 
@@ -207,13 +191,8 @@ public class ViewStudent extends VerticalLayout {
                                 nota5.setText(res3.getString("VALOARE"));
                                 data5.setText(res3.getString("DATA"));
                             }
-
                             counter++;
-
-
                         }
-
-
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
@@ -221,10 +200,7 @@ public class ViewStudent extends VerticalLayout {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-
-
         });
-
     }
 
     private VerticalLayout createLayout(String caption) {
