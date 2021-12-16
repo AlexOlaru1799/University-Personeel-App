@@ -4,11 +4,13 @@ import mta.universitate.Utils.JsonParser;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.Date;
 
 public class Schedule extends JsonParser {
     private Integer id;
     private Date date;
+    private Time time;
     private StudyGroup study_group;
     private Classroom classroom;
     private Module module;
@@ -75,5 +77,13 @@ public class Schedule extends JsonParser {
 
     public void setModule(Module module) {
         this.module = module;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
     }
 }

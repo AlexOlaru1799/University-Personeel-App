@@ -109,6 +109,7 @@ public class Secretary extends Employee {
         try{
             Database db = Database.getInstance();
             Professor P = Professor.fromEmployee(Employee.fromDB(db.getEmployeeID(name, surname)));
+            P.getUser().setPassword(null);
 
             return P.toJson();
         }
