@@ -17,7 +17,7 @@ import javax.servlet.http.Cookie;
 public class RouteLogin {
     Database db = Database.getInstance();
 
-    @RequestMapping(value = "/login", produces = "application/json")
+    @PostMapping(value = "/login", produces = "application/json")
     @ResponseBody
     public String login(@RequestBody String payload, HttpServletResponse response)  {
         try
@@ -40,7 +40,7 @@ public class RouteLogin {
     }
 
 
-    @RequestMapping(value = "/logout", produces = "application/json")
+    @PostMapping(value = "/logout", produces = "application/json")
     @ResponseBody
     public String logout(@CookieValue(value="uid", defaultValue = "hahaha") Cookie cookie){
         if (CookieManager.getInstance().invalidateCookie(cookie))

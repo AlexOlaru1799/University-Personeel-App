@@ -3,6 +3,7 @@ package mta.universitate.Routes;
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
 import mta.universitate.Utils.Hasher;
+import mta.universitate.Utils.ParamsParser;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import mta.universitate.Model.Admin.*;
@@ -20,139 +22,127 @@ import javax.servlet.http.Cookie;
 public class RouteAdmin {
     Database db = Database.getInstance();
 
-    @RequestMapping(value = "/admin/reset-password", produces = "application/json")
+    @PostMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
-    public String resetPassword(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String username, @RequestParam String new_pass){
+    public String resetPassword(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload){
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
-            if (A.resetUserPassword(username, Hasher.getHash(new_pass)))
-                return "{'status' : 'SUCCESS'}";
+            if (A.resetUserPassword(parameters.get("username").toString(), Hasher.getHash(parameters.get("new_pass").toString())))
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
 
-    @RequestMapping(value = "/admin/reset-username", produces = "application/json")
+    @PostMapping(value = "/admin/reset-username", produces = "application/json")
     @ResponseBody
-    public String resetUsername(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String username, @RequestParam String new_username){
+    public String resetUsername(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload){
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
-            if (A.resetUsername(username, new_username))
-                return "{'status' : 'SUCCESS'}";
+            if (A.resetUsername(parameters.get("username").toString(), parameters.get("new_username").toString()))
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
 
 
-    @RequestMapping(value = "/admin/create-employee", produces = "application/json")
+    @PostMapping(value = "/admin/create-employee", produces = "application/json")
     @ResponseBody
-    public String createEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam String role, @RequestParam int salary)  {
+    public String createEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)  {
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
+            String password = parameters.get("password").toString();
+            String position = parameters.get("position").toString();
+            String role = parameters.get("role").toString();
+            int salary = Integer.parseInt(parameters.get("salary").toString());
+
             if (A.createEmployee(name, surname, password, position, role, salary))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
 
     }
 
 
-    @RequestMapping(value = "/admin/delete-employee", produces = "application/json")
+    @PostMapping(value = "/admin/delete-employee", produces = "application/json")
     @ResponseBody
-    public String deleteEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
+    public String deleteEmployee(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
+
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
             if (A.deleteEmployee(name, surname))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
 
 
-    @RequestMapping(value = "/admin/create-student", produces = "application/json")
+    @PostMapping(value = "/admin/create-student", produces = "application/json")
     @ResponseBody
-    public String createStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String major, @RequestParam String study_group, @RequestParam int income) {
+    public String createStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
+            String password = parameters.get("password").toString();
+            String major = parameters.get("major").toString();
+            String study_group = parameters.get("study_group").toString();
+            int income = Integer.parseInt(parameters.get("income").toString());
+
             if (A.createStudent(name, surname, password, major, study_group, income))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
 
 
-    @RequestMapping(value = "/admin/delete-student", produces = "application/json")
+    @PostMapping(value = "/admin/delete-student", produces = "application/json")
     @ResponseBody
-    public String deleteStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
+    public String deleteStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
+
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
             if (A.deleteStudent(name, surname))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
-
-
-    /*
-    @GetMapping("/materii")
-    public String viewSubjects() throws SQLException {
-        Database db = Database.getInstance();
-        ResultSet result = db.getSubjects();
-
-        if(result == null)
-        {
-            return "Eroare :(";
-        }
-
-        ResultSetMetaData metadata = result.getMetaData();
-        int columnCount = metadata.getColumnCount();
-
-        StringBuilder stringBuilder=new StringBuilder();
-        stringBuilder.append("<style>table, th, td {border: 1px solid black;border-collapse: collapse; text-align:center} table.center{margin-left: auto;margin-right: auto;} table{font-family: arial, sans-serif;width: 70%;}</style>");
-        stringBuilder.append("<table class=\"center\">" +
-                "<tr>" +
-                "<th>Materie</th>" +
-                "<th>Numar credite</th>" +
-                "<th>Profesor</th>" +
-                "<th>Specializare</th>" +
-                "<th>Facultate</th>" +
-                "</tr>");
-
-        while (result.next()) {
-            stringBuilder.append("<tr>");
-            for (int i = 1; i <= columnCount; i++) {
-                stringBuilder.append("<td>").append(result.getString(i)).append("</td>");
-            }
-            stringBuilder.append("</tr>");
-        }
-        stringBuilder.append("</table>");
-
-
-        return stringBuilder.toString();
-    }
-
-    */
-
 }
