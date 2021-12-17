@@ -1,11 +1,10 @@
-package com.example.application.views;
+package com.example.application.views.Secretary;
 
 
 import com.example.application.views.BackEnd.Database;
 import com.example.application.views.BackEnd.Student;
 import com.example.application.views.BackEnd.StudyGroup;
 import com.example.application.views.BackEnd.StudyYear;
-import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;

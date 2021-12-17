@@ -1,4 +1,4 @@
-package com.example.application.views;
+package com.example.application.views.Secretary;
 
 
 
@@ -121,6 +121,12 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("View Student Account", "la la-certificate", ViewStudent.class), //
 
                 new MenuItemInfo("View Teacher Account", "la la-search", ViewTeacher.class), //
+
+                new MenuItemInfo("View Students Statistics", "la la-list", ViewStatistics.class), //
+
+                new MenuItemInfo("Add Subject", "la la-leanpub", AddSubject.class), //
+
+                new MenuItemInfo("View Courses", "la la-th-list", ViewCourses.class), //
 
                 new MenuItemInfo("Create Student Medical Certificate", "la la-edit", CreateStudentMedicalCertificate.class), //
 

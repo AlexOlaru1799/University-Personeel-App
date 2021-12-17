@@ -1,4 +1,4 @@
-package com.example.application.views;
+package com.example.application.views.Secretary;
 
 
 import com.vaadin.flow.component.Text;

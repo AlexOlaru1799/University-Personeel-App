@@ -1,20 +1,12 @@
 
 
-package com.example.application.views;
+package com.example.application.views.Secretary;
 
-        import com.example.application.views.MainLayout;
         import com.vaadin.flow.component.button.Button;
         import com.vaadin.flow.component.html.H1;
-        import com.vaadin.flow.component.html.H2;
-        import com.vaadin.flow.component.html.Image;
-        import com.vaadin.flow.component.html.Paragraph;
-        import com.vaadin.flow.component.notification.Notification;
-        import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
         import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-        import com.vaadin.flow.component.textfield.TextField;
         import com.vaadin.flow.router.PageTitle;
         import com.vaadin.flow.router.Route;
-        import com.vaadin.flow.router.RouteAlias;
 
 @PageTitle("Sign Out")
 @Route(value = "signOut", layout = MainLayout.class)

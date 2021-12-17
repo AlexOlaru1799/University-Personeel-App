@@ -1,8 +1,7 @@
-package com.example.application.views;
+package com.example.application.views.Secretary;
 
 import com.example.application.views.BackEnd.Database;
 import com.vaadin.flow.component.Html;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
