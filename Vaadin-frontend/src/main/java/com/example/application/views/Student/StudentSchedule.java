@@ -4,7 +4,9 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -29,9 +31,14 @@ public class StudentSchedule extends VerticalLayout {
         DatePicker finalDate = new DatePicker("Final date");
         add(finalDate);
 
-        VerticalLayout layout = createLayout("Show Student Schedule");
+        VerticalLayout layout = createLayout("Enter student's name and time period: ");
         layout.setPadding(true);
         layout.add(studentName, initialDate, finalDate, showSchedule);
+
+        layout = createLayout("Schedule : ");
+        layout.setPadding(true);
+        layout.setHeight("500px");
+        layout.getStyle().set("overflow", "scroll");// enable scrolling when content doesn't fit
     }
 
     private VerticalLayout createLayout(String caption) {
