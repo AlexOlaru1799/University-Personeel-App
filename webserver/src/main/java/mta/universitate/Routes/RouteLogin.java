@@ -3,10 +3,12 @@ package mta.universitate.Routes;
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
 import mta.universitate.Utils.Hasher;
+import mta.universitate.Utils.ParamsParser;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
@@ -17,21 +19,23 @@ public class RouteLogin {
 
     @RequestMapping(value = "/login", produces = "application/json")
     @ResponseBody
-    public String login(@RequestParam String username, @RequestParam String password, HttpServletResponse response)  {
+    public String login(@RequestBody String payload, HttpServletResponse response)  {
         try
         {
-            User U = db.get(User.fromDB(db.getUserID(username)));
-            if (U.getPassword().contentEquals(Hasher.getHash(password)))
+            HashMap<String, Object> params = ParamsParser.parse(payload);
+
+            User U = db.get(User.fromDB(db.getUserID(params.get("username").toString())));
+            if (U.getPassword().contentEquals(Hasher.getHash(params.get("password").toString())))
             {
                 Cookie cookie = CookieManager.getInstance().generateCookie(U);
                 cookie.setPath("/");
                 response.addCookie(cookie);
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
             }
         }
         catch (SQLException exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
 
     }
 
@@ -40,8 +44,8 @@ public class RouteLogin {
     @ResponseBody
     public String logout(@CookieValue(value="uid", defaultValue = "hahaha") Cookie cookie){
         if (CookieManager.getInstance().invalidateCookie(cookie))
-            return "{'status' : 'SUCCESS'}";
-        return "{'status' : 'FAILED'}";
+            return "{\"status\" : \"SUCCESS\"}";
+        return "{\"status\" : \"FAILED\"}";
     }
 
 }
