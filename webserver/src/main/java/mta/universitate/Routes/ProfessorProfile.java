@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class ProfessorProfile {
 
 
-    @GetMapping("/professor/{id}")
+   /* @GetMapping("/professor/{id}")
     public String getProfessorProfile(@PathVariable String id) throws SQLException {
         Database db1;
         db1 = Database.getInstance();
@@ -67,5 +67,5 @@ public class ProfessorProfile {
         stringBuilder.append("</table>");
 
         return stringBuilder.toString();
-    }
+    }*/
 }

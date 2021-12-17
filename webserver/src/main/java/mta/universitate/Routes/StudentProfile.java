@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @RestController
 public class StudentProfile {
 
-    @GetMapping("/student/{id}")
+    /*@GetMapping("/student/{id}")
     public String getStudentProfile(@PathVariable String id) throws SQLException {
         Database db1;
         db1 = Database.getInstance();
@@ -63,7 +63,7 @@ public class StudentProfile {
         stringBuilder.append("</table>");
 
         return stringBuilder.toString();
-    }
+    }*/
 
 
 }
