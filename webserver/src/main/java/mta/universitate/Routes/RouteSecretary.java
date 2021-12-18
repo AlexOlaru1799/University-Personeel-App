@@ -2,47 +2,60 @@ package mta.universitate.Routes;
 
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
+import mta.universitate.Utils.ParamsParser;
 import org.springframework.web.bind.annotation.*;
 import mta.universitate.Model.Secretary;
 import javax.servlet.http.Cookie;
+import java.util.HashMap;
 
 @RestController
 public class RouteSecretary {
     Database db = Database.getInstance();
 
 
-    @RequestMapping(value = "/secretary/create-professor", produces = "application/json")
+    @PostMapping(value = "/secretary/create-professor", produces = "application/json")
     @ResponseBody
-    public String createProfessor(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname, @RequestParam String password, @RequestParam String position, @RequestParam int salary)  {
+    public String createProfessor(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)  {
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name=parameters.get("name").toString();
+            String surname=parameters.get("surname").toString();
+            String password=parameters.get("password").toString();
+            String position=parameters.get("position").toString();
+            int salary=Integer.parseInt(parameters.get("salary").toString());
+
             if (S.createProfessor(name, surname, password, position, salary))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
-
+        return "{\"status\" : \"FAILED\"}";
     }
 
 
-    @RequestMapping(value = "/secretary/delete-professor", produces = "application/json")
+    @PostMapping(value = "/secretary/delete-professor", produces = "application/json")
     @ResponseBody
-    public String deleteProfessor(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String name, @RequestParam String surname) {
+    public String deleteProfessor(@CookieValue(value = "uid", defaultValue = "test") Cookie C,  @RequestBody String payload) {
 
         try
         {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name=parameters.get("name").toString();
+            String surname=parameters.get("surname").toString();
+
             if (S.deleteProfessor(name, surname))
-                return "{'status' : 'SUCCESS'}";
+                return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
 
-        return "{'status' : 'FAILED'}";
+        return "{\"status\" : \"FAILED\"}";
     }
-
 
     @RequestMapping(value = "/secretary/create-student", produces = "application/json")
     @ResponseBody
