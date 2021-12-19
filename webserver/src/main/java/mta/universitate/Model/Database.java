@@ -845,6 +845,37 @@ public class Database {
         return null;
     }
 
+    public ArrayList<Classroom> getAllClassrooms()
+    {
+        ArrayList<Classroom> classrooms = new ArrayList<Classroom>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT Name, Capacity, Kind " +
+                    "FROM Classrooms"
+            );
+
+
+            while(rs.next())
+            {
+                Classroom C = new Classroom();
+                C.setName(rs.getString("Name"));
+                C.setCapacity(rs.getInt("Capacity"));
+                C.setKind(rs.getBoolean("Kind"));
+
+
+
+                classrooms.add(C);
+            }
+            return classrooms;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
+
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d",
                 U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))

@@ -1,20 +1,15 @@
 package mta.universitate.Routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
 import mta.universitate.Utils.Hasher;
 import mta.universitate.Utils.ParamsParser;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
-
-import mta.universitate.Model.Admin.*;
 
 import javax.servlet.http.Cookie;
 
@@ -154,8 +149,8 @@ public class RouteAdmin {
             HashMap<String, Object> parameters = ParamsParser.parse(payload);
             Classroom classroom = new Classroom();
             String name = parameters.get("name").toString();
-            int capacity = (int) parameters.get("capacity");
-            int kind = (int) parameters.get("kind");
+            int capacity = Integer.parseInt(parameters.get("capacity").toString());
+            int kind = Integer.parseInt(parameters.get("kind").toString());
 
             classroom.setCapacity(capacity);
             classroom.setName(name);
@@ -167,6 +162,24 @@ public class RouteAdmin {
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
             if (Database.getInstance().update(classroom))
                 return "{\"status\" : \"SUCCESS\"}";
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+    @PostMapping(value = "/admin/get-classrooms", produces = "application/json")
+    @ResponseBody
+    public String getClassrooms(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+        try
+        {
+            ArrayList<Classroom> classrooms = Database.getInstance().getAllClassrooms();
+
+
+            //Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(classrooms));
         }
         catch (Exception exc){}
 
