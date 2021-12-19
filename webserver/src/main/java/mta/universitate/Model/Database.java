@@ -132,7 +132,7 @@ public class Database {
     // public boolean add(Course C){ return true;}
     // public boolean add(Major M){ return true;}
     // public boolean add(Feature F) {return true;}
-    // public boolean add(Report R){ return true;}
+
     public boolean add(Role R){
         if(this.execute(String.format("INSERT INTO Roles(ID, Description) VALUES (%d,'%s')", R.getId(), R.getDescription())))
             return true;
@@ -156,8 +156,35 @@ public class Database {
 
     public boolean add(Request R)
     {
-        if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
+        if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved) VALUES " +
                 "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
+            return true;
+
+        return false;
+    }
+
+    public boolean add(Grade G)
+    {
+        if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
+                "(%d, %d, %d, %d", G.getValue(), G.getCourse(), G.getDate(), G.getStudent())))
+            return true;
+
+        return false;
+    }
+
+    public boolean add(Module M)
+    {
+        if(this.execute(String.format("INSERT INTO Modules(Kind, Course, Professor) VALUES " +
+                "(%d, %d, %d)", M.getKind(), M.getCourse(), M.getProfessor())))
+            return true;
+
+        return false;
+    }
+
+    public boolean add(Feature F)
+    {
+        if(this.execute(String.format("INSERT INTO Features(Description) VALUES " +
+                "('%s')", F.getDescription())))
             return true;
 
         return false;
@@ -811,8 +838,29 @@ public class Database {
     }
 
     public boolean update(User U){
-        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d", U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
+        if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d",
+                U.getUsername(), U.getPassword(), U.getRole().getId(), U.getId())))
             return true;
+        return false;
+    }
+
+    public boolean update(Classroom C)
+    {
+        int type = 0;
+        if(C.isKind() == true)
+        {
+            type = 1;
+        }
+
+
+        if(this.execute(String.format("UPDATE Classrooms SET Name = '%s' , Capacity = '%d', Kind = '%d'",
+                C.getName(), C.getCapacity(), type)))
+
+            return true;
+
+
+
+
         return false;
     }
 
