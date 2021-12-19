@@ -77,7 +77,7 @@ public class ArchiveStudents {
         ArrayList<Grade> allGrades = Database.getInstance().getAllGrades();
         if(fourthYearStudents.size() == 0)
         {
-            return "{'status':'FAILED'}";
+            return "{\"status\" : \"FAILED\"}";
         }
 
         ArrayList<Document> documents = Database.getInstance().getAllDocuments();
@@ -124,7 +124,7 @@ public class ArchiveStudents {
 
         }
         out.close();
-        return "{'status' : 'SUCCESS'}";
+        return "{\"status\" : \"SUCCESS\"}";
     }
 
 }
