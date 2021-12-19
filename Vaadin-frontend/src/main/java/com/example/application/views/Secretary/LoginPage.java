@@ -1,10 +1,9 @@
 package com.example.application.views.Secretary;     // To do modify for the current project
 
 
-
-import com.example.application.views.BackEnd.Database;
 import com.example.application.views.Utils.ApiRequest;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
@@ -18,16 +17,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Random;
-
 import java.net.CookieManager;
-import java.net.HttpCookie;
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Random;
 
 @PageTitle("list")
 @Route(value = "")
@@ -44,7 +37,7 @@ public class LoginPage extends VerticalLayout {
         CookieManager cookieManager = new CookieManager();
 
         // Create request and set the endpoint
-        ApiRequest req = new ApiRequest("http://localhost:8080/login");
+        ApiRequest req = new ApiRequest("http://localhost:8090/login");
 
         String photo = "https://picsum.photos/seed/" + int_random + "/400";
 
@@ -78,45 +71,29 @@ public class LoginPage extends VerticalLayout {
 
         component.addLoginListener(e -> {
 
-                String username = e.getUsername();
-                String password = e.getPassword();
+            String username = e.getUsername();
+            String password = e.getPassword();
 
 
-                req.addParameter("username", username);
-                req.addParameter("password", password);
+            req.addParameter("username", username);
+            req.addParameter("password", password);
 
 
             // Send the request and get the response
             HashMap<String, Object> response = req.send();
 
-            // Get the cookie and store it in the CookieManager
-            cookieManager.getCookieStore().add(null, req.getCookie());
-
-            System.out.println(response.get("status"));
-
-
-
-
-//                    if(!res2.next())
-//                    {
-//                        System.out.println("DB Query Error\n\n");
-//                    }
-//                    else
-//                    {
-//                        System.out.println(res2.getString(1));
-//                    }
-//
-//                    if(Objects.equals(res2.getString(1), "300"))
-//                    {
-//                        String location = "viewStudent";
-//                        component.getUI().ifPresent(ui ->ui.navigate(location));
-//                    }
-//                    else    //TO DO: ADD HERE FOR THE OTHER TYPE OF USERS
-//                    {
-//                        String location = "main/"+username;
-//                        component.getUI().ifPresent(ui ->ui.navigate(location));
-//                    }
-
+            if(!response.get("status").equals("SUCCESS"))
+            {
+                component.getUI().ifPresent(ui ->ui.navigate(""));
+                UI.getCurrent().getPage().reload();
+            }
+            else {
+                // Get the cookie and store it in the CookieManager
+                cookieManager.getCookieStore().add(null, req.getCookie());
+                System.out.println(response.get("role"));
+                String location = "viewStudent";
+                component.getUI().ifPresent(ui ->ui.navigate(location));
+            }
 
 
 
