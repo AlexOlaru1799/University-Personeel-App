@@ -1,23 +1,19 @@
 package com.example.application.views.Admin;
 
-import com.example.application.views.Admin.AdminLayout;
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -39,14 +35,24 @@ public class UpdateClassroom extends VerticalLayout{
 
         HashMap<String, Object> classes = getCl.send();
 
-        //String ceva = classes.get("name").toString();
+        ArrayList<Object> objResp = new ArrayList<Object>(classes.values());
 
-        System.out.println(classes);
+        ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
+
+        ArrayList<String> classesName = new ArrayList<String>(objClasses.size());
+
+        for (int i = 0; i < objClasses.size(); i++) {
+            String[] set = null;
+            String c = objClasses.get(i).toString();
+            set = c.split("=");
+            set = set[2].split(",");
+            classesName.add(set[0]);
+        }
 
         Select<String> classSelect = new Select<String>();
         classSelect.setLabel("Select Class");
-        //sclassSelect.setItems((Collection<String>) classes);
-        classSelect.setValue("Class");
+        classSelect.setItems(classesName);
+        classSelect.setValue(classesName.get(0));
 
         Select<String> type = new Select<String>();
         type.setLabel("Class Type");
@@ -71,12 +77,16 @@ public class UpdateClassroom extends VerticalLayout{
 
             ApiRequest req = new ApiRequest("http://localhost:8080/admin/update-classroom");
 
-
             if(classroom != "" && _type!= "" && _capacity != 0)
             {
                 req.addParameter("name", classroom);
                 req.addParameter("capacity", String.valueOf(_capacity));
-                req.addParameter("kind", _type);
+                if (_type == "Lab"){
+                    req.addParameter("kind", String.valueOf(1));
+                }
+                else {
+                    req.addParameter("kind", String.valueOf(0));
+                }
 
                 req.addCookie(OwnCookieManager.getInstance().getCookie());
                 // Send the request and get the response
