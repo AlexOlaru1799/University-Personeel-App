@@ -1,5 +1,7 @@
 package mta.universitate.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import mta.universitate.Utils.JsonParser;
 
 import java.sql.Array;
@@ -89,30 +91,35 @@ public class Employee extends JsonParser {
         return null;
     }
 
-    public String viewScheduleForProfessor(String name, String surname, String initDate){
-        try{
-            Database db = Database.getInstance();
+    public ArrayList<Schedule> viewScheduleForProfessor(String name, String surname, String initDate){
+        //try{
+        Database db = Database.getInstance();
 
-            ArrayList<Schedule> schedules = db.getAllSchedule();
-            StringBuilder response = new StringBuilder();
+        ArrayList<Schedule> schedules = db.getAllSchedule();
+        //StringBuilder response = new StringBuilder();
 
-            for(int i=0;i<schedules.size();i++)
-            {
-                String dateDB = schedules.get(i).getDate().toString();
+        ArrayList<Schedule> schedulesforReturn=new ArrayList<Schedule>();
 
-                if(dateDB.equals(initDate)) {
-                    if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
-                        response.append(schedules.get(i).toJson());
-                    }
+        for(int i=0;i<schedules.size();i++)
+        {
+            String dateDB = schedules.get(i).getDate().toString();
+
+            if(dateDB.equals(initDate)) {
+                if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                    //response.append(schedules.get(i).toJson());
+                    schedulesforReturn.add(schedules.get(i));
                 }
             }
-
-            return response.toString();
-
         }
-        catch (JsonProcessingException exc){}
 
-        return null;
+        // return response.toString();
+
+        return schedulesforReturn;
+
+        // }
+//        catch (JsonProcessingException exc){}
+//
+//        return null;
     }
 
     public ArrayList getGradesForSubject(String name) {
@@ -139,7 +146,6 @@ public class Employee extends JsonParser {
 
         ArrayList<Student> students=db.getAllStudents();
         ArrayList<Student> students2=new ArrayList<Student>();
-
         ArrayList<Grade> grades = db.getAllGrades();
 
         int nr=0;
@@ -158,7 +164,6 @@ public class Employee extends JsonParser {
                     }
                 }
             }
-
             if(nrFailedSubj==1)
             {
                 nr++;
@@ -167,7 +172,6 @@ public class Employee extends JsonParser {
         }
         return students2;
     }
-
 
     public Integer getId() {
         return id;
