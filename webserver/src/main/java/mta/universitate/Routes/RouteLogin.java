@@ -25,13 +25,17 @@ public class RouteLogin {
             HashMap<String, Object> params = ParamsParser.parse(payload);
 
             User U = db.get(User.fromDB(db.getUserID(params.get("username").toString())));
+            int role = U.getRole().getId();
+
+
             if (U.getPassword().contentEquals(Hasher.getHash(params.get("password").toString())))
             {
                 Cookie cookie = CookieManager.getInstance().generateCookie(U);
                 cookie.setPath("/");
                 response.addCookie(cookie);
-                return "{\"status\" : \"SUCCESS\"}";
+                return "{\"status\" : \"SUCCESS\", \"role\" : \""+ role +"\"}";
             }
+
         }
         catch (SQLException exc){}
 

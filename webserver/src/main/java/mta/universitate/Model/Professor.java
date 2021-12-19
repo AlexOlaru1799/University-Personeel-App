@@ -1,5 +1,8 @@
 package mta.universitate.Model;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 public class Professor extends Employee {
 
     public Professor(Employee E) {
@@ -21,10 +24,26 @@ public class Professor extends Employee {
             return null;
     }
 
-    public void giveGrade(Student S, int grade)
-    {
-        System.out.print("Professor gave grade " +
-                grade + "to student " + S.getName());
+    public boolean giveGrade(String name, String surname, int grade, String course, LocalDate date) throws SQLException {
+        Database db = Database.getInstance();
+
+        Grade G=new Grade();
+        G.setValue(grade);
+        G.setDate(date);
+
+        Student S=new Student();
+        S.setId(db.getStudentID(name,surname));
+
+        Course C=new Course();
+        C.setId(db.getCourseID(course));
+
+        G.setStudent(S);
+        G.setCourse(C);
+
+        if (db.addGrade(G))
+            return true;
+
+        return false;
     }
 
 }
