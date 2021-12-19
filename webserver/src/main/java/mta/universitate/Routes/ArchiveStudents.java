@@ -70,7 +70,7 @@ public class ArchiveStudents {
 
 
 
-    @GetMapping(value = "/archive-students", produces = "application/json")
+    @PostMapping(value = "/archive-students", produces = "application/json")
     @ResponseBody
     public String archiveStudents() throws SQLException, IOException {
         ArrayList<Student> fourthYearStudents=get4thYearStudents();

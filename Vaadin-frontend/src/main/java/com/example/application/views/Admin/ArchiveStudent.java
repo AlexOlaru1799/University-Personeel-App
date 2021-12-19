@@ -1,7 +1,9 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Utils.ApiRequest;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
@@ -11,45 +13,40 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.HashMap;
+
 @PageTitle("Archive Student")
 @Route(value = "archiveStudent", layout = AdminLayout.class)
 public class ArchiveStudent extends VerticalLayout{
 
-    private TextField studentName;
     private Button archiveButton;
 
     public ArchiveStudent() {
 
-        studentName = new TextField("Student Name");
-        archiveButton = new Button("Archive Student");
+        archiveButton = new Button("Archive Students");
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Archive Student by pressing the button"));
+        add(new H2("Archive Students by pressing the button"));
 
-        VerticalLayout layout = createLayout("Enter student name here");
+        VerticalLayout layout = createLayout("Archive Students Section");
         layout.setPadding(true);
-        layout.add(studentName, archiveButton);
+        layout.add(archiveButton);
 
 
         archiveButton.addClickListener(e -> {
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080/archive-students");
 
-            String nameSurname = studentName.getValue();
+            // Send the request and get the response
+            HashMap<String, Object> response = req.send();
 
-            //Database DB = Database.getInstance();
+            Notification.show("Be patient, this may take some time...");
 
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
-
-            if(nameSurname != "")
+            if(response.get("status").equals("SUCCESS"))
             {
-                Notification.show("Student with name:" + nameSurname + " has an archive now");
-            }
-            else
-            {
-                Notification.show("You need to select a name!");
+                Notification.show("Archive was created successfully :)");
             }
         });
 

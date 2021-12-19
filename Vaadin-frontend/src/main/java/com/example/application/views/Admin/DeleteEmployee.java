@@ -1,6 +1,8 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -10,6 +12,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+import java.net.CookieManager;
+import java.util.HashMap;
 
 @PageTitle("Delete Employee")
 @Route(value = "deleteEmployee", layout = AdminLayout.class)
@@ -40,15 +45,27 @@ public class DeleteEmployee extends VerticalLayout{
             String name = employeeName.getValue();
             String surname = employeeSurName.getValue();
 
-            //Database DB = Database.getInstance();
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080/admin/delete-employee");
 
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
 
             if(name != "" && surname != "")
             {
-                Notification.show("Employee with name:" + name + surname + " has been deleted");
+                req.addParameter("username", name);
+                req.addParameter("password", surname);
+
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
+                // Send the request and get the response
+                HashMap<String, Object> response = req.send();
+
+                if(response.get("status").equals("SUCCESS"))
+                {
+                    Notification.show("Employee with name:" + name + surname + " has been deleted");
+                }
+                else
+                {
+                    Notification.show("Failed :(");
+                }
             }
             else
             {

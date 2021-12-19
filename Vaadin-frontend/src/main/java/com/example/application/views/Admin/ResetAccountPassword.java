@@ -51,9 +51,6 @@ public class ResetAccountPassword extends VerticalLayout{
             String user = username.getValue();
             String pass = newPassword.getValue();
 
-            // Here we will store the cookie
-            CookieManager cookieManager = new CookieManager();
-
             // Create request and set the endpoint
             ApiRequest req = new ApiRequest("http://localhost:8080/admin/reset-password");
 
