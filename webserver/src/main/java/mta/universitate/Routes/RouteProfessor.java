@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,4 +129,31 @@ public class RouteProfessor {
 
         return "{\"status\" : \"FAILED\"}";
     }
+
+    @PostMapping(value = "/professor/add-grade", produces = "application/json")
+    @ResponseBody
+    public String addGrade(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)  {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Professor P = Professor.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
+            String courseName = parameters.get("course").toString();
+            String data = parameters.get("date").toString();
+            int grade = Integer.parseInt(parameters.get("grade").toString());
+
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(data, format);
+
+            if (P.giveGrade(name, surname, grade, courseName, date))
+                return "{\"status\" : \"SUCCESS\"}";
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+
+    }
+
 }

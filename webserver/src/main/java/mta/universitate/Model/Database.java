@@ -172,6 +172,14 @@ public class Database {
         return false;
     }
 
+    public boolean addGrade(Grade G) {
+        if (this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) " +
+                        "VALUES(%d, %d, '%s', %d)",
+                G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
+            return true;
+        return false;
+    }
+
     public boolean add(Module M)
     {
         if(this.execute(String.format("INSERT INTO Modules(Kind, Course, Professor) VALUES " +
@@ -462,7 +470,7 @@ public class Database {
             rs.next();
             to_return.setId(rs.getInt("ID"));
             to_return.setValue(rs.getInt("Value"));
-            to_return.setDate(rs.getDate("[Date]"));
+            to_return.setDate(rs.getDate("[Date]").toLocalDate());
 
             C.setId(rs.getInt("Course"));
             C=this.get(C);
@@ -704,7 +712,7 @@ public class Database {
             {
                 Grade G = new Grade();
                 G.setValue(rs.getInt("G_Value"));
-                G.setDate(rs.getDate("G_Date"));
+                G.setDate(rs.getDate("G_Date").toLocalDate());
 
                 Course C=new Course();
                 C.setCredits(rs.getInt("C_Credits"));
@@ -864,6 +872,12 @@ public class Database {
         return false;
     }
 
+
+    public int getCourseID(String course) throws SQLException {
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Courses WHERE Name = '%s'", course));
+        rs.next();
+        return rs.getInt("ID");
+    }
 
 
     public int getRoleID(String role) throws SQLException, SQLServerException{

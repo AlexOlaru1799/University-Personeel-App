@@ -1,13 +1,14 @@
 package mta.universitate.Model;
 import mta.universitate.Utils.JsonParser;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Grade extends JsonParser {
     private Integer id;
     private Integer value;
     private Course course;
-    private Date date;
+    private LocalDate date;
     private Student student;
 
     public static Grade fromDB(int id){
@@ -41,11 +42,11 @@ public class Grade extends JsonParser {
         this.course = course;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
