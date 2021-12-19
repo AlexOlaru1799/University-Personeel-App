@@ -37,7 +37,7 @@ public class LoginPage extends VerticalLayout {
         CookieManager cookieManager = new CookieManager();
 
         // Create request and set the endpoint
-        ApiRequest req = new ApiRequest("http://localhost:8090/login");
+        ApiRequest req = new ApiRequest("http://localhost:8080/login");
 
         String photo = "https://picsum.photos/seed/" + int_random + "/400";
 
@@ -86,13 +86,35 @@ public class LoginPage extends VerticalLayout {
             {
                 component.getUI().ifPresent(ui ->ui.navigate(""));
                 UI.getCurrent().getPage().reload();
+
+
             }
             else {
                 // Get the cookie and store it in the CookieManager
                 cookieManager.getCookieStore().add(null, req.getCookie());
                 System.out.println(response.get("role"));
-                String location = "viewStudent";
-                component.getUI().ifPresent(ui ->ui.navigate(location));
+
+                String roleS = (String) response.get("role");
+                if(roleS.equals("300"))
+                {
+                    String location = "viewStudent";
+                    component.getUI().ifPresent(ui ->ui.navigate(location));
+                }
+                else if(roleS.equals("200"))
+                {
+                    String location = "professorLayout";
+                    component.getUI().ifPresent(ui ->ui.navigate(location));
+                }
+                else if(roleS.equals("400"))
+                {
+                    String location = "adminLayout";
+                    component.getUI().ifPresent(ui ->ui.navigate(location));
+                }
+                else
+                {
+                    String location = "studentLayout";
+                    component.getUI().ifPresent(ui ->ui.navigate(location));
+                }
             }
 
 
