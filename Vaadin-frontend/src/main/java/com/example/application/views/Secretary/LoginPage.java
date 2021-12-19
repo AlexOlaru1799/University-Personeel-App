@@ -3,6 +3,7 @@ package com.example.application.views.Secretary;     // To do modify for the cur
 
 
 import com.example.application.views.BackEnd.Database;
+import com.example.application.views.Utils.ApiRequest;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -23,6 +24,11 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Random;
 
+import java.net.CookieManager;
+import java.net.HttpCookie;
+import java.util.HashMap;
+import java.util.List;
+
 @PageTitle("list")
 @Route(value = "")
 public class LoginPage extends VerticalLayout {
@@ -34,7 +40,11 @@ public class LoginPage extends VerticalLayout {
         int upperLimit = 500;
         int int_random = rand.nextInt(upperLimit);
 
+        // Here we will store the cookie
+        CookieManager cookieManager = new CookieManager();
 
+        // Create request and set the endpoint
+        ApiRequest req = new ApiRequest("http://localhost:8080/login");
 
         String photo = "https://picsum.photos/seed/" + int_random + "/400";
 
@@ -67,78 +77,50 @@ public class LoginPage extends VerticalLayout {
 
 
         component.addLoginListener(e -> {
-            try
-            {
+
                 String username = e.getUsername();
                 String password = e.getPassword();
 
 
+                req.addParameter("username", username);
+                req.addParameter("password", password);
 
-                Database DB = Database.getInstance();
 
-                String hashedPass =DB.getHash(password);
+            // Send the request and get the response
+            HashMap<String, Object> response = req.send();
 
-                ResultSet res  = DB.executeQuery(" SELECT CASE WHEN EXISTS (" +
-                        "    SELECT *" +
-                        "    FROM [dbo].[utilizatori]" +
-                        "    WHERE [Username] = '" +
-                        username +
-                        "' and [Password] = '" +
-                        hashedPass +
-                        "'" +
-                        ")" +
-                        "THEN CAST(1 AS BIT)" +
-                        "ELSE CAST(0 AS BIT) END");
+            // Get the cookie and store it in the CookieManager
+            cookieManager.getCookieStore().add(null, req.getCookie());
 
-                if(!res.next())
-                {
-                    System.out.println("DB Query Error\n\n");
-                }
-                else
-                {
-                    System.out.println(res.getString(1));
-                }
-
-                if (Objects.equals(res.getString(1), "1")) {
-
-                    ResultSet res2  = DB.executeQuery(" SELECT [FK_TipCont]" +
-                            "  FROM [dbo].[utilizatori]" +
-                            "  WHERE [dbo].[utilizatori].[Username] = '" +
-                            username +
-                            "'");
-
-                    if(!res2.next())
-                    {
-                        System.out.println("DB Query Error\n\n");
-                    }
-                    else
-                    {
-                        System.out.println(res2.getString(1));
-                    }
-
-                    if(Objects.equals(res2.getString(1), "300"))
-                    {
-                        String location = "viewStudent";
-                        component.getUI().ifPresent(ui ->ui.navigate(location));
-                    }
-                    else    //TO DO: ADD HERE FOR THE OTHER TYPE OF USERS
-                    {
-                        String location = "main/"+username;
-                        component.getUI().ifPresent(ui ->ui.navigate(location));
-                    }
+            System.out.println(response.get("status"));
 
 
 
 
-                    component.close();
-                } else {
-                    component.setError(true);
+//                    if(!res2.next())
+//                    {
+//                        System.out.println("DB Query Error\n\n");
+//                    }
+//                    else
+//                    {
+//                        System.out.println(res2.getString(1));
+//                    }
+//
+//                    if(Objects.equals(res2.getString(1), "300"))
+//                    {
+//                        String location = "viewStudent";
+//                        component.getUI().ifPresent(ui ->ui.navigate(location));
+//                    }
+//                    else    //TO DO: ADD HERE FOR THE OTHER TYPE OF USERS
+//                    {
+//                        String location = "main/"+username;
+//                        component.getUI().ifPresent(ui ->ui.navigate(location));
+//                    }
 
-                }
-            }
-            catch (SQLException | NoSuchAlgorithmException throwables) {
-                throwables.printStackTrace();
-            }
+
+
+
+
         });
         Button open = new Button("Open login overlay",
                 e -> component.setOpened(true));
