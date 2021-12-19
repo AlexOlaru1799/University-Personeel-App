@@ -1,6 +1,8 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -15,6 +17,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+import java.util.HashMap;
 
 @PageTitle("Add Employee")
 @Route(value = "addEmployee", layout = AdminLayout.class)
@@ -63,16 +67,32 @@ public class CreateEmployee extends VerticalLayout{
             String role1 = role.getValue();
             Integer sal = salary.getValue();
 
-            //Database DB = Database.getInstance();
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080/admin/create-employee");
 
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
 
             if(name != "" && surname!= "" && passwd != "" && sal != null)
             {
-                Notification.show("Employee with name:" + name + " " + surname + " " + passwd + " " + pos +
-                         " " + role1 + " " + sal +" has been added");
+                req.addParameter("name", name);
+                req.addParameter("surname", surname);
+                req.addParameter("password", passwd);
+                req.addParameter("position", pos);
+                req.addParameter("role", role1);
+                req.addParameter("salary", String.valueOf(sal));
+
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
+
+
+                // Send the request and get the response
+                HashMap<String, Object> response = req.send();
+
+                if(response.get("status").equals("SUCCESS")) {
+
+                    Notification.show("Employee with name:" + name + " " + surname + " has been added");
+                }
+                else{
+                    Notification.show("Failed :(");
+                }
             }
             else
             {

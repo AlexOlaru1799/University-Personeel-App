@@ -59,7 +59,16 @@ public class UpdateClassroom extends VerticalLayout{
             Integer _capacity = capacity.getValue();
 
             // Create request and set the endpoint
+            ApiRequest getCl = new ApiRequest("http://localhost:8080/admin/get-classrooms");
+
+            HashMap<String, Object> classes = getCl.send();
+
+            String ceva = classes.get("name").toString();
+
+            System.out.println(ceva);
+
             ApiRequest req = new ApiRequest("http://localhost:8080/admin/update-classroom");
+
 
             if(classroom != "" && _type!= "" && _capacity != 0)
             {
