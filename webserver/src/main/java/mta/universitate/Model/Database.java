@@ -156,18 +156,13 @@ public class Database {
 
     public boolean add(Request R)
     {
-<<<<<<< HEAD
-        if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved) VALUES " +
-=======
         if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
->>>>>>> master
                 "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
             return true;
 
         return false;
     }
 
-<<<<<<< HEAD
     public boolean add(Grade G)
     {
         if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
@@ -195,8 +190,6 @@ public class Database {
         return false;
     }
 
-=======
->>>>>>> master
     public boolean delete(Student S){
 
         if (this.execute(String.format("DELETE FROM Students WHERE ID = %d", S.getId())))
