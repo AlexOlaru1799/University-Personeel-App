@@ -33,9 +33,9 @@ public class CreateTeacherAccount extends VerticalLayout {
 
 
         // Create request and set the endpoint
-        ApiRequest req = new ApiRequest("http://localhost:8080/secretary/create-professor");
 
-        CookieManager cookieManager = new CookieManager();
+
+        //CookieManager cookieManager = new CookieManager();
 
 
 
@@ -46,7 +46,7 @@ public class CreateTeacherAccount extends VerticalLayout {
         name.setWidth("500px");
         TextField surname = new TextField("Professor surname");
         surname.setWidth("500px");
-        PasswordField password = new PasswordField("Professor surname");
+        PasswordField password = new PasswordField("Professor password");
         surname.setWidth("500px");
 
         Select<String> role = new Select<String>();
@@ -71,7 +71,7 @@ public class CreateTeacherAccount extends VerticalLayout {
             String passS = password.getValue();
             String positionS = role.getValue();
 
-
+            ApiRequest req = new ApiRequest("http://localhost:8080/secretary/create-professor");
 
             req.addParameter("name",nameS);
             req.addParameter("surname",surnameS);
@@ -81,9 +81,17 @@ public class CreateTeacherAccount extends VerticalLayout {
 
             req.addCookie(OwnCookieManager.getInstance().getCookie());
 
+
+            // Send the request and get the response
             HashMap<String, Object> response = req.send();
 
-            System.out.println(response.get("status"));
+            if(response.get("status").equals("SUCCESS")) {
+
+                Notification.show("Employee with name: " + nameS + " " + surnameS + " has been added");
+            }
+            else{
+                Notification.show("Failed :(");
+            }
 
 
             name.clear();
@@ -92,7 +100,7 @@ public class CreateTeacherAccount extends VerticalLayout {
             role.clear();
             password.clear();
 
-            Notification.show("Professor was added to the database!");
+            //Notification.show("Professor was added to the database!");
 
         });
     }

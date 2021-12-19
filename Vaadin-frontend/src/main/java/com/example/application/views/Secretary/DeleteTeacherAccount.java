@@ -3,6 +3,8 @@ package com.example.application.views.Secretary;
 
 
 
+        import com.example.application.views.Utils.ApiRequest;
+        import com.example.application.views.Utils.OwnCookieManager;
         import com.vaadin.flow.component.Html;
         import com.vaadin.flow.component.button.Button;
         import com.vaadin.flow.component.html.H3;
@@ -11,6 +13,8 @@ package com.example.application.views.Secretary;
         import com.vaadin.flow.component.textfield.TextField;
         import com.vaadin.flow.router.PageTitle;
         import com.vaadin.flow.router.Route;
+
+        import java.util.HashMap;
 
 @PageTitle("Delete Teacher Account")
 @Route(value = "deleteTeacherAccount", layout = MainLayout.class)
@@ -35,30 +39,31 @@ public class DeleteTeacherAccount extends VerticalLayout {
         addStudent.addClickListener(e -> {
             String nameS = name.getValue();
             String surnameS = surname.getValue();
+            ApiRequest req = new ApiRequest("http://localhost:8080/secretary/delete-professor");
 
-//            Professor professor = new Professor(nameS,surnameS);
-//            professor.setSalary(salaryS);
-//
-//
-//
-//
-//
-//            Database DB = Database.getInstance();
-//
-//            try {
-//                DB.createTeacher(professor);
-//            } catch (NoSuchAlgorithmException ex) {
-//                ex.printStackTrace();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//
-//
-//            name.clear();
-//            surname.clear();
-//            salary.clear();
+            req.addParameter("name",nameS);
+            req.addParameter("surname",surnameS);
 
-            Notification.show("Professor was added to the database!");
+
+            req.addCookie(OwnCookieManager.getInstance().getCookie());
+
+
+            // Send the request and get the response
+            HashMap<String, Object> response = req.send();
+
+            if(response.get("status").equals("SUCCESS")) {
+
+                Notification.show("Teacher with name: " + nameS + " " + surnameS + " has been deleted");
+            }
+            else{
+                Notification.show("There is no Teacher with this name!");
+            }
+
+            name.clear();
+            surname.clear();
+
+
+
 
         });
     }
