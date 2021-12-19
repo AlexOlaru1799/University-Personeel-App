@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 @PageTitle("Update Classroom")
@@ -32,9 +33,19 @@ public class UpdateClassroom extends VerticalLayout{
         capacity = new IntegerField("Select Capacity");
         updateClassroom = new Button("Update Classroom");
 
+        // Create request and set the endpoint
+        ApiRequest getCl = new ApiRequest("http://localhost:8080/admin/get-classrooms");
+        getCl.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> classes = getCl.send();
+
+        //String ceva = classes.get("name").toString();
+
+        System.out.println(classes);
+
         Select<String> classSelect = new Select<String>();
         classSelect.setLabel("Select Class");
-        classSelect.setItems("Class", "Class", "Class", "Class", "Class");
+        //sclassSelect.setItems((Collection<String>) classes);
         classSelect.setValue("Class");
 
         Select<String> type = new Select<String>();
@@ -57,15 +68,6 @@ public class UpdateClassroom extends VerticalLayout{
             String classroom = classSelect.getValue();
             String _type = type.getValue();
             Integer _capacity = capacity.getValue();
-
-            // Create request and set the endpoint
-            ApiRequest getCl = new ApiRequest("http://localhost:8080/admin/get-classrooms");
-
-            HashMap<String, Object> classes = getCl.send();
-
-            String ceva = classes.get("name").toString();
-
-            System.out.println(ceva);
 
             ApiRequest req = new ApiRequest("http://localhost:8080/admin/update-classroom");
 

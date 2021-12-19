@@ -169,14 +169,13 @@ public class RouteAdmin {
     }
 
     @PostMapping(value = "/admin/get-classrooms", produces = "application/json")
-    @ResponseBody
-    public String getClassrooms(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+    public String getClassrooms(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
         try
         {
             ArrayList<Classroom> classrooms = Database.getInstance().getAllClassrooms();
 
 
-            //Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
 
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(classrooms));

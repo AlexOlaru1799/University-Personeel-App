@@ -35,7 +35,7 @@ public class CreateTeacherAccount extends VerticalLayout {
         // Create request and set the endpoint
         ApiRequest req = new ApiRequest("http://localhost:8080/secretary/create-professor");
 
-        CookieManager cookieManager = new CookieManager();
+        //CookieManager cookieManager = new CookieManager();
 
 
 
@@ -71,19 +71,27 @@ public class CreateTeacherAccount extends VerticalLayout {
             String passS = password.getValue();
             String positionS = role.getValue();
 
-
+            req.addCookie(OwnCookieManager.getInstance().getCookie());
 
             req.addParameter("name",nameS);
             req.addParameter("surname",surnameS);
-            req.addParameter("position",positionS);
             req.addParameter("password",passS);
+            req.addParameter("position",positionS);
             req.addParameter("salary",String.valueOf(salaryS));
 
-            req.addCookie(OwnCookieManager.getInstance().getCookie());
 
+
+
+            // Send the request and get the response
             HashMap<String, Object> response = req.send();
 
-            System.out.println(response.get("status"));
+            if(response.get("status").equals("SUCCESS")) {
+
+                Notification.show("Employee with name:" + name + " " + surname + " has been added");
+            }
+            else{
+                Notification.show("Failed :(");
+            }
 
 
             name.clear();
@@ -92,7 +100,7 @@ public class CreateTeacherAccount extends VerticalLayout {
             role.clear();
             password.clear();
 
-            Notification.show("Professor was added to the database!");
+            //Notification.show("Professor was added to the database!");
 
         });
     }
