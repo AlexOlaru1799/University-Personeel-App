@@ -95,9 +95,6 @@ public class LoginPage extends VerticalLayout {
                 component.getUI().ifPresent(ui ->ui.navigate(location));
             }
 
-
-
-
         });
         Button open = new Button("Open login overlay",
                 e -> component.setOpened(true));

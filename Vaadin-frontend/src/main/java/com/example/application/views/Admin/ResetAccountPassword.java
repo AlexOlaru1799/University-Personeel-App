@@ -1,5 +1,6 @@
 package com.example.application.views.Admin;
 
+import com.example.application.views.Utils.ApiRequest;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -15,9 +16,11 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.util.HashMap;
 
 @PageTitle("Reset Account Password")
 @Route(value = "resetAccountPassword", layout = AdminLayout.class)
@@ -42,21 +45,27 @@ public class ResetAccountPassword extends VerticalLayout{
         layout.setPadding(true);
         layout.add(username, newPassword , resPassword);
 
-
         resPassword.addClickListener(e -> {
 
             String user = username.getValue();
             String pass = newPassword.getValue();
 
-            //Database DB = Database.getInstance();
+            // Here we will store the cookie
+            CookieManager cookieManager = new CookieManager();
 
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080//admin/reset-password");
 
             if(user != "" && pass!= "")
             {
+                req.addParameter("username", user);
+                req.addParameter("password", pass);
+
+                // Send the request and get the response
+                HashMap<String, Object> response = req.send();
+
                 Notification.show("Username:" + user + " credentials has been updated");
+                Notification.show((String) response.get("status"));
 
             }
             else
