@@ -54,7 +54,7 @@ public class ResetUsername extends VerticalLayout{
             if(user != "" && newUser!= "")
             {
                 req.addParameter("username", user);
-                req.addParameter("password", newUser);
+                req.addParameter("new_username", newUser);
 
                 req.addCookie(OwnCookieManager.getInstance().getCookie());
                 // Send the request and get the response

@@ -1,6 +1,8 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -15,6 +17,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+import java.util.HashMap;
 
 @PageTitle("Update Classroom")
 @Route(value = "updateClassroom", layout = AdminLayout.class)
@@ -34,7 +38,7 @@ public class UpdateClassroom extends VerticalLayout{
         classSelect.setValue("Class");
 
         Select<String> type = new Select<String>();
-        type.setLabel("Student Study Group");
+        type.setLabel("Class Type");
         type.setItems("Lab", "Course");
         type.setValue("Lab");
 
@@ -54,15 +58,27 @@ public class UpdateClassroom extends VerticalLayout{
             String _type = type.getValue();
             Integer _capacity = capacity.getValue();
 
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080/admin/update-classroom");
 
             if(classroom != "" && _type!= "" && _capacity != 0)
             {
-                Notification.show("Student with name:" + classroom + " " + _type + " has been added");
+                req.addParameter("name", classroom);
+                req.addParameter("capacity", String.valueOf(_capacity));
+                req.addParameter("kind", _type);
+
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
+                // Send the request and get the response
+                HashMap<String, Object> response = req.send();
+
+                if(response.get("status").equals("SUCCESS"))
+                {
+                    Notification.show("Classroom has been updated");
+                }
+                else
+                {
+                    Notification.show("Failed :(");
+                }
             }
             else
             {

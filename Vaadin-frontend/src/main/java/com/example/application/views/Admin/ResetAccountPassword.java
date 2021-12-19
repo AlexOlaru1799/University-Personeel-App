@@ -57,7 +57,7 @@ public class ResetAccountPassword extends VerticalLayout{
             if(user != "" && pass!= "")
             {
                 req.addParameter("username", user);
-                req.addParameter("password", pass);
+                req.addParameter("new_pass", pass);
 
                 req.addCookie(OwnCookieManager.getInstance().getCookie());
                 // Send the request and get the response

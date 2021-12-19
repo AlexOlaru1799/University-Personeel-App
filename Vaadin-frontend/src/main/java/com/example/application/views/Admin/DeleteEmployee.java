@@ -51,8 +51,8 @@ public class DeleteEmployee extends VerticalLayout{
 
             if(name != "" && surname != "")
             {
-                req.addParameter("username", name);
-                req.addParameter("password", surname);
+                req.addParameter("name", name);
+                req.addParameter("surname", surname);
 
                 req.addCookie(OwnCookieManager.getInstance().getCookie());
                 // Send the request and get the response

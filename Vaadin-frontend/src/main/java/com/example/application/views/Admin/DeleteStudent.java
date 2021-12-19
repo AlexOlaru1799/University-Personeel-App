@@ -1,6 +1,8 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -10,6 +12,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+import java.util.HashMap;
 
 @PageTitle("Delete Student")
 @Route(value = "deleteStudent", layout = AdminLayout.class)
@@ -37,18 +41,29 @@ public class DeleteStudent extends VerticalLayout{
 
         deleteButton.addClickListener(e -> {
 
-            String name = studentSurname.getValue();
+            String name = studentName.getValue();
             String surname = studentSurname.getValue();
 
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
+            // Create request and set the endpoint
+            ApiRequest req = new ApiRequest("http://localhost:8080/admin/delete-student");
 
             if(name != "" && surname != "")
             {
-                Notification.show("Student with name:" + name + surname + " has been deleted");
+                req.addParameter("name", name);
+                req.addParameter("surname", surname);
+
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
+                // Send the request and get the response
+                HashMap<String, Object> response = req.send();
+
+                if(response.get("status").equals("SUCCESS"))
+                {
+                    Notification.show("Student with name:" + name + " " +surname + " has been deleted");
+                }
+                else
+                {
+                    Notification.show("Failed :(");
+                }
             }
             else
             {

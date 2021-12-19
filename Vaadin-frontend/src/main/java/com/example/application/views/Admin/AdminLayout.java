@@ -1,6 +1,8 @@
 package com.example.application.views.Admin;
 
 
+import com.example.application.views.Secretary.MainLayout;
+import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -120,6 +122,8 @@ public class AdminLayout extends AppLayout {
                 new MenuItemInfo("Add Student", "la la-magic", AddStudent.class), //
 
                 new MenuItemInfo("Delete Student", "la la-edit", DeleteStudent.class), //
+
+                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 
         };
 

@@ -1,5 +1,7 @@
 package com.example.application.views.Student;
 
+import com.example.application.views.Admin.AdminLayout;
+import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -105,6 +107,8 @@ public class StudentLayout  extends AppLayout {
                 new MenuItemInfo("Show Student Grades", "la la-smile-o", StudentGrades.class), //
 
                 new MenuItemInfo("Create Report", "la la-smile-o", CreateReport.class), //
+
+               new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 
         };
 
