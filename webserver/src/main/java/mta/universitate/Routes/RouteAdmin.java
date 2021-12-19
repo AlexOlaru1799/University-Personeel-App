@@ -25,7 +25,7 @@ public class RouteAdmin {
     @PostMapping(value = "/admin/reset-password", produces = "application/json")
     @ResponseBody
     public String resetPassword(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload){
-
+        System.out.print("Aici");
         try
         {
             HashMap<String, Object> parameters = ParamsParser.parse(payload);

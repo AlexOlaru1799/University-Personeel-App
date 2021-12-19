@@ -2,6 +2,7 @@ package com.example.application.views.Secretary;     // To do modify for the cur
 
 
 import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -34,7 +35,7 @@ public class LoginPage extends VerticalLayout {
         int int_random = rand.nextInt(upperLimit);
 
         // Here we will store the cookie
-        CookieManager cookieManager = new CookieManager();
+        //CookieManager cookieManager = new CookieManager();
 
         // Create request and set the endpoint
         ApiRequest req = new ApiRequest("http://localhost:8080/login");
@@ -91,7 +92,9 @@ public class LoginPage extends VerticalLayout {
             }
             else {
                 // Get the cookie and store it in the CookieManager
-                cookieManager.getCookieStore().add(null, req.getCookie());
+                //cookieManager.getCookieStore().add(null, req.getCookie());
+                OwnCookieManager.getInstance().addCookie(req.getCookie());
+
                 System.out.println(response.get("role"));
 
                 String roleS = (String) response.get("role");

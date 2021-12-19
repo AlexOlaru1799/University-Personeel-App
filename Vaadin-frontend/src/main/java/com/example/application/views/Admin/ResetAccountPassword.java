@@ -1,6 +1,7 @@
 package com.example.application.views.Admin;
 
 import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -54,13 +55,14 @@ public class ResetAccountPassword extends VerticalLayout{
             CookieManager cookieManager = new CookieManager();
 
             // Create request and set the endpoint
-            ApiRequest req = new ApiRequest("http://localhost:8080//admin/reset-password");
+            ApiRequest req = new ApiRequest("http://localhost:8080/admin/reset-password");
 
             if(user != "" && pass!= "")
             {
                 req.addParameter("username", user);
                 req.addParameter("password", pass);
 
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
                 // Send the request and get the response
                 HashMap<String, Object> response = req.send();
 
