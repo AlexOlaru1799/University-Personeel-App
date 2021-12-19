@@ -3,6 +3,7 @@ package mta.universitate.Model;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 
+import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -141,6 +142,24 @@ public class Database {
         if (this.execute(String.format("INSERT INTO Users(Username, Password, User_Role) VALUES" +
                 "('%s', '%s', %d)", U.getUsername(), U.getPassword(), U.getRole().getId())))
             return true;
+        return false;
+    }
+
+    public boolean add(Document D)
+    {
+        if(this.execute(String.format("INSERT INTO Documents(Title, Content, [[User]]]) VALUES" +
+                "('%s','%s',%d)", D.getTitle(), D.getContent(), D.getUser().getId())))
+            return true;
+
+        return false;
+    }
+
+    public boolean add(Request R)
+    {
+        if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
+                "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
+            return true;
+
         return false;
     }
 
