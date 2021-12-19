@@ -119,80 +119,83 @@ public class ViewTeacher extends VerticalLayout {
 
             username.setText("");
 
-            for(int i =0;i<50;i++) {
-
-                materii.get(i).setText("");
-                tip.get(i).setText("");
-                ora.get(i).setText("");
-                grupa.get(i).setText("");
-                sala.get(i).setText("");
-
-            }
-
-            ref.counter=0;
-
-            String ID = name.getValue();
-
-            Database DB = Database.getInstance();
-
-            ResultSet res = DB.getProfessorInfo(ID);
-            ResultSet res2 = DB.getProfessorInfo(ID);
-
-            ResultSet res3 = DB.getProfessorClasses(ID);
+            
 
 
-
-            try {
-                if(!res2.next())
-                {
-                    Notification.show("Teacher with ID:" + ID + " does not exist in the database!");
-                    nume.setText("Teacher with ID:" + ID + " does not exist in the database!");
-                }
-                else
-                {
-                    try {
-                        while (res.next()) {
-
-
-                            id.setText("ID : "+ res.getString("ID") );
-                            nume.setText("Nume : "+res.getString("NUME") );
-                            prenume.setText("Prenume : "+res.getString("PRENUME") );
-                            salariu.setText("Salariu : "+res.getString("SALARIU") );
-                            username.setText("Username : "+res.getString("USERNAME") );
-                        }
-
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    try {
-
-                        while (res3.next()) {
-
-
-                            materii.get(ref.counter).setText(res3.getString("MATERIE"));
-                            tip.get(ref.counter).setText(res3.getString("TIP"));
-                            ora.get(ref.counter).setText(res3.getString("ORA"));
-                            grupa.get(ref.counter).setText(res3.getString("GRUPA"));
-                            sala.get(ref.counter).setText(res3.getString("DENUMIRE"));
-
-
-
-                            ref.counter++;
-
-
-                        }
-
-
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-
+//            for(int i =0;i<50;i++) {
+//
+//                materii.get(i).setText("");
+//                tip.get(i).setText("");
+//                ora.get(i).setText("");
+//                grupa.get(i).setText("");
+//                sala.get(i).setText("");
+//
+//            }
+//
+//            ref.counter=0;
+//
+//            String ID = name.getValue();
+//
+//            Database DB = Database.getInstance();
+//
+//            ResultSet res = DB.getProfessorInfo(ID);
+//            ResultSet res2 = DB.getProfessorInfo(ID);
+//
+//            ResultSet res3 = DB.getProfessorClasses(ID);
+//
+//
+//
+//            try {
+//                if(!res2.next())
+//                {
+//                    Notification.show("Teacher with ID:" + ID + " does not exist in the database!");
+//                    nume.setText("Teacher with ID:" + ID + " does not exist in the database!");
+//                }
+//                else
+//                {
+//                    try {
+//                        while (res.next()) {
+//
+//
+//                            id.setText("ID : "+ res.getString("ID") );
+//                            nume.setText("Nume : "+res.getString("NUME") );
+//                            prenume.setText("Prenume : "+res.getString("PRENUME") );
+//                            salariu.setText("Salariu : "+res.getString("SALARIU") );
+//                            username.setText("Username : "+res.getString("USERNAME") );
+//                        }
+//
+//                    } catch (SQLException ex) {
+//                        ex.printStackTrace();
+//                    }
+//
+//                    try {
+//
+//                        while (res3.next()) {
+//
+//
+//                            materii.get(ref.counter).setText(res3.getString("MATERIE"));
+//                            tip.get(ref.counter).setText(res3.getString("TIP"));
+//                            ora.get(ref.counter).setText(res3.getString("ORA"));
+//                            grupa.get(ref.counter).setText(res3.getString("GRUPA"));
+//                            sala.get(ref.counter).setText(res3.getString("DENUMIRE"));
+//
+//
+//
+//                            ref.counter++;
+//
+//
+//                        }
+//
+//
+//                    } catch (SQLException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
+//
+//
         });
 
 

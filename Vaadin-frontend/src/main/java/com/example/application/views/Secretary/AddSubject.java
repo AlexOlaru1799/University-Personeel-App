@@ -47,29 +47,14 @@ public class AddSubject extends VerticalLayout {
             Integer idT = idTeacher.getValue();
             Integer creditsS = credits.getValue();
 
-//            Professor professor = new Professor(nameS,surnameS);
-//            professor.setSalary(salaryS);
-//
-//
-//
-//
-//
-//            Database DB = Database.getInstance();
-//
-//            try {
-//                DB.createTeacher(professor);
-//            } catch (NoSuchAlgorithmException ex) {
-//                ex.printStackTrace();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//
-//
-//            name.clear();
-//            surname.clear();
-//            salary.clear();
 
-            Notification.show("Professor was added to the database!");
+
+
+            name.clear();
+            //surname.clear();
+            //salary.clear();
+
+
 
         });
     }
