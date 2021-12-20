@@ -1,6 +1,7 @@
 package mta.universitate.Model;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -823,6 +824,71 @@ public class Database {
 
         return null;
     }
+
+    public ArrayList<Schedule> getScheduleofGroups(String grupa){
+        ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
+                    "from Schedule as S\n" +
+                    "inner join Classrooms as CR\n" +
+                    "on CR.ID=S.Classroom\n" +
+                    "inner join Modules as MO\n" +
+                    "on MO.ID=S.Module\n" +
+                    "inner join Courses as C\n" +
+                    "on C.ID=MO.Course\n" +
+                    "inner join Employees as E\n" +
+                    "on E.ID=MO.Professor\n" +
+                    "inner join StudyGroups as SG\n" +
+                    "on SG.ID=S.StudyGroup\n" +
+                    "where SG.Name='" + grupa + "'"
+            );
+
+
+            while(rs.next())
+            {
+                Module M=new Module();
+                M.setKind(rs.getString("M_Kind"));
+
+                StudyGroup SG=new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Classroom C=new Classroom();
+                C.setName(rs.getString("C_Name"));
+                C.setCapacity(rs.getInt("C_Capacity"));
+
+                Course C2=new Course();
+                C2.setName(rs.getString("C2_Name"));
+                C2.setCredits(rs.getInt("C2_Credits"));
+                M.setCourse(C2);
+
+                Employee E=new Employee();
+                E.setName(rs.getString("E_Name"));
+                E.setSurname(rs.getString("E_Surname"));
+                M.setProfessor(new Professor(E));
+                C2.setProfessor(new Professor(E));
+
+                Schedule S=new Schedule();
+                S.setTime(rs.getTime("S_Time"));
+                S.setDate(rs.getDate("S_Time"));
+                S.setId(rs.getInt("S_ID"));
+
+                S.setModule(M);
+                S.setClassroom(C);
+                S.setStudy_group(SG);
+
+                schedules.add(S);
+            }
+            return schedules;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public ArrayList<Classroom> getAllClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<Classroom>();
 
@@ -923,6 +989,7 @@ public class Database {
             return true;
         return false;
     }
+
     public boolean update(Classroom C) {
         int type = 0;
         if (C.isKind() == true)
@@ -992,7 +1059,7 @@ public class Database {
 
 
 
-    public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException {
+    public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException, SQLServerException {
         String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
                 "from Schedule as S\n" +
                 "inner join Classrooms as CR\n" +
