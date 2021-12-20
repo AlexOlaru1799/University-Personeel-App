@@ -1,7 +1,5 @@
 package com.example.application.views.Professor;
 
-import com.example.application.views.Admin.AdminLayout;
-import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -12,7 +10,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 

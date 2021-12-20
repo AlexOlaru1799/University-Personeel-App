@@ -1,6 +1,5 @@
 package com.example.application.views.Admin;
 
-import com.example.application.views.Admin.AdminLayout;
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
@@ -13,7 +12,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import java.net.CookieManager;
 import java.util.HashMap;
 
 @PageTitle("Delete Employee")
