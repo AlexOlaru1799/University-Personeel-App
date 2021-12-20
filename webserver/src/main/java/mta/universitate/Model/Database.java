@@ -129,7 +129,12 @@ public class Database {
 
         return false;
     }
-    // public boolean add(Course C){ return true;}
+    public boolean add(Course C){
+        if (this.execute(String.format("INSERT INTO Courses(Credits, Professor, Name) VALUES" +
+                "(%d, '%s', '%s')", C.getCredits(), C.getProfessor().getId(), C.getName())))
+            return true;
+        return false;
+    }
     // public boolean add(Major M){ return true;}
     // public boolean add(Feature F) {return true;}
 
@@ -144,59 +149,42 @@ public class Database {
             return true;
         return false;
     }
-
-    public boolean add(Document D)
-    {
+    public boolean add(Document D) {
         if(this.execute(String.format("INSERT INTO Documents(Title, Content, [[User]]]) VALUES" +
                 "('%s','%s',%d)", D.getTitle(), D.getContent(), D.getUser().getId())))
             return true;
 
         return false;
     }
-
-    public boolean add(Request R)
-    {
+    public boolean add(Request R) {
         if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
                 "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
             return true;
 
         return false;
     }
-
-    public boolean add(Grade G)
-    {
+    public boolean add(Grade G) {
         if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
-                "(%d, %d, %d, %d", G.getValue(), G.getCourse(), G.getDate(), G.getStudent())))
+                "(%d, %d, '%s', %d", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
             return true;
 
         return false;
     }
-
-    public boolean addGrade(Grade G) {
-        if (this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) " +
-                        "VALUES(%d, %d, '%s', %d)",
-                G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
-            return true;
-        return false;
-    }
-
-    public boolean add(Module M)
-    {
+    public boolean add(Module M) {
         if(this.execute(String.format("INSERT INTO Modules(Kind, Course, Professor) VALUES " +
                 "(%d, %d, %d)", M.getKind(), M.getCourse(), M.getProfessor())))
             return true;
 
         return false;
     }
-
-    public boolean add(Feature F)
-    {
+    public boolean add(Feature F) {
         if(this.execute(String.format("INSERT INTO Features(Description) VALUES " +
                 "('%s')", F.getDescription())))
             return true;
 
         return false;
     }
+
 
     public boolean delete(Student S){
 
@@ -685,7 +673,6 @@ public class Database {
 
         return null;
     }
-
     public ArrayList<Grade> getAllGrades(){
         ArrayList<Grade> grades = new ArrayList<Grade>();
 
@@ -747,9 +734,7 @@ public class Database {
 
         return null;
     }
-
-    public ArrayList<Document> getAllDocuments()
-    {
+    public ArrayList<Document> getAllDocuments() {
         ArrayList<Document> documents = new ArrayList<Document>();
 
         try{
@@ -780,7 +765,6 @@ public class Database {
 
         return null;
     }
-
     public ArrayList<Schedule> getAllSchedule(){
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
@@ -844,9 +828,7 @@ public class Database {
 
         return null;
     }
-
-    public ArrayList<Classroom> getAllClassrooms()
-    {
+    public ArrayList<Classroom> getAllClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<Classroom>();
 
         try{
@@ -882,9 +864,7 @@ public class Database {
             return true;
         return false;
     }
-
-    public boolean update(Classroom C)
-    {
+    public boolean update(Classroom C) {
         int type = 0;
         if(C.isKind() == true)
         {
@@ -909,8 +889,6 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
-
-
     public int getRoleID(String role) throws SQLException, SQLServerException{
         ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
         rs.next();
