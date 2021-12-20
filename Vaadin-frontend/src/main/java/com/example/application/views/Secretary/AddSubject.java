@@ -31,9 +31,9 @@ public class AddSubject extends VerticalLayout {
         TextField name = new TextField("Course name");
         name.setWidth("500px");
         TextField nameP = new TextField("Professor name");
-        name.setWidth("500px");
+        nameP.setWidth("500px");
         TextField surnameP = new TextField("Professor surname");
-        name.setWidth("500px");
+        surnameP.setWidth("500px");
 
 
         Button addSubject = new Button("Add Course");

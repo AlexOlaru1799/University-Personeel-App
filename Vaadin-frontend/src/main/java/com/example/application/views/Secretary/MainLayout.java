@@ -128,9 +128,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("View Courses", "la la-th-list", ViewCourses.class), //
 
-                new MenuItemInfo("Create Student Medical Certificate", "la la-edit", CreateStudentMedicalCertificate.class), //
-
-                new MenuItemInfo("Create Teacher Salary Certificate", "la la-cc-visa", CreateTeacherSalryCertificate.class), //
+                new MenuItemInfo("Create Student Medical Certificate", "la la-edit", CreateDocument.class), //
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 
