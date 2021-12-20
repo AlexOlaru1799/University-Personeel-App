@@ -899,19 +899,19 @@ public class Database {
     }
     public boolean update(Classroom C) {
         int type = 0;
-        if(C.isKind() == true)
-        {
+        if (C.isKind() == true)
             type = 1;
+
+        try
+        {
+            if (this.execute(String.format("UPDATE Classrooms SET Capacity = %d, Kind = %d WHERE ID = %d",
+                    C.getCapacity(), type, getClassroomID(C.getName()))))
+
+                return true;
         }
-
-
-        if(this.execute(String.format("UPDATE Classrooms SET Name = '%s' , Capacity = '%d', Kind = '%d'",
-                C.getName(), C.getCapacity(), type)))
-
-            return true;
-
-
-
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
 
         return false;
     }
