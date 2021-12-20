@@ -174,7 +174,6 @@ public class RouteAdmin {
         {
             ArrayList<Classroom> classrooms = Database.getInstance().getAllClassrooms();
 
-
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
 
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

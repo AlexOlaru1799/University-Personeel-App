@@ -159,11 +159,44 @@ public class RouteSecretary {
         return "{\"status\" : \"FAILED\"}";
     }
 
-    // TODO
     @RequestMapping(value = "/secretary/view-courses", produces = "application/json")
     @ResponseBody
-    public String viewCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestParam String major)
+    public String viewCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C)
     {
-        return "";
+        try
+        {
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", S.viewCourses());
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+    @RequestMapping(value = "/secretary/add-course", produces = "application/json")
+    @ResponseBody
+    public String addCourse(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)
+    {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String course_name = parameters.get("course_name").toString();
+            String professor_name = parameters.get("professor_name").toString();
+            String professor_surname = parameters.get("professor_surname").toString();
+            Integer credits = Integer.parseInt(parameters.get("credits").toString());
+
+            if (S.addCourse(course_name, credits, professor_name, professor_surname))
+                return String.format("{\"status\" : \"SUCCESS\"}");
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{\"status\" : \"FAILED\"}";
     }
 }

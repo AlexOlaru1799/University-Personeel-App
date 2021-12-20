@@ -1,10 +1,7 @@
 package com.example.application.views.Secretary;
 
 
-import com.example.application.views.BackEnd.Database;
-import com.example.application.views.BackEnd.Student;
-import com.example.application.views.BackEnd.StudyGroup;
-import com.example.application.views.BackEnd.StudyYear;
+
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;

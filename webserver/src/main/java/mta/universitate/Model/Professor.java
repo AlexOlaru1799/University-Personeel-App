@@ -40,7 +40,7 @@ public class Professor extends Employee {
         G.setStudent(S);
         G.setCourse(C);
 
-        if (db.addGrade(G))
+        if (db.add(G))
             return true;
 
         return false;

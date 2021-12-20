@@ -120,7 +120,23 @@ public class Secretary extends Employee {
 
     }
 
+    public boolean addCourse(String name, Integer credits, String professor_name, String professor_surname) {
+        try
+        {
+            Database db = Database.getInstance();
+            Professor P = Professor.fromEmployee(Employee.fromDB(db.getEmployeeID(professor_name, professor_surname)));
+            Course C = new Course();
+            C.setName(name);
+            C.setCredits(credits);
+            C.setProfessor(P);
 
+            if (db.add(C))
+                return true;
+        }
+        catch (SQLException e){}
+
+        return false;
+    }
 
 
 }

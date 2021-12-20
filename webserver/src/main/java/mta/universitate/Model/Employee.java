@@ -173,6 +173,23 @@ public class Employee extends JsonParser {
         return students2;
     }
 
+    public String viewCourses()
+    {
+        Database db = Database.getInstance();
+        ArrayList<Course> courses = db.getAllCourses();
+
+        try{
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return  ow.writeValueAsString(courses);
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return null;
+
+    }
+
     public Integer getId() {
         return id;
     }
