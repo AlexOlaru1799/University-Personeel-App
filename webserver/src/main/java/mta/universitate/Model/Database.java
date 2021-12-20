@@ -1,15 +1,11 @@
 package mta.universitate.Model;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.jetbrains.annotations.NotNull;
 
-
-import javax.print.Doc;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static Database dbObject;
@@ -993,6 +989,7 @@ public class Database {
             return true;
         return false;
     }
+
     public boolean update(Classroom C) {
         int type = 0;
         if (C.isKind() == true)

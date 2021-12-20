@@ -10,6 +10,7 @@ import javax.print.Doc;
 import javax.servlet.http.Cookie;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 @RestController
 public class DocumentRoute {
@@ -22,14 +23,26 @@ public class DocumentRoute {
         {
             //Adaugare Document
             HashMap<String, Object> parameters = ParamsParser.parse(payload);
-            User U = CookieManager.getInstance().validateCookie(C);
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+
+
+
+            String name = parameters.get("name").toString();
+            String surname = parameters.get("surname").toString();
             String title = parameters.get("title").toString();
             String content = parameters.get("content").toString();
 
             Document D = new Document();
-            D.setUser(U);
+
             D.setTitle(title);
             D.setContent(content);
+
+            String username=name.toLowerCase(Locale.ROOT) +"."+surname.toLowerCase(Locale.ROOT)+"@mta.ro";
+            int UserId = Database.getInstance().getUserID(username);
+            User U = new User();
+            U.setId(UserId);
+            D.setUser(U);
 
             Database.getInstance().add(D);
             //TODO: Daca ne ramane timp adaugam si un request odata cu acel raport
