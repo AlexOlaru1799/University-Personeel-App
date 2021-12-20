@@ -908,7 +908,7 @@ public class Database {
 
 
                 S.setStudy_year(rs.getInt("StudyYear"));
-                S.setName("Name");
+                S.setName(rs.getString("Name"));
 
                 Professor P = Professor.fromEmployee(Employee.fromDB(rs.getInt("Mentor")));
                 S.setMentor(P);

@@ -35,10 +35,31 @@ public class UpdateSchedule extends VerticalLayout{
         timePicker.setLabel("Select Hour");
         timePicker.setValue(LocalTime.of(8, 0));
 
+        // Create request and set the endpoint
+        ApiRequest getGroups = new ApiRequest("http://localhost:8080/admin/get-study-groups");
+        getGroups.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> groups = getGroups.send();
+
+        ArrayList<Object> objResponse = new ArrayList<Object>(groups.values());
+
+        ArrayList<Object> objGroups = (ArrayList<Object>)objResponse.get(0);
+
+        ArrayList<String> groupsName = new ArrayList<String>(objGroups.size());
+
+        for (int i = 0; i < objGroups.size(); i++) {
+            String[] set = null;
+            String c = objGroups.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            groupsName.add(set[0]);
+        }
+
+
         Select<String> group = new Select<String>();
         group.setLabel("Select Study Group");
-        group.setItems("Nj", "Nj", "Nj", "Nj", "Nj");
-        group.setValue("Nj");
+        group.setItems(groupsName);
+        group.setValue(groupsName.get(0));
 
         // Create request and set the endpoint
         ApiRequest getCourse = new ApiRequest("http://localhost:8080/admin/get-courses");
@@ -59,7 +80,6 @@ public class UpdateSchedule extends VerticalLayout{
             set = c.split("=");
             set = set[1].split(",");
             coursesName.add(set[0]);
-            System.out.println(objClasses.get(i));
         }
 
         Select<String> subject = new Select<String>();
@@ -84,11 +104,7 @@ public class UpdateSchedule extends VerticalLayout{
             LocalDate _date = datePicker.getValue();
             LocalTime _time = timePicker.getValue();
 
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
+            System.out.println(_subject + "  " + _group + "  " + _date.toString() + "  " + _time.toString());
 
             if(_date != null && _time!= null)
             {
