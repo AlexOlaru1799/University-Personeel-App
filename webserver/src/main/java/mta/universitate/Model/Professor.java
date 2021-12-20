@@ -49,19 +49,6 @@ public class Professor extends Employee {
         return false;
     }
 
-    public String viewStudent(String name, String surname)
-    {
-        try
-        {
-            Database db = Database.getInstance();
-            Student S = Student.fromDB(db.getStudentID(name, surname));
-
-            return S.toJson();
-        }
-        catch (Exception exc){}
-        return null;
-    }
-
     public ArrayList getGradesForStudent(String name, String surname)
     {
         Database db = Database.getInstance();
