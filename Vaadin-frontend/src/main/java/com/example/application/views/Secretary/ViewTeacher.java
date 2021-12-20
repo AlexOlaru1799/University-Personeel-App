@@ -3,7 +3,7 @@ package com.example.application.views.Secretary;
      // To do modify for the current project
 
 
-import com.example.application.views.BackEnd.Database;
+
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
