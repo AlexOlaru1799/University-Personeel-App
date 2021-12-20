@@ -1,5 +1,7 @@
 package com.example.application.views.Admin;
 
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -14,6 +16,8 @@ import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @PageTitle("Update Schedule")
 @Route(value = "updateSchedule", layout = AdminLayout.class)
@@ -31,15 +35,57 @@ public class UpdateSchedule extends VerticalLayout{
         timePicker.setLabel("Select Hour");
         timePicker.setValue(LocalTime.of(8, 0));
 
+        // Create request and set the endpoint
+        ApiRequest getGroups = new ApiRequest("http://localhost:8080/admin/get-study-groups");
+        getGroups.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> groups = getGroups.send();
+
+        ArrayList<Object> objResponse = new ArrayList<Object>(groups.values());
+
+        ArrayList<Object> objGroups = (ArrayList<Object>)objResponse.get(0);
+
+        ArrayList<String> groupsName = new ArrayList<String>(objGroups.size());
+
+        for (int i = 0; i < objGroups.size(); i++) {
+            String[] set = null;
+            String c = objGroups.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            groupsName.add(set[0]);
+        }
+
+
         Select<String> group = new Select<String>();
         group.setLabel("Select Study Group");
-        group.setItems("Nj", "Nj", "Nj", "Nj", "Nj");
-        group.setValue("Nj");
+        group.setItems(groupsName);
+        group.setValue(groupsName.get(0));
+
+        // Create request and set the endpoint
+        ApiRequest getCourse = new ApiRequest("http://localhost:8080/admin/get-courses");
+        getCourse.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> courses = getCourse.send();
+
+        ArrayList<Object> objResp = new ArrayList<Object>(courses.values());
+
+        ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
+
+        ArrayList<String> coursesName = new ArrayList<String>(objClasses.size());
+
+
+        for (int i = 0; i < objClasses.size(); i++) {
+            String[] set = null;
+            String c = objClasses.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            coursesName.add(set[0]);
+        }
 
         Select<String> subject = new Select<String>();
         subject.setLabel("Select Subject");
-        subject.setItems("Nj", "Nj", "Nj", "Nj", "Nj");
-        subject.setValue("Nj");
+        subject.setItems(coursesName);
+        subject.setValue(coursesName.get(0));
 
         setPadding(true);
         setSpacing(true);
@@ -58,11 +104,7 @@ public class UpdateSchedule extends VerticalLayout{
             LocalDate _date = datePicker.getValue();
             LocalTime _time = timePicker.getValue();
 
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
+            System.out.println(_subject + "  " + _group + "  " + _date.toString() + "  " + _time.toString());
 
             if(_date != null && _time!= null)
             {

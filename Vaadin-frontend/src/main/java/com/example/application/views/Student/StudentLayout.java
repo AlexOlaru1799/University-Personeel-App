@@ -108,7 +108,7 @@ public class StudentLayout  extends AppLayout {
 
                 new MenuItemInfo("Create Report", "la la-smile-o", CreateReport.class), //
 
-               new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
+               new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutStudent.class), //
 
         };
 

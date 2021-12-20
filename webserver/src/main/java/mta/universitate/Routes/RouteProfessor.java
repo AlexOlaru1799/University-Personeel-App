@@ -156,4 +156,37 @@ public class RouteProfessor {
 
     }
 
+    @PostMapping(value = "/professor/gradesForStudent", produces = "application/json")
+    @ResponseBody
+    public String viewGradesForStudent(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Professor P = Professor.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            String name=parameters.get("name").toString();
+            String surname=parameters.get("surname").toString();
+
+            ArrayList<Grade> grades=P.getGradesForStudent(name,surname);
+            ArrayList<Grade> grades2=new ArrayList<>();
+
+            if(grades.size()>0)
+            {
+                for (Grade grade : grades) {
+                    grades2.add(grade);
+                }
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(grades2));
+            }
+            else
+            {
+                return "{\"status\" : \"NO GRADES\"}";
+            }
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        return "{\"status\" : \"FAILED\"}";
+    }
 }

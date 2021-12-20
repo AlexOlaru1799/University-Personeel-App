@@ -129,7 +129,12 @@ public class Database {
 
         return false;
     }
-    // public boolean add(Course C){ return true;}
+    public boolean add(Course C){
+        if (this.execute(String.format("INSERT INTO Courses(Credits, Professor, Name) VALUES" +
+                "(%d, '%s', '%s')", C.getCredits(), C.getProfessor().getId(), C.getName())))
+            return true;
+        return false;
+    }
     // public boolean add(Major M){ return true;}
     // public boolean add(Feature F) {return true;}
 
@@ -144,59 +149,42 @@ public class Database {
             return true;
         return false;
     }
-
-    public boolean add(Document D)
-    {
+    public boolean add(Document D) {
         if(this.execute(String.format("INSERT INTO Documents(Title, Content, [[User]]]) VALUES" +
                 "('%s','%s',%d)", D.getTitle(), D.getContent(), D.getUser().getId())))
             return true;
 
         return false;
     }
-
-    public boolean add(Request R)
-    {
+    public boolean add(Request R) {
         if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
                 "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
             return true;
 
         return false;
     }
-
-    public boolean add(Grade G)
-    {
+    public boolean add(Grade G) {
         if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
-                "(%d, %d, %d, %d", G.getValue(), G.getCourse(), G.getDate(), G.getStudent())))
+                "(%d, %d, '%s', %d", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
             return true;
 
         return false;
     }
-
-    public boolean addGrade(Grade G) {
-        if (this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) " +
-                        "VALUES(%d, %d, '%s', %d)",
-                G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
-            return true;
-        return false;
-    }
-
-    public boolean add(Module M)
-    {
+    public boolean add(Module M) {
         if(this.execute(String.format("INSERT INTO Modules(Kind, Course, Professor) VALUES " +
                 "(%d, %d, %d)", M.getKind(), M.getCourse(), M.getProfessor())))
             return true;
 
         return false;
     }
-
-    public boolean add(Feature F)
-    {
+    public boolean add(Feature F) {
         if(this.execute(String.format("INSERT INTO Features(Description) VALUES " +
                 "('%s')", F.getDescription())))
             return true;
 
         return false;
     }
+
 
     public boolean delete(Student S){
 
@@ -685,7 +673,6 @@ public class Database {
 
         return null;
     }
-
     public ArrayList<Grade> getAllGrades(){
         ArrayList<Grade> grades = new ArrayList<Grade>();
 
@@ -747,9 +734,7 @@ public class Database {
 
         return null;
     }
-
-    public ArrayList<Document> getAllDocuments()
-    {
+    public ArrayList<Document> getAllDocuments() {
         ArrayList<Document> documents = new ArrayList<Document>();
 
         try{
@@ -780,7 +765,6 @@ public class Database {
 
         return null;
     }
-
     public ArrayList<Schedule> getAllSchedule(){
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
@@ -844,9 +828,7 @@ public class Database {
 
         return null;
     }
-
-    public ArrayList<Classroom> getAllClassrooms()
-    {
+    public ArrayList<Classroom> getAllClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<Classroom>();
 
         try{
@@ -874,7 +856,71 @@ public class Database {
 
         return null;
     }
+    public ArrayList<Course> getAllCourses() {
+        ArrayList<Course> courses = new ArrayList<Course>();
 
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT C.Name AS C_Name, C.Credits as C_Credits, E.Name as P_Name, E.Surname as P_Surname " +
+                    "FROM Courses AS C " +
+                    "INNER JOIN Employees AS E ON E.ID = C.Professor"
+            );
+
+
+            while(rs.next())
+            {
+                Course C = new Course();
+                C.setName(rs.getString("C_Name"));
+                C.setCredits(rs.getInt("C_Credits"));
+
+                Professor P = new Professor(new Employee());
+                P.setName(rs.getString("P_Name"));
+                P.setSurname(rs.getString("P_Surname"));
+
+                C.setProfessor(P);
+
+                courses.add(C);
+            }
+            return courses;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
+    public ArrayList<StudyGroup> getAllStudyGroups()
+    {
+        ArrayList<StudyGroup> studyGroups = new ArrayList<StudyGroup>();
+
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT * " +
+                    "FROM StudyGroups"
+            );
+
+
+            while(rs.next())
+            {
+                StudyGroup S = new StudyGroup();
+
+
+                S.setStudy_year(rs.getInt("StudyYear"));
+                S.setName(rs.getString("Name"));
+
+                Professor P = Professor.fromEmployee(Employee.fromDB(rs.getInt("Mentor")));
+                S.setMentor(P);
+
+                studyGroups.add(S);
+            }
+            return studyGroups;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
 
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d",
@@ -882,23 +928,21 @@ public class Database {
             return true;
         return false;
     }
-
-    public boolean update(Classroom C)
-    {
+    public boolean update(Classroom C) {
         int type = 0;
-        if(C.isKind() == true)
-        {
+        if (C.isKind() == true)
             type = 1;
+
+        try
+        {
+            if (this.execute(String.format("UPDATE Classrooms SET Capacity = %d, Kind = %d WHERE ID = %d",
+                    C.getCapacity(), type, getClassroomID(C.getName()))))
+
+                return true;
         }
-
-
-        if(this.execute(String.format("UPDATE Classrooms SET Name = '%s' , Capacity = '%d', Kind = '%d'",
-                C.getName(), C.getCapacity(), type)))
-
-            return true;
-
-
-
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
 
         return false;
     }
@@ -909,8 +953,6 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
-
-
     public int getRoleID(String role) throws SQLException, SQLServerException{
         ResultSet rs = this.executeQuery(String.format("SELECT ID FROM Roles WHERE Description = '%s'", role));
         rs.next();
@@ -955,148 +997,6 @@ public class Database {
 
 
 
-    //
-    public ResultSet getStudentInfoByName(String nume, String prenume) throws SQLException {
-        String query="SELECT Students.Name + ' ' + Students.Surname as 'Student',Students.ID,StudyGroups.StudyYear,Students.Pay,StudyGroups.Name, Majors.Name as 'Specializare',Faculties.Name as 'Facultate'\n" +
-                "FROM Students\n" +
-                "inner join StudyGroups\n" +
-                "on StudyGroups.ID=Students.StudyGroup\n" +
-                "inner join Majors\n" +
-                "on Majors.ID=Students.Major\n" +
-                "inner join Faculties\n" +
-                "on Faculties.ID=Majors.Faculty\n" +
-                "where Students.Name = '"+ nume +"' and Students.Surname = '" + prenume + "'";
-        return executeQuery(query);
-    }
-
-    public ResultSet getStudentInfo(String id) {
-        String query="SELECT S.Name, S.Surname,G.Name,SP.Name, G.StudyYear,U.Username " +
-                "FROM Students as S " +
-                "INNER JOIN Majors as SP " +
-                "ON S.Major = SP.ID " +
-                "INNER JOIN StudyGroups as G " +
-                "ON S.StudyGroup = G.ID " +
-                "INNER JOIN Users AS U " +
-                "ON S.User_ID = U.ID " +
-                "WHERE S.ID = " + id ;
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getStudentGradesByName(String nume, String prenume) throws SQLException {
-            String query = "select G.Value, G.[[Date]]], C.name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name, SG.StudyYear, M.Name as 'Specializare', F.Name as 'Facultate'\n" +
-                    "from Grades as G\n" +
-                    "inner join Courses as C\n" +
-                    "on C.ID = G.Course\n" +
-                    "inner join Employees as E\n" +
-                    "on E.ID=C.Professor\n" +
-                    "inner join Students as S\n" +
-                    "on S.ID=G.Student\n" +
-                    "inner join StudyGroups as SG\n" +
-                    "on SG.ID=S.StudyGroup\n" +
-                    "inner join Majors as M\n" +
-                    "on M.ID=S.Major\n" +
-                    "inner join Faculties as F\n" +
-                    "on F.ID=M.Faculty\n" +
-                    "where S.Name='" + nume + "' and S.Surname='" + prenume + "'";
-        return executeQuery(query);
-    }
-
-    public ResultSet getStudentGrades(String id) {
-        String query="SELECT M.Name, NS.Value, NS.[[Date]]]  \n" +
-                "FROM Students AS S  \n" +
-                "INNER JOIN Grades AS NS  \n" +
-                "ON S.ID = NS.Student  \n" +
-                "INNER JOIN Courses AS M  \n" +
-                "ON M.ID = NS.Course  \n" +
-                "WHERE S.ID = " + id ;
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getStudentClasses(String nume, String prenume) throws SQLException {
-        String query= "SELECT [dbo].[materii].[NumeMaterie],[dbo].[materii].[Nr_Credite],[dbo].[studenti].[An_de_Studiu],[dbo].[grupe_studiu].[denumire_grupa], [dbo].[specializari].[Denumire] as 'Specializare',[dbo].[facultati].[Denumire] as 'Facultate',[dbo].[angajati].[Nume] +' '+[dbo].[angajati].[Prenume] as 'Profesor'\n "+
-                "FROM [dbo].[studenti]\n" +
-                "inner join [dbo].[grupe_studiu]\n" +
-                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[studenti].[FK_Grupa]\n" +
-                "inner join [dbo].[orar]\n" +
-                "on [dbo].[grupe_studiu].[ID_Grupa]=[dbo].[orar].[FK_Grupa]\n" +
-                "inner join [dbo].[ore]\n" +
-                "on [dbo].[orar].[FK_ore]=[dbo].[ore].[ID_ora]\n" +
-                "inner join [dbo].[materii]\n" +
-                "on [dbo].[ore].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
-                "inner join [dbo].[specializari]\n" +
-                "on [dbo].[specializari].[ID_Specializare]=[dbo].[studenti].[FK_Specializare]\n" +
-                "inner join [dbo].[facultati]\n" +
-                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]\n" +
-                "inner join [dbo].[angajati]\n" +
-                "on [dbo].[angajati].[ID_Angajat]=[dbo].[ore].[FK_Titular]\n" +
-                "where [dbo].[studenti].[Nume]='"+nume+"' and [dbo].[studenti].[Prenume]='"+prenume+"'\n";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getStudentSchedule(String nume, String prenume) throws SQLException {
-        String query= "SELECT S.Module,SG.Name,C.Name,CR.Name,SG.StudyYear, M.Name as 'Specializare',F.Name as 'Facultate',E.Name +' '+E.Surname as 'Profesor'\n" +
-                "FROM Schedule as S\n" +
-                "inner join StudyGroups as SG\n" +
-                "on SG.ID=S.StudyGroup\n" +
-                "inner join Students as ST\n" +
-                "on SG.ID=S.StudyGroup\n" +
-                "inner join Modules as MO\n" +
-                "on S.Module=MO.ID\n" +
-                "inner join Courses as C\n" +
-                "on MO.Course=C.ID\n" +
-                "inner join Classrooms as CR\n" +
-                "on S.Classroom=CR.ID\n" +
-                "inner join Majors as M\n" +
-                "on M.ID=ST.Major\n" +
-                "inner join Faculties as F\n" +
-                "on F.ID=M.Faculty\n" +
-                "inner join Employees as E\n" +
-                "on E.ID=MO.Professor\n" +
-                "where ST.Name='" + nume +"' and ST.Surname='" + prenume + "'";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet uploadReport(int FKTipRaport, String data, int FK_User, int FK_Supervizor) throws SQLException {
-        String query= "Insert into [dbo].[rapoarte]([FK_TipRaport],[Data_calendar],[FK_User],[FK_Supervizor]) values("
-                +FKTipRaport+", CAST(N'"+data+"' AS DateTime), "+FK_User+", "+FK_Supervizor+")";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getProfessorInfo(String id) {
-        String query="SELECT A.ID, A.Name, A.Surname, A.Salary, U.Username  \n" +
-                "FROM Employees AS A  \n" +
-                "INNER JOIN Positions AS F  \n" +
-                "ON A.Position_ID = F.ID  \n" +
-                "INNER JOIN Users AS U  \n" +
-                "ON A.User_ID = U.ID  \n" +
-                "WHERE a.ID = " + id;
-        return executeQuery(query);
-    }
-
-    public ResultSet getProfessorClasses(String id) {
-        String query="SELECT E.ID,C.name,MO.Kind, ORAR.[[Time]]],G.Name,CR.Name\n" +
-                "FROM Employees AS E\n" +
-                "INNER JOIN Positions AS P\n" +
-                "ON E.Position_ID = P.ID\n" +
-                "INNER JOIN Courses AS C\n" +
-                "ON E.ID = C.Professor\n" +
-                "INNER JOIN Modules AS MO\n" +
-                "ON C.ID=MO.Course\n" +
-                "INNER JOIN Schedule AS ORAR\n" +
-                "ON MO.ID = ORAR.Module\n" +
-                "INNER JOIN StudyGroups AS G\n" +
-                "ON ORAR.StudyGroup = G.ID\n" +
-                "INNER JOIN Classrooms AS CR\n" +
-                "ON ORAR.Classroom = CR.ID\n" +
-                "WHERE E.ID= " +id;
-        return executeQuery(query);
-    }
-
     public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException {
         String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
                 "from Schedule as S\n" +
@@ -1136,135 +1036,5 @@ public class Database {
       return executeQuery(query);
     }
 
-    public ResultSet getStudentGradess(String nume, String prenume) throws SQLException {
-        String query= "select G.Value, G.[[Date]]], C.Name, E.Name + ' ' + E.Surname as 'Profesor', S.Name + ' ' + S.Surname as 'Student', S.ID, SG.Name, SG.StudyYear, M.Name as 'Specializare', F.Name as 'Facultate'\n" +
-                "from Grades as G\n" +
-                "inner join Courses as C\n" +
-                "on C.ID = G.Course\n" +
-                "inner join Employees as E\n" +
-                "on E.ID = C.Professor\n" +
-                "inner join Students as S\n" +
-                "on S.ID=G.Student\n" +
-                "inner join StudyGroups as SG\n" +
-                "on SG.ID=S.StudyGroup\n" +
-                "inner join Majors as M\n" +
-                "on M.ID=S.Major\n" +
-                "inner join Faculties as F\n" +
-                "on F.ID=M.Faculty\n" +
-                "where S.Name='" + nume + "' and S.Surname='" + prenume + "'";
-
-       return executeQuery(query);
-    }
-
-    public ResultSet addStudentGrade(int nota, int FKMaterie, String data, int FK_Student) throws SQLException {
-        String query= "INSERT [dbo].[note_studenti] ([Valoare], [FK_Materie], [Data_calendar], [FK_Student]) VALUES " +
-                        "("+nota+", "+FKMaterie+", CAST(N'"+data+"' AS DateTime), "+FK_Student+")";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet askForTeacherSalaryCertificate(int tipRaport, String data, int FK_User,int FK_Supervizor) throws SQLException {
-        String query= "INSERT [dbo].[rapoarte] ([FK_TipRaport], [Data_calendar], [FK_User], [FK_Supervizor]) " +
-                        "VALUES ("+tipRaport+", CAST(N'"+data+"' AS DateTime), "+FK_User+", "+FK_Supervizor+")";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getSubjects() throws SQLException {
-        String query= "select [dbo].[materii].[NumeMaterie], [dbo].[materii].[Nr_Credite], [dbo].[angajati].[Nume] + ' ' + [dbo].[angajati].[Prenume] as 'Profesor', [dbo].[specializari].[Denumire] as 'Specializare', [dbo].[facultati].[Denumire] as 'Facultate'\n" +
-                "from [dbo].[materii]\n" +
-                "inner join [dbo].[angajati]\n" +
-                "on [dbo].[angajati].[ID_Angajat]=[dbo].[materii].[FK_Profesor]\n" +
-                "inner join [dbo].[specializari_materii]\n" +
-                "on [dbo].[specializari_materii].[FK_Materie]=[dbo].[materii].[ID_Materie]\n" +
-                "inner join [dbo].[specializari]\n" +
-                "on [dbo].[specializari].[ID_Specializare]=[dbo].[specializari_materii].[FK_Specializare]\n" +
-                "inner join [dbo].[facultati]\n" +
-                "on [dbo].[facultati].[ID_Facultate]=[dbo].[specializari].[FK_Facultate]";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getSubjectsbySpecialization(String Name) throws SQLException {
-        String query= "select C.Name, C.Credits, E.Name + ' ' + E.Surname as 'Profesor', M.Name as 'Specializare', F.Name as 'Facultate'\n" +
-                "from Courses as C\n" +
-                "inner join Employees as E\n" +
-                "on E.ID=C.Professor\n" +
-                "inner join MajorsCourses as MC\n" +
-                "on MC.Course=C.ID\n" +
-                "inner join Majors as M\n" +
-                "on M.ID=MC.Major\n" +
-                "inner join Faculties as F\n" +
-                "on F.ID=M.Faculty \n" +
-                "where M.Name='" + Name + "'";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getSubjectsForTeacher(String surname,String name) throws SQLException {
-        String query= "select C.Name, C.Credits, E.Name + ' ' + E.Surname as 'Profesor', M.Name as 'Specializare', F.Name as 'Facultate'\n" +
-                "from Courses as C\n" +
-                "inner join Employees as E\n" +
-                "on E.ID=C.Professor\n" +
-                "inner join MajorsCourses as MC\n" +
-                "on MC.Course=C.ID\n" +
-                "inner join Majors as M\n" +
-                "on M.ID=MC.Major\n" +
-                "inner join Faculties as F\n" +
-                "on F.ID=M.Faculty \n" +
-                "where E.Name='" + name + "' and E.Surname='" + surname + "'";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet addSubject(int credits, int IDTeacher, String name, String specialization) throws SQLException {
-        String query1= "INSERT into [dbo].[materii] ([dbo].[materii].[Nr_Credite], [dbo].[materii].[FK_Profesor], [dbo].[materii].[NumeMaterie]) VALUES " +
-                "("+credits+", "+IDTeacher+", '"+name+"')";
-
-        executeQuery(query1);
-
-        String query2="select ID_Materie\n" +
-                      "from materii\n" +
-                     "where NumeMaterie='"+name+"'";
-
-        ResultSet result = executeQuery(query2);
-
-        if(result == null)
-        {
-            return result;
-        }
-        result.next();
-        String idMaterie = result.getString("ID_Materie");
-
-        String query3="select ID_Specializare\n" +
-                "from specializari\n" +
-                "where Denumire='"+specialization+"'";
-
-        ResultSet result2 = executeQuery(query3);
-
-        if(result2 == null)
-        {
-            return result2;
-        }
-        result2.next();
-        String idSpecializare = result2.getString("ID_Specializare");
-
-
-        String query= "INSERT into [dbo].[specializari_materii] ([dbo].[specializari_materii].[FK_Specializare], [dbo].[specializari_materii].[FK_Materie]) VALUES " +
-                "("+idSpecializare+", "+idMaterie+")";
-
-        return executeQuery(query);
-    }
-
-    public ResultSet get4thYearStudents()
-    {
-        String query = "SELECT S.ID AS ID, S.Name AS Nume, S.Surname AS Prenume, G.Name AS Grupa\n" +
-                "FROM Students AS S \n" +
-                "INNER JOIN StudyGroups AS G\n" +
-                "ON S.StudyGroup = G.ID\n" +
-                "WHERE G.StudyYear = 4";
-
-        return executeQuery(query);
-    }
 
 }

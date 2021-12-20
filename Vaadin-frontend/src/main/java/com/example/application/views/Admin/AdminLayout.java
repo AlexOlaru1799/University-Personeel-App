@@ -123,7 +123,7 @@ public class AdminLayout extends AppLayout {
 
                 new MenuItemInfo("Delete Student", "la la-edit", DeleteStudent.class), //
 
-                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
+                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutAdmin.class), //
 
         };
 
