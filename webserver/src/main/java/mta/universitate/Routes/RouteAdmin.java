@@ -184,4 +184,21 @@ public class RouteAdmin {
         return "{\"status\" : \"FAILED\"}";
     }
 
+    @PostMapping(value = "/admin/get-courses", produces = "application/json")
+    public String getCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            ArrayList<Course> courses = Database.getInstance().getAllCourses();
+
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(courses));
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
 }
+
