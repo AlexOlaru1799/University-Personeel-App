@@ -1,7 +1,5 @@
 package mta.universitate.Model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
