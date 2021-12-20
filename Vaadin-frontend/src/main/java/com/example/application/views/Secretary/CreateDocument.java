@@ -26,7 +26,10 @@ public class CreateDocument extends VerticalLayout {
     public CreateDocument() {
         VerticalLayout mainLayout = createLayout("Enter document details : ");
 
-
+        TextField name = new TextField("Person Name");
+        name.setWidth("500px");
+        TextField surname = new TextField("Person Surname");
+        surname.setWidth("500px");
 
         TextField title = new TextField("Document title");
         title.setWidth("500px");
@@ -40,21 +43,25 @@ public class CreateDocument extends VerticalLayout {
         Button addSubject = new Button("Push Document");
         addSubject.setWidth("500px");
 
-        mainLayout.add(title,content,addSubject);
+        mainLayout.add(name,surname,title,content,addSubject);
         add(mainLayout);
 
 
         addSubject.addClickListener(e -> {
             String titleS = title.getValue();
             String contentS = content.getValue();
+            String nameS = name.getValue();
+            String surnameS = surname.getValue();
 
 
             ApiRequest req = new ApiRequest("http://localhost:8080/create-document");
 
             req.addCookie(OwnCookieManager.getInstance().getCookie());
 
-            req.addParameter("course_name",titleS);
-            req.addParameter("professor_surname",contentS);
+            req.addParameter("title",titleS);
+            req.addParameter("content",contentS);
+            req.addParameter("name",nameS);
+            req.addParameter("surname",surnameS);
 
 
             // Send the request and get the response

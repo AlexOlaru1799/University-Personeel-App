@@ -118,6 +118,8 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Delete Teacher Account", "la la-magic", DeleteTeacherAccount.class), //
 
+                new MenuItemInfo("Create Document", "la la-edit", CreateDocument.class), //
+
                 new MenuItemInfo("Add Subject", "la la-leanpub", AddSubject.class), //
 
                 new MenuItemInfo("View Student Account", "la la-certificate", ViewStudent.class), //
@@ -127,8 +129,6 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("View Students Statistics", "la la-list", ViewStatistics.class), //
 
                 new MenuItemInfo("View Courses", "la la-th-list", ViewCourses.class), //
-
-                new MenuItemInfo("Create Student Medical Certificate", "la la-edit", CreateDocument.class), //
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 
