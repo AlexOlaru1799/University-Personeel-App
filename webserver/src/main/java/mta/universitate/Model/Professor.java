@@ -1,7 +1,10 @@
 package mta.universitate.Model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Professor extends Employee {
 
@@ -46,4 +49,38 @@ public class Professor extends Employee {
         return false;
     }
 
+    public String viewStudent(String name, String surname)
+    {
+        try
+        {
+            Database db = Database.getInstance();
+            Student S = Student.fromDB(db.getStudentID(name, surname));
+
+            return S.toJson();
+        }
+        catch (Exception exc){}
+        return null;
+    }
+
+    public ArrayList getGradesForStudent(String name, String surname)
+    {
+        Database db = Database.getInstance();
+        Student S=new Student();
+        S.setName(name);
+        S.setSurname(surname);
+
+        ArrayList<Grade> gradesfromDB = db.getAllGrades();
+
+        ArrayList<Grade> gradesforStudent=new ArrayList<>();
+
+        for(int i=0;i<gradesfromDB.size();i++)
+        {
+            if(gradesfromDB.get(i).getStudent().getName().equals(S.getName()) && gradesfromDB.get(i).getStudent().getSurname().equals(S.getSurname()))
+            {
+                gradesfromDB.get(i).setDate(null);
+                gradesforStudent.add(gradesfromDB.get(i));
+            }
+        }
+        return gradesforStudent;
+    }
 }

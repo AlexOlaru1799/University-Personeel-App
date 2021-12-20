@@ -92,12 +92,9 @@ public class Employee extends JsonParser {
     }
 
     public ArrayList<Schedule> viewScheduleForProfessor(String name, String surname, String initDate){
-        //try{
         Database db = Database.getInstance();
 
         ArrayList<Schedule> schedules = db.getAllSchedule();
-        //StringBuilder response = new StringBuilder();
-
         ArrayList<Schedule> schedulesforReturn=new ArrayList<Schedule>();
 
         for(int i=0;i<schedules.size();i++)
@@ -106,20 +103,11 @@ public class Employee extends JsonParser {
 
             if(dateDB.equals(initDate)) {
                 if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
-                    //response.append(schedules.get(i).toJson());
                     schedulesforReturn.add(schedules.get(i));
                 }
             }
         }
-
-        // return response.toString();
-
         return schedulesforReturn;
-
-        // }
-//        catch (JsonProcessingException exc){}
-//
-//        return null;
     }
 
     public ArrayList getGradesForSubject(String name) {
