@@ -889,6 +889,38 @@ public class Database {
         return null;
     }
 
+    public ArrayList<StudyGroup> getAllStudyGroups()
+    {
+        ArrayList<StudyGroup> studyGroups = new ArrayList<StudyGroup>();
+
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT * " +
+                    "FROM StudyGroups"
+            );
+
+
+            while(rs.next())
+            {
+                StudyGroup S = new StudyGroup();
+
+
+                S.setStudy_year(rs.getInt("StudyYear"));
+                S.setName("Name");
+
+                Professor P = Professor.fromEmployee(Employee.fromDB(rs.getInt("Mentor")));
+                S.setMentor(P);
+
+                studyGroups.add(S);
+            }
+            return studyGroups;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
 
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d",

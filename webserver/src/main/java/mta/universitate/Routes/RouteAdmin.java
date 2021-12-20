@@ -200,16 +200,16 @@ public class RouteAdmin {
         return "{\"status\" : \"FAILED\"}";
     }
 
-    @PostMapping(value = "/admin/get-groups", produces = "application/json")
-    public String getGroups(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+    @PostMapping(value = "/admin/get-study-groups", produces = "application/json")
+    public String getStudyGroups(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
         try
         {
-            ArrayList<Course> courses = Database.getInstance().getAllCourses();
+            ArrayList<StudyGroup> studyGroups = Database.getInstance().getAllStudyGroups();
 
             Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
 
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(courses));
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(studyGroups));
         }
         catch (Exception exc){}
 
