@@ -118,7 +118,7 @@ public class RouteProfessor {
 
             int nr=0;
             for(int i=0;i<grades.size();i++) {
-                if (grades.get(i).getValue() <5) {
+                if (grades.get(i).getValue() < 5) {
                     nr++;
                 }
             }

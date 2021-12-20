@@ -1,5 +1,7 @@
 package com.example.application.views.Professor;
 
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
