@@ -1,5 +1,7 @@
 package com.example.application.views.Admin;
 
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -14,6 +16,8 @@ import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @PageTitle("Update Schedule")
 @Route(value = "updateSchedule", layout = AdminLayout.class)
@@ -36,10 +40,32 @@ public class UpdateSchedule extends VerticalLayout{
         group.setItems("Nj", "Nj", "Nj", "Nj", "Nj");
         group.setValue("Nj");
 
+        // Create request and set the endpoint
+        ApiRequest getCourse = new ApiRequest("http://localhost:8080/admin/get-courses");
+        getCourse.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> courses = getCourse.send();
+
+        ArrayList<Object> objResp = new ArrayList<Object>(courses.values());
+
+        ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
+
+        ArrayList<String> coursesName = new ArrayList<String>(objClasses.size());
+
+
+        for (int i = 0; i < objClasses.size(); i++) {
+            String[] set = null;
+            String c = objClasses.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            coursesName.add(set[0]);
+            System.out.println(objClasses.get(i));
+        }
+
         Select<String> subject = new Select<String>();
         subject.setLabel("Select Subject");
-        subject.setItems("Nj", "Nj", "Nj", "Nj", "Nj");
-        subject.setValue("Nj");
+        subject.setItems(coursesName);
+        subject.setValue(coursesName.get(0));
 
         setPadding(true);
         setSpacing(true);
