@@ -856,6 +856,39 @@ public class Database {
 
         return null;
     }
+    public ArrayList<Course> getAllCourses()
+    {
+        ArrayList<Course> courses = new ArrayList<Course>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT C.Name AS C_Name, C.Credits as C_Credits, E.Name as P_Name, E.Surname as P_Surname " +
+                    "FROM Courses AS C " +
+                    "INNER JOIN Employees AS E ON E.ID = C.Professor"
+            );
+
+
+            while(rs.next())
+            {
+                Course C = new Course();
+                C.setName(rs.getString("C_Name"));
+                C.setCredits(rs.getInt("C_Credits"));
+
+                Professor P = new Professor(new Employee());
+                P.setName(rs.getString("P_Name"));
+                P.setSurname(rs.getString("P_Surname"));
+
+                C.setProfessor(P);
+
+                courses.add(C);
+            }
+            return courses;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
 
 
     public boolean update(User U){
