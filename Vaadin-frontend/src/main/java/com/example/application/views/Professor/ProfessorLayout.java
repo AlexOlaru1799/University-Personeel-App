@@ -115,7 +115,7 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("Subject Statistics", "la la-search", SubjectStatistics.class), //
 
-                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
+                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutProfessor.class), //
         };
 
         List<RouterLink> links = new ArrayList<>();
