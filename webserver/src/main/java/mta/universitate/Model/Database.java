@@ -221,6 +221,14 @@ public class Database {
         return false;
     }
 
+    public boolean delete(Grade G){
+
+        if (this.execute(String.format("DELETE FROM Grades WHERE ID = %d", G.getId())))
+            return true;
+
+        return false;
+    }
+
     public Student get(Student S){
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId())); //asta returneaza userul,nu student??
         try{
@@ -699,7 +707,7 @@ public class Database {
 
             ResultSet rs = executeQuery("" +
                     "SELECT " +
-                    "G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
+                    "G.ID AS G_ID, G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
                     "C.Credits AS C_Credits, C.Name AS C_Name,\n" +
                     "E.Name AS Professor_Name, E.Surname AS Professor_Surname,\n" +
                     "S.Name AS Student_Name, S.Surname AS Student_Surname,\n" +
@@ -717,6 +725,7 @@ public class Database {
             while(rs.next())
             {
                 Grade G = new Grade();
+                G.setId(rs.getInt("G_ID"));
                 G.setValue(rs.getInt("G_Value"));
                 G.setDate(rs.getDate("G_Date").toLocalDate());
 

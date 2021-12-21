@@ -147,7 +147,7 @@ public class RouteProfessor {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(data, format);
 
-            if (P.giveGrade(name, surname, grade, courseName, date))
+            if (P.giveGrade(name, surname, grade, courseName, date, P.getId()))
                 return "{\"status\" : \"SUCCESS\"}";
         }
         catch (Exception exc){}
