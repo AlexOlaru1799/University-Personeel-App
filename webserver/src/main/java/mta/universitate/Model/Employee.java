@@ -179,6 +179,14 @@ public class Employee extends JsonParser {
         Database db = Database.getInstance();
         ArrayList<Course> courses = db.getAllCourses();
 
+
+        for(Course course : courses)
+        {
+            if(course.getName().contains(" "))
+                course.setName(course.getName().replace(" ","_"));
+        }
+
+
         try{
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             return  ow.writeValueAsString(courses);
