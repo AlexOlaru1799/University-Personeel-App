@@ -103,11 +103,7 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("Get Professor Schedule", "la la-smile-o", ProfessorSchedule.class), //
 
-                new MenuItemInfo("AverageGradeProfessorStudyGroup", "la la-smile-o", AverageGradeProfessorStudyGroup.class), //
-
-                new MenuItemInfo("GradesProfessorStudyGroup", "la la-smile-o", GradesProfessorStudyGroup.class), //
-
-                new MenuItemInfo("AverageGradeSubject", "la la-search", AverageGradeSubject.class), //
+                new MenuItemInfo("Average Subject", "la la-search", AverageGradeSubject.class), //
 
                 new MenuItemInfo("Subject Failed", "la la-search", SubjectFailed.class), //
 

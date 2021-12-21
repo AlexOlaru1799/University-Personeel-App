@@ -25,7 +25,7 @@ public class Professor extends Employee {
             return null;
     }
 
-    public boolean giveGrade(String name, String surname, int grade, String course, LocalDate date) throws SQLException {
+    public boolean giveGrade(String name, String surname, int grade, String course, LocalDate date, int id) throws SQLException {
         Database db = Database.getInstance();
 
         Grade G=new Grade();
@@ -37,12 +37,43 @@ public class Professor extends Employee {
 
         Course C=new Course();
         C.setId(db.getCourseID(course));
+        C=db.get(C);
 
         G.setStudent(S);
         G.setCourse(C);
 
-        if (db.add(G))
-            return true;
+        ArrayList<Grade> grades = db.getAllGrades();
+
+        if(C.getProfessor().getId()==id) {
+            int ok = 0;
+
+            for(int i=0;i<grades.size();i++)
+            {
+                if (grades.get(i).getStudent().getName().equals(name))
+                {
+                    if (grades.get(i).getStudent().getSurname().equals(surname))
+                    {
+                        if (grades.get(i).getCourse().getName().equals(course))
+                        {
+                            int idd=grades.get(i).getId();
+                            if (db.delete(grades.get(i)))
+                            {
+                                if (db.add(G))
+                                {
+                                    ok = 1;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (ok == 0) {
+                if (db.add(G))
+                    return true;
+            }
+        }
 
         return false;
     }

@@ -13,11 +13,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,7 +38,7 @@ public class GradesStudent extends VerticalLayout {
         setPadding(true);
         setSpacing(true);
 
-        VerticalLayout infoLayout = createLayout("Stedent Grades: ");
+        VerticalLayout infoLayout = createLayout("Student Grades: ");
         TextArea textArea = new TextArea();
         textArea.setWidth("500px");
         textArea.isReadOnly();
@@ -86,6 +81,11 @@ public class GradesStudent extends VerticalLayout {
                     courseName.add(materie_name_cality);
                 }
 
+                Grid grid = new Grid();
+
+                grid.addColumn("courseName");
+                grid.addColumn("grades");
+
                 String gradesMaterii = "";
                 for(int i = 0;i < grades.size(); i++)
                 {
@@ -93,6 +93,7 @@ public class GradesStudent extends VerticalLayout {
                    gradesMaterii += ": ";
                    gradesMaterii += grades.get(i);
                    gradesMaterii += "\n";
+
                 }
 
                 if(response.get("status").equals("SUCCESS"))
@@ -111,13 +112,7 @@ public class GradesStudent extends VerticalLayout {
             {
                 Notification.show("You need to complete all the fields!");
             }
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
-
-        });
+         });
     }
 
     private VerticalLayout createLayout(String caption) {

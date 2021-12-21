@@ -1,18 +1,24 @@
 package com.example.application.views.Professor;
 
+import com.example.application.views.Utils.ApiRequest;
+import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @PageTitle("Professor Schedule")
 @Route(value = "professorShedule", layout = ProfessorLayout.class)
@@ -20,11 +26,9 @@ import java.time.format.DateTimeFormatter;
 public class ProfessorSchedule extends VerticalLayout {
 
 
-    private TextField professorName;
     private Button showSchedule;
 
     public ProfessorSchedule() {
-        professorName = new TextField("Professor Name");
         showSchedule = new Button("Show Schedule");
 
         setPadding(true);
@@ -35,73 +39,115 @@ public class ProfessorSchedule extends VerticalLayout {
         DatePicker initialDate = new DatePicker("Start date");
         add(initialDate);
 
-        DatePicker finalDate = new DatePicker("Final date");
-        add(finalDate);
-
-        TimePicker initialTimeModule = new TimePicker();
-        initialTimeModule.setLabel("Start hour module: ");
-        add(initialTimeModule);
-
-        TimePicker finalTimeModule = new TimePicker();
-        finalTimeModule.setLabel("Final hour module: ");
-        add(finalTimeModule);
 
 
         VerticalLayout layout = createLayout("Professor Schedule");
         layout.setPadding(true);
-        layout.add(professorName, initialDate, finalDate, initialTimeModule, finalTimeModule, showSchedule);
+        layout.add(initialDate,showSchedule);
 
         setSpacing(true);
         setPadding(true);
 
-        H5 subject = new H5("");
-        H5 date = new H5("");
-        H5 hour = new H5("");
+        TextArea textArea = new TextArea();
+        textArea.setLabel("Your scheduler: ");
+        textArea.setWidth("500px");
+        textArea.isReadOnly();
+        textArea.setHeight("500px");
+        layout.add(textArea);
 
         showSchedule.addClickListener(e -> {
 
-            String professor = professorName.getValue();
-            DatePicker date1 = initialDate;
-            DatePicker date2 = finalDate;
-            TimePicker time1 = initialTimeModule;
-            TimePicker time2 = finalTimeModule;
+            DatePicker data1 = initialDate;
 
+            String initDate = initialDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            String initialDateFromUser = initialDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String finalDateFromUser = finalDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String initialHourFromUser = initialTimeModule.getValue().format(DateTimeFormatter.ofPattern("hh:mm:ss"));
-            String finalHourFromUser = finalTimeModule.getValue().format(DateTimeFormatter.ofPattern("hh:mm:ss"));
+            //String initDate = "2021-10-04";
 
-            StringBuilder sendInitialDateTime = new StringBuilder().append(initialDateFromUser).append(" ").append(initialHourFromUser);
-            StringBuilder sendFinalDateTime = new StringBuilder().append(finalDateFromUser).append(" ").append(finalHourFromUser);
+            if(initDate != "")
+            {
+                // Create request and set the endpoint
+                ApiRequest req = new ApiRequest("http://localhost:8080/professor/view-schedule");
+                req.addCookie(OwnCookieManager.getInstance().getCookie());
 
+                req.addParameter("date", initDate);
 
-            System.out.println(initialDateFromUser.toString());
-            System.out.println(finalDateFromUser.toString());
-            System.out.println(initialHourFromUser.toString());
-            System.out.println(finalHourFromUser.toString());
+                HashMap<String, Object> response = req.send();
 
-            System.out.println(sendInitialDateTime.toString());
-            System.out.println(sendFinalDateTime.toString());
+                ArrayList<Object> objResp = new ArrayList<Object>(response.values());
 
+                ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
 
+                System.out.println(objClasses);
 
-            //Database DB = Database.getInstance();
+                ArrayList<String> name = new ArrayList<String>(objClasses.size());
+                ArrayList<String> surname = new ArrayList<String>(objClasses.size());
+                ArrayList<String> courseName = new ArrayList<String>(objClasses.size());
+                ArrayList<String> studyGroup = new ArrayList<String>(objClasses.size());
+                ArrayList<String> classroom = new ArrayList<String>(objClasses.size());
 
-            //ResultSet res2 = DB.getStudentInfo(ID);
+                for (int i = 0; i < objClasses.size(); i++) {
+                    String[] set = null;
+                    String c = objClasses.get(i).toString();
+                    set = c.split("=");
+                    String nume = set[17].split(",")[0];
+                    String prenume = set[18].split("}},")[0];
+                    String materie = set[14].split(",")[0];
+                    String grupa = set[5].split(",")[0];
+                    String clasa = set[9].split(",")[0];
+                    set = set[1].split(",");
+                    name.add(nume);
+                    surname.add(prenume);
+                    courseName.add(materie);
+                    studyGroup.add(grupa);
+                    classroom.add(clasa);
 
-            //ResultSet res3 = DB.getStudentGrades(ID);
+                    System.out.println(nume);
+                    System.out.println(prenume);
+                    System.out.println(materie);
+                    System.out.println(grupa);
+                    System.out.println(clasa);
+                }
 
+                String scheduleFinal = "";
+                for(int i = 0;i < name.size(); i++)
+                {
+                    scheduleFinal += name.get(i);
+                    scheduleFinal += "\t";
+                    scheduleFinal += surname.get(i);
+                    scheduleFinal += "\t";
+                    scheduleFinal += studyGroup.get(i);
+                    scheduleFinal += "\t";
+                    scheduleFinal += courseName.get(i);
+                    scheduleFinal += "\t";
+                    scheduleFinal += classroom.get(i);
+                    scheduleFinal += "\n";
+                }
+
+                String print = "You don't have courses today! :)";
+
+                if(response.get("status").equals("SUCCESS"))
+                {
+                    if(objClasses.toString() == "[]" ){
+                        textArea.setValue(print);
+                    }
+                    else if(response.get("result") != null ) {
+                        textArea.setValue(scheduleFinal);
+                    }
+                    Notification.show("Print succes!");
+
+                }
+                else
+                {
+                    Notification.show("Failed :(");
+                }
+            }
+            else
+            {
+                Notification.show("You need to complete all the fields!");
+            }
         });
 
-
-        layout = createLayout("Professor Schedule: ");
-        layout.setPadding(true);
-        layout.setHeight("300px");
-        layout.add(subject, date, hour);
-        layout.getStyle().set("overflow", "scroll");// enable scrolling when content doesn't fit
     }
-
 
         private VerticalLayout createLayout(String caption) {
             VerticalLayout hl = new VerticalLayout();
