@@ -131,4 +131,24 @@ public class Student extends JsonParser {
         }
         return schedulesforReturn;
     }
+
+    public ArrayList getGradesForStudent(String courseName) throws SQLException
+    {
+        Database db = Database.getInstance();
+
+        ArrayList<Grade> gradesfromDB = db.getAllGrades();
+
+        ArrayList<Grade> gradesforStudent=new ArrayList<>();
+
+
+        for(Grade g :gradesfromDB)
+        {
+            if(g.getStudent().getSurname().equals(this.getSurname())&& g.getStudent().getName().equals(this.getName())  && g.getCourse().getName().equals(courseName) )
+            {
+                g.setDate(null);
+                gradesforStudent.add(g);
+            }
+        }
+        return gradesforStudent;
+    }
 }

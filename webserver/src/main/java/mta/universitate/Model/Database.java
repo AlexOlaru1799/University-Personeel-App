@@ -244,27 +244,6 @@ public class Database {
 
     }
 
-    public Student getStudentfromUser(int UserID){
-        //System.out.println(U.getId());
-        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE User_ID = %d", UserID)); //asta returneaza student din user
-        try{
-            Student to_return = new Student();
-
-            rs.next();
-
-            to_return.setId(rs.getInt("ID"));
-            to_return.setName(rs.getString("Name"));
-            to_return.setSurname(rs.getString("Surname"));
-            to_return.setIncome(rs.getInt("Pay"));
-            to_return.setUser(User.fromDB(rs.getInt("User_ID")));
-            to_return.setStudyGroup(StudyGroup.fromDB(rs.getInt("StudyGroup")));
-            to_return.setMajor(Major.fromDB(rs.getInt("Major")));
-            return to_return;
-        }
-        catch (SQLException e) {
-            return null;
-        }
-    }
 
 
     public Employee get(Employee E){
@@ -691,6 +670,76 @@ public class Database {
 
         return null;
     }
+
+    public ArrayList<Student> getStudent(String name, String surname){
+        ArrayList<Student> students = new ArrayList<Student>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT " +
+                    "S.Name AS S_Name, S.Surname AS S_Surname, S.Pay AS S_Pay, " +
+                    "M.Name AS M_Name, " +
+                    "F.Name AS F_Name, " +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
+                    "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
+                    "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname, " +
+                    "U.ID AS U_ID " +
+                    "FROM Students AS S " +
+                    "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
+                    "INNER JOIN Majors AS M ON S.Major = M.ID " +
+                    "INNER JOIN Employees AS E ON M.Secretary = E.ID " +
+                    "INNER JOIN Employees AS X ON SG.Mentor = X.ID " +
+                    "INNER JOIN Faculties AS F ON M.Faculty = F.ID " +
+                    "INNER JOIN Users as U ON S.User_ID = U.ID" +
+                    "WHERE S_Name='"+name+"' and S_Surname='"+surname+"'"
+            );
+
+
+            while(rs.next())
+            {
+                Student S = new Student();
+                S.setName(rs.getString("S_Name"));
+                S.setSurname(rs.getString("S_Surname"));
+                S.setIncome(rs.getInt("S_Pay"));
+
+                User U = new User();
+                U.setId(rs.getInt("U_ID"));
+
+                StudyGroup SG = new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Major M = new Major();
+                M.setName(rs.getString("M_Name"));
+
+                Faculty F = new Faculty();
+                F.setName(rs.getString("F_Name"));
+                M.setFaculty(F);
+
+                Employee secretary = new Employee();
+                secretary.setName(rs.getString("Secretary_Name"));
+                secretary.setSurname(rs.getString("Secretary_Surname"));
+                M.setSecretary(new Secretary(secretary));
+
+                Employee mentor = new Employee();
+                mentor.setName(rs.getString("Mentor_Name"));
+                mentor.setSurname(rs.getString("Mentor_Surname"));
+                SG.setMentor(new Professor(mentor));
+
+                S.setMajor(M);
+                S.setStudyGroup(SG);
+                S.setUser(U);
+
+                students.add(S);
+            }
+            return students;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public ArrayList<Grade> getAllGrades(){
         ArrayList<Grade> grades = new ArrayList<Grade>();
 
@@ -752,6 +801,8 @@ public class Database {
 
         return null;
     }
+
+
     public ArrayList<Document> getAllDocuments() {
         ArrayList<Document> documents = new ArrayList<Document>();
 

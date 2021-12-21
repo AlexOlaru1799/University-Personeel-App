@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 @RestController
 public class RouteStudent {
-    Database db = Database.getInstance();
+        Database db = Database.getInstance();
 
  /*   @RequestMapping(value = "/student/my-profile", produces = "application/json")
     @ResponseBody
@@ -79,4 +79,36 @@ public class RouteStudent {
 
 
 
+    @PostMapping(value = "/student/gradesForStudent", produces = "application/json")
+    @ResponseBody
+    public String viewStudentGrades(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Student S = Student.fromUser(CookieManager.getInstance().validateCookie(C));
+
+            String courseName = parameters.get("courseName").toString();
+
+            ArrayList<Grade> grades=S.getGradesForStudent(courseName);
+            ArrayList<Grade> grades2=new ArrayList<>();
+
+            if(grades.size()>0)
+            {
+                for (Grade grade : grades) {
+                    grades2.add(grade);
+                }
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(grades2));
+            }
+            else
+            {
+                return "{\"status\" : \"NO GRADES OR ACCESS DENIED TO ANOTHER ACCOUNT\"}";
+            }
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        return "{\"status\" : \"FAILED\"}";
+    }
 }
