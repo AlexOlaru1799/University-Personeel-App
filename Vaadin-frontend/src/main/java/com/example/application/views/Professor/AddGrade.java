@@ -27,7 +27,6 @@ import java.util.HashMap;
 public class AddGrade extends VerticalLayout {
     private TextField studentName;
     private TextField studentSurname;
-    private TextField courseName;
     private IntegerField gradeToAdd;
     private Button addGrade;
 

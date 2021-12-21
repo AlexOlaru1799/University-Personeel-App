@@ -1,11 +1,14 @@
 package mta.universitate.Routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import mta.universitate.Model.*;
 import mta.universitate.Utils.CookieManager;
 import mta.universitate.Utils.ParamsParser;
 import org.springframework.web.bind.annotation.*;
 import mta.universitate.Model.Secretary;
 import javax.servlet.http.Cookie;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -139,6 +142,22 @@ public class RouteSecretary {
         return "{\"status\" : \"FAILED\"}";
     }
 
+    @PostMapping(value = "/secretary/view-students", produces = "application/json")
+    public String viewStudents(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", S.viewStudents());
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+
+
     @PostMapping(value = "/secretary/view-classroom", produces = "application/json")
     @ResponseBody
     public String viewClassroom(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)
@@ -159,8 +178,11 @@ public class RouteSecretary {
         return "{\"status\" : \"FAILED\"}";
     }
 
+
+
     @RequestMapping(value = "/secretary/view-courses", produces = "application/json")
     @ResponseBody
+    //
     public String viewCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C)
     {
         try

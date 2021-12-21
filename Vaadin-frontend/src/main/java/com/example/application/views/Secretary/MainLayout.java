@@ -126,9 +126,12 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("View Teacher Account", "la la-search", ViewTeacher.class), //
 
-                new MenuItemInfo("View Students Statistics", "la la-list", ViewStatistics.class), //
+                new MenuItemInfo("View Classrooms", "la la-list", ViewClassrooms.class), //
 
                 new MenuItemInfo("View Courses", "la la-th-list", ViewCourses.class), //
+
+
+                new MenuItemInfo("Students", "la la-cc-visa", Students.class),
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 

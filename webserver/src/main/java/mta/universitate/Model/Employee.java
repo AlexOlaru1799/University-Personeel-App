@@ -77,6 +77,18 @@ public class Employee extends JsonParser {
         return null;
     }
 
+    public String viewStudents() {
+        ArrayList<Student> students = Database.getInstance().getAllStudents();
+
+        try{
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return ow.writeValueAsString(students);
+        }
+        catch (Exception exc){}
+
+        return null;
+    }
+
     public String viewClassroom(String name){
         try{
             Database db = Database.getInstance();
@@ -166,6 +178,14 @@ public class Employee extends JsonParser {
     {
         Database db = Database.getInstance();
         ArrayList<Course> courses = db.getAllCourses();
+
+
+        for(Course course : courses)
+        {
+            if(course.getName().contains(" "))
+                course.setName(course.getName().replace(" ","_"));
+        }
+
 
         try{
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

@@ -100,13 +100,6 @@ public class SubjectStatistics extends VerticalLayout {
             {
                 Notification.show("You need to complete all the fields!");
             }
-
-            //Database DB = Database.getInstance();
-
-            //ResultSet res2 = DB.getStudentInfo(ID);
-
-            //ResultSet res3 = DB.getStudentGrades(ID);
-
         });
     }
 

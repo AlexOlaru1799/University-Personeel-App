@@ -221,6 +221,14 @@ public class Database {
         return false;
     }
 
+    public boolean delete(Grade G){
+
+        if (this.execute(String.format("DELETE FROM Grades WHERE ID = %d", G.getId())))
+            return true;
+
+        return false;
+    }
+
     public Student get(Student S){
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId())); //asta returneaza userul,nu student??
         try{
@@ -616,7 +624,7 @@ public class Database {
                     "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
                     "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
                     "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname, " +
-                    "U.ID AS U_ID " +
+                    "U.ID AS U_ID, U.Username as U_Username " +
                     "FROM Students AS S " +
                     "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
                     "INNER JOIN Majors AS M ON S.Major = M.ID " +
@@ -636,6 +644,7 @@ public class Database {
 
                 User U = new User();
                 U.setId(rs.getInt("U_ID"));
+                U.setUsername(rs.getString("U_Username"));
 
                 StudyGroup SG = new StudyGroup();
                 SG.setName(rs.getString("SG_Name"));
@@ -747,7 +756,7 @@ public class Database {
 
             ResultSet rs = executeQuery("" +
                     "SELECT " +
-                    "G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
+                    "G.ID AS G_ID, G.Value AS G_Value, G.[[Date]]] AS G_Date,\n" +
                     "C.Credits AS C_Credits, C.Name AS C_Name,\n" +
                     "E.Name AS Professor_Name, E.Surname AS Professor_Surname,\n" +
                     "S.Name AS Student_Name, S.Surname AS Student_Surname,\n" +
@@ -765,6 +774,7 @@ public class Database {
             while(rs.next())
             {
                 Grade G = new Grade();
+                G.setId(rs.getInt("G_ID"));
                 G.setValue(rs.getInt("G_Value"));
                 G.setDate(rs.getDate("G_Date").toLocalDate());
 
