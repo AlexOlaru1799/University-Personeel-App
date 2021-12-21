@@ -1,5 +1,6 @@
 package com.example.application.views.Professor;
 
+import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -112,13 +113,13 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("Subject Statistics", "la la-search", SubjectStatistics.class), //
 
-<<<<<<< HEAD
+
                 new MenuItemInfo("Add Grade", "la  la-smile-o", AddGrade.class), //
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
-=======
+
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutProfessor.class), //
->>>>>>> master
+
         };
 
         List<RouterLink> links = new ArrayList<>();
