@@ -113,16 +113,16 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("Subject Statistics", "la la-search", SubjectStatistics.class), //
 
-<<<<<<< HEAD
+
 
                 new MenuItemInfo("Add Grade", "la  la-smile-o", AddGrade.class), //
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
-=======
+
                 new MenuItemInfo("Add Grade", "la  la-smile-o", AddGrade.class), //
 
                 new MenuItemInfo("Student Grades", "la  la-smile-o", GradesStudent.class), //
->>>>>>> master
+
 
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutProfessor.class), //
 
