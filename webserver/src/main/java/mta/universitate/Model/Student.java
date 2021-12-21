@@ -151,4 +151,25 @@ public class Student extends JsonParser {
         }
         return gradesforStudent;
     }
+
+
+    public boolean createRequest(String type,String supervizorName,String supervizerSurname)
+    {
+        try
+        {
+            Database db = Database.getInstance();
+            Request req=new Request();
+            req.setIssuer(this.user);
+            req.setKind(RequestType.fromDB(db.getRequestTypeID(type)));
+            req.setApproved(false);
+            req.setSupervisor(Employee.fromDB(db.getEmployeeID(supervizorName,supervizerSurname)));
+            long millis=System.currentTimeMillis();
+            java.sql.Date date=new java.sql.Date(millis);
+            req.setDate(date);
+            if(db.add(req))
+                return true;
+        }
+        catch(Exception exc){ exc.printStackTrace(); }
+        return false;
+    }
 }

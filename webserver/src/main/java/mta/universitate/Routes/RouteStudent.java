@@ -111,4 +111,28 @@ public class RouteStudent {
         }
         return "{\"status\" : \"FAILED\"}";
     }
+
+
+
+    @PostMapping(value = "/student/createRequest", produces = "application/json")
+    @ResponseBody
+    public String createRequest(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Student S = Student.fromUser(CookieManager.getInstance().validateCookie(C));
+
+            String kind=parameters.get("kind").toString();
+            String supervizorName=parameters.get("sName").toString();
+            String supervizorSurname=parameters.get("sSurname").toString();
+            if(S.createRequest(kind,supervizorName,supervizorSurname))
+            {
+                return "{\"status\" : \"SUCCESS\"}";
+            }
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        return "{\"status\" : \"FAILED\"}";
+    }
 }

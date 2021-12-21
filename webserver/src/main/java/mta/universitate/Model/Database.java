@@ -154,7 +154,7 @@ public class Database {
     }
     public boolean add(Request R) {
         if(this.execute(String.format("INSERT INTO Requests(Kind,[[Date]]],Issuer,Supervisor,Approved)   VALUES " +
-                "(%d,%d,%d,%d,0)", R.getKind(), R.getDate(), R.getIssuer() ,R.getSupervisor())))
+                "(%d,'%s',%d,%d,0)", R.getKind().getId(), R.getDate(), R.getIssuer().getId() ,R.getSupervisor().getId())))
             return true;
 
         return false;
@@ -1129,7 +1129,11 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
-
+    public int getRequestTypeID(String reqType) throws SQLException, SQLServerException {
+        ResultSet rs = this.executeQuery(String.format("SELECT ID FROM RequestTypes WHERE Kind = '%s'", reqType));
+        rs.next();
+        return rs.getInt("ID");
+    }
 
 
 
