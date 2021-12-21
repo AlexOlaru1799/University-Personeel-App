@@ -1,7 +1,5 @@
 package com.example.application.views.Student;
 
-import com.example.application.views.Admin.AdminLayout;
-import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;

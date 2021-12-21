@@ -1,22 +1,17 @@
 package com.example.application.views.Professor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.core.utils.DateFactory;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 import java.time.format.DateTimeFormatter;
 
 @PageTitle("Professor Schedule")

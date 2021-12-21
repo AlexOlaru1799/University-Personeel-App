@@ -12,6 +12,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -19,47 +20,48 @@ import com.vaadin.flow.router.Route;
 import java.util.HashMap;
 
 @PageTitle("Add Subject")
-@Route(value = "addSubject", layout = MainLayout.class)
-public class AddSubject extends VerticalLayout {
+@Route(value = "createDocument", layout = MainLayout.class)
+public class CreateDocument extends VerticalLayout {
 
-    public AddSubject() {
-        VerticalLayout mainLayout = createLayout("Insert the necessary info");
+    public CreateDocument() {
+        VerticalLayout mainLayout = createLayout("Enter document details : ");
 
-        IntegerField credits = new IntegerField("Course credits");
-        credits.setWidth("500px");
-
-        TextField name = new TextField("Course name");
+        TextField name = new TextField("Person Name");
         name.setWidth("500px");
-        TextField nameP = new TextField("Professor name");
-        nameP.setWidth("500px");
-        TextField surnameP = new TextField("Professor surname");
-        surnameP.setWidth("500px");
+        TextField surname = new TextField("Person Surname");
+        surname.setWidth("500px");
+
+        TextField title = new TextField("Document title");
+        title.setWidth("500px");
+
+        TextArea content = new TextArea("Document content");
+        content.setWidth("500px");
+        content.setHeight("300px");
 
 
-        Button addSubject = new Button("Add Course");
+
+        Button addSubject = new Button("Push Document");
         addSubject.setWidth("500px");
 
-        mainLayout.add(name,nameP,surnameP,credits,addSubject);
+        mainLayout.add(name,surname,title,content,addSubject);
         add(mainLayout);
 
 
         addSubject.addClickListener(e -> {
+            String titleS = title.getValue();
+            String contentS = content.getValue();
             String nameS = name.getValue();
-            String nameSP = nameP.getValue();
-            String surnameSP = surnameP.getValue();
-            Integer creditsS = credits.getValue();
+            String surnameS = surname.getValue();
 
-            ApiRequest req = new ApiRequest("http://localhost:8080/secretary/add-course");
+
+            ApiRequest req = new ApiRequest("http://localhost:8080/create-document");
 
             req.addCookie(OwnCookieManager.getInstance().getCookie());
 
-            req.addParameter("course_name",nameS);
-            req.addParameter("professor_surname",surnameSP);
-            req.addParameter("professor_name",nameSP);
-            req.addParameter("credits",creditsS.toString());
-
-
-
+            req.addParameter("title",titleS);
+            req.addParameter("content",contentS);
+            req.addParameter("name",nameS);
+            req.addParameter("surname",surnameS);
 
 
             // Send the request and get the response
@@ -67,19 +69,15 @@ public class AddSubject extends VerticalLayout {
 
             if(response.get("status").equals("SUCCESS")) {
 
-                Notification.show("Course with name: " + nameS + " has been added");
+                Notification.show("Document has been added!");
             }
             else{
                 Notification.show("Failed :(");
             }
 
 
-            name.clear();
-            surnameP.clear();
-            nameP.clear();
-            credits.clear();
-
-
+            title.clear();
+            content.clear();
 
         });
     }

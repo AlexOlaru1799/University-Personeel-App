@@ -2,6 +2,8 @@ package mta.universitate.Model;
 
 import mta.universitate.Utils.JsonParser;
 
+import java.util.ArrayList;
+
 public class Student extends JsonParser {
     private Integer id;
     private String name;
@@ -90,5 +92,24 @@ public class Student extends JsonParser {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ArrayList<Schedule> viewScheduleForStudent(int id, String initDate) throws Exception{
+        Database db = Database.getInstance();
+
+        ArrayList<Schedule> schedules = db.getScheduleofGroups(this.getStudyGroup().getName());
+        ArrayList<Schedule> schedulesforReturn=new ArrayList<Schedule>();
+
+        for(int i=0;i<schedules.size();i++)
+        {
+            String dateDB = schedules.get(i).getDate().toString();
+
+            if(dateDB.equals(initDate)) {
+                if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                    schedulesforReturn.add(schedules.get(i));
+                }
+            }
+        }
+        return schedulesforReturn;
     }
 }
