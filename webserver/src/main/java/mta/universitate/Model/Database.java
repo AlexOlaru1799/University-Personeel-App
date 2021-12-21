@@ -619,7 +619,7 @@ public class Database {
                     "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear, " +
                     "E.Name AS Secretary_Name, E.Surname AS Secretary_Surname, " +
                     "X.Name AS Mentor_Name , X.Surname AS Mentor_Surname, " +
-                    "U.ID AS U_ID " +
+                    "U.ID AS U_ID, U.Username as U_Username " +
                     "FROM Students AS S " +
                     "INNER JOIN StudyGroups AS SG ON S.StudyGroup = SG.ID " +
                     "INNER JOIN Majors AS M ON S.Major = M.ID " +
@@ -639,6 +639,7 @@ public class Database {
 
                 User U = new User();
                 U.setId(rs.getInt("U_ID"));
+                U.setUsername(rs.getString("U_Username"));
 
                 StudyGroup SG = new StudyGroup();
                 SG.setName(rs.getString("SG_Name"));

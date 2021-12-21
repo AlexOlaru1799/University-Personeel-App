@@ -78,6 +78,18 @@ public class Employee extends JsonParser {
         return null;
     }
 
+    public String viewStudents() {
+        ArrayList<Student> students = Database.getInstance().getAllStudents();
+
+        try{
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return ow.writeValueAsString(students);
+        }
+        catch (Exception exc){}
+
+        return null;
+    }
+
     public String viewClassroom(String name){
         try{
             Database db = Database.getInstance();
