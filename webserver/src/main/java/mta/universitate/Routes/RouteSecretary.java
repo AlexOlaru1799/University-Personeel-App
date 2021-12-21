@@ -139,6 +139,22 @@ public class RouteSecretary {
         return "{\"status\" : \"FAILED\"}";
     }
 
+    @PostMapping(value = "/secretary/view-students", produces = "application/json")
+    public String viewStudents(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            Secretary S = Secretary.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", S.viewStudents());
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+
+
     @PostMapping(value = "/secretary/view-classroom", produces = "application/json")
     @ResponseBody
     public String viewClassroom(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload)
