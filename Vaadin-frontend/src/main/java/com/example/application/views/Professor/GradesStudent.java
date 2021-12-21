@@ -61,7 +61,6 @@ public class GradesStudent extends VerticalLayout {
 
                 HashMap<String, Object> response = req.send();
 
-
                 ArrayList<Object> objResp = new ArrayList<Object>(response.values());
 
                 ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
@@ -81,10 +80,6 @@ public class GradesStudent extends VerticalLayout {
                     courseName.add(materie_name_cality);
                 }
 
-                Grid grid = new Grid();
-
-                grid.addColumn("courseName");
-                grid.addColumn("grades");
 
                 String gradesMaterii = "";
                 for(int i = 0;i < grades.size(); i++)
