@@ -61,7 +61,19 @@ public class ViewCourses extends VerticalLayout {
             Course S = new Course();
             try {
                 JSONObject obj = new JSONObject(stud_json.toString());
-                S.setCourse(obj.getString("name"));
+                if(obj.getString("name").contains("_"))
+                {
+                    String[] parts = obj.getString("name").split("_");
+                    String part1 = parts[0];
+                    String part2 = parts[1];
+                    S.setCourse(part1 + " " + part2);
+                }
+                else
+                {
+                    S.setCourse(obj.getString("name"));
+                }
+
+
                 S.setCredits(Integer.parseInt(obj.get("credits").toString()));
                 S.setName(obj.getJSONObject("professor").get("name").toString());
                 S.setSurname(obj.getJSONObject("professor").get("surname").toString());
@@ -77,31 +89,6 @@ public class ViewCourses extends VerticalLayout {
         }
 
 
-//        facultySelect = new Select<String>();
-//        majorSelect = new Select<String>();
-//        studyGroupSelect = new Select<String>();
-//        yearSelect = new Select<String>();
-//        facultySelect.setLabel("Faculty");
-//        majorSelect.setLabel("Major");
-//        studyGroupSelect.setLabel("Study Group");
-//        yearSelect.setLabel("Year");
-
-//        facultySelect.setItems(students.stream().map(student -> student.getFaculty()).distinct());
-//        majorSelect.setItems(students.stream().map(student -> student.getMajor()).distinct());
-//        studyGroupSelect.setItems(students.stream().map(student -> student.getStudyGroup()).distinct());
-//        yearSelect.setItems(students.stream().map(student -> student.getStudyYear().toString()).distinct());
-//
-//
-//        facultySelectListener =  facultySelect.addValueChangeListener(this::updateStudents);
-//        majorSelectListener = majorSelect.addValueChangeListener(this::updateStudents);
-//        studyGroupSelectListener = studyGroupSelect.addValueChangeListener(this::updateStudents);
-//        yearSelectListener = yearSelect.addValueChangeListener(this::updateStudents);
-
-//        HorizontalLayout filters = new HorizontalLayout();
-//        filters.setJustifyContentMode(JustifyContentMode.CENTER);
-//        filters.setWidth("100%");
-//        filters.add(facultySelect, majorSelect, studyGroupSelect, yearSelect);
-
         grid.setItems(students);
 
         //add(filters);
@@ -109,58 +96,5 @@ public class ViewCourses extends VerticalLayout {
         add(layout);
     }
 
-//    private void updateStudents(AbstractField.ComponentValueChangeEvent<Select<String>, String> selectStringComponentValueChangeEvent) {
-//        String faculty = facultySelect.getValue();
-//        String major = majorSelect.getValue();
-//        String studyGroup = studyGroupSelect.getValue();
-//        String year = yearSelect.getValue();
-//
-//        ArrayList<Student> new_items = new ArrayList<Student>();
-//
-//        for (Student S : students)
-//        {
-//            if ( (faculty == null) || (S.getFaculty().contentEquals(faculty)))
-//                if ( (major == null) || (S.getMajor().contentEquals(major)))
-//                    if ( (studyGroup == null) || (S.getStudyGroup().contentEquals(studyGroup)))
-//                        if ( (year == null) || (S.getStudyYear().toString().contentEquals(year)))
-//                            new_items.add(S);
-//        }
-//
-//        facultySelectListener.remove();
-//        majorSelectListener.remove();
-//        studyGroupSelectListener.remove();
-//        yearSelectListener.remove();
-//
-//
-//        String finalFaculty = faculty == null ? "" : faculty;
-//        String finalMajor = major == null ? "" : major;
-//        String finalStudyGroup = studyGroup == null ? "" : studyGroup;
-//
-//        majorSelect.setItems(students.stream().filter(stud ->
-//                        stud.getFaculty().contentEquals(finalFaculty))
-//                .map(student -> student.getMajor()).distinct());
-//
-//        studyGroupSelect.setItems(students.stream().filter(stud ->
-//                        stud.getFaculty().contentEquals(finalFaculty) &&
-//                                stud.getMajor().contentEquals(finalMajor))
-//                .map(student -> student.getStudyGroup()).distinct());
-//
-//        yearSelect.setItems(students.stream().filter(stud ->
-//                stud.getFaculty().contentEquals(finalFaculty) &&
-//                        stud.getMajor().contentEquals(finalMajor) &&
-//                        stud.getStudyGroup().contentEquals(finalStudyGroup)
-//        ).map(student -> student.getStudyYear().toString()).distinct());
-//
-//        facultySelect.setValue(faculty);
-//        majorSelect.setValue(major);
-//        studyGroupSelect.setValue(studyGroup);
-//        yearSelect.setValue(year);
-//
-//        facultySelectListener =  facultySelect.addValueChangeListener(this::updateStudents);
-//        majorSelectListener = majorSelect.addValueChangeListener(this::updateStudents);
-//        studyGroupSelectListener = studyGroupSelect.addValueChangeListener(this::updateStudents);
-//        yearSelectListener = yearSelect.addValueChangeListener(this::updateStudents);
-//
-//        grid.setItems(new_items);
-//    }
+
 }
