@@ -165,7 +165,7 @@ public class Database {
     }
     public boolean add(Grade G) {
         if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
-                "(%d, %d, '%s', %d", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
+                "(%d, %d, '%s', %d)", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
             return true;
 
         return false;
