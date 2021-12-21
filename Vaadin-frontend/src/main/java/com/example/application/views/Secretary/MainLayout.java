@@ -132,6 +132,8 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Create Teacher Salary Certificate", "la la-cc-visa", CreateTeacherSalryCertificate.class), //
 
+                new MenuItemInfo("Students", "la la-cc-visa", Students.class),
+
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
 
 

@@ -2,7 +2,6 @@ package com.example.application.views.Secretary;
 
 
 
-import com.example.application.views.BackEnd.*;
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
