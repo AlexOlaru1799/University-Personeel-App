@@ -2,6 +2,10 @@ package mta.universitate.Model;
 
 import mta.universitate.Utils.JsonParser;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class Student extends JsonParser {
     private Integer id;
     private String name;
@@ -28,6 +32,23 @@ public class Student extends JsonParser {
         S.id = id;
 
         return Database.getInstance().get(S);
+    }
+
+    public static Student fromUser(User U)
+    {
+        String[] tokens = U.getUsername().split("@");
+        tokens = tokens[0].split("\\.");
+
+        String name = tokens[0].substring(0, 1).toUpperCase(Locale.ROOT) + tokens[0].substring(1);
+        String surname = tokens[1].substring(0, 1).toUpperCase(Locale.ROOT) + tokens[1].substring(1);
+        try
+        {
+            Student S = Student.fromDB(Database.getInstance().getStudentID(name, surname));
+            return S;
+        }
+        catch (SQLException exc){}
+
+        return null;
     }
 
     public void fillReport()
@@ -90,5 +111,24 @@ public class Student extends JsonParser {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ArrayList<Schedule> viewScheduleForStudent(int id, String initDate) throws Exception{
+        Database db = Database.getInstance();
+
+        ArrayList<Schedule> schedules = db.getGroupSchedule(this.getStudyGroup().getName());
+        ArrayList<Schedule> schedulesforReturn=new ArrayList<Schedule>();
+
+        for(int i=0;i<schedules.size();i++)
+        {
+            String dateDB = schedules.get(i).getDate().toString();
+
+            if(dateDB.equals(initDate)) {
+                if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                    schedulesforReturn.add(schedules.get(i));
+                }
+            }
+        }
+        return schedulesforReturn;
     }
 }

@@ -58,8 +58,8 @@ public class UpdateClassroom extends VerticalLayout{
 
         Select<String> type = new Select<String>();
         type.setLabel("Class Type");
-        type.setItems("Lab", "Course");
-        type.setValue("Lab");
+        type.setItems("Laboratory", "Course");
+        type.setValue("Laboratory");
 
         setPadding(true);
         setSpacing(true);
@@ -83,7 +83,7 @@ public class UpdateClassroom extends VerticalLayout{
             {
                 req.addParameter("name", classroom);
                 req.addParameter("capacity", String.valueOf(_capacity));
-                if (_type == "Lab"){
+                if (_type == "Laboratory"){
                     req.addParameter("kind", String.valueOf(1));
                 }
                 else {

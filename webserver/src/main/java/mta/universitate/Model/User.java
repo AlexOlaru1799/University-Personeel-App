@@ -1,10 +1,7 @@
 package mta.universitate.Model;
 
 
-import mta.universitate.Utils.Hasher;
 import mta.universitate.Utils.JsonParser;
-
-import java.util.Locale;
 
 public class User extends JsonParser{
     private int id;

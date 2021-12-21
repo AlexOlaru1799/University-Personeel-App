@@ -1,7 +1,5 @@
 package com.example.application.views.Secretary;
 
-
-
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;
@@ -16,9 +14,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import java.net.CookieManager;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 @PageTitle("Create Professor Account")
@@ -46,12 +41,13 @@ public class CreateTeacherAccount extends VerticalLayout {
         TextField surname = new TextField("Professor surname");
         surname.setWidth("500px");
         PasswordField password = new PasswordField("Professor password");
-        surname.setWidth("500px");
+        password.setWidth("500px");
 
         Select<String> role = new Select<String>();
         role.setLabel("Employee Role");
         role.setItems("Administrator", "Secretary", "Professor", "Mentor","Janitor");
         role.setValue("Professor");
+        role.setWidth("500px");
 
         IntegerField salary = new IntegerField("Professor salary");
         salary.setWidth("500px");

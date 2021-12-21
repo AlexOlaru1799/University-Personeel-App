@@ -1,10 +1,9 @@
 package mta.universitate.Model;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import mta.universitate.Utils.JsonParser;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -104,12 +103,9 @@ public class Employee extends JsonParser {
     }
 
     public ArrayList<Schedule> viewScheduleForProfessor(String name, String surname, String initDate){
-        //try{
         Database db = Database.getInstance();
 
         ArrayList<Schedule> schedules = db.getAllSchedule();
-        //StringBuilder response = new StringBuilder();
-
         ArrayList<Schedule> schedulesforReturn=new ArrayList<Schedule>();
 
         for(int i=0;i<schedules.size();i++)
@@ -118,20 +114,11 @@ public class Employee extends JsonParser {
 
             if(dateDB.equals(initDate)) {
                 if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
-                    //response.append(schedules.get(i).toJson());
                     schedulesforReturn.add(schedules.get(i));
                 }
             }
         }
-
-        // return response.toString();
-
         return schedulesforReturn;
-
-        // }
-//        catch (JsonProcessingException exc){}
-//
-//        return null;
     }
 
     public ArrayList getGradesForSubject(String name) {
@@ -153,24 +140,24 @@ public class Employee extends JsonParser {
         return gradesforSubject;
     }
 
-    public ArrayList<Student> failedOneSubject() {
+    public ArrayList<Grade> failedOneSubject() {
         Database db = Database.getInstance();
 
         ArrayList<Student> students=db.getAllStudents();
-        ArrayList<Student> students2=new ArrayList<Student>();
         ArrayList<Grade> grades = db.getAllGrades();
+        ArrayList<Grade> grades2 = new ArrayList<>();
 
         int nr=0;
 
-        for (int i = 0; i < students.size(); i++)
+        for (int i = 0; i < grades.size(); i++)
         {
             int nrFailedSubj=0;
 
-            for (int k = 0; k < grades.size(); k++)
+            for (int k = 0; k < students.size(); k++)
             {
-                if (students.get(i).getName().equals(grades.get(k).getStudent().getName()) && students.get(i).getSurname().equals(grades.get(k).getStudent().getSurname())  )
+                if (students.get(k).getName().equals(grades.get(i).getStudent().getName()) && students.get(k).getSurname().equals(grades.get(i).getStudent().getSurname())  )
                 {
-                    if(grades.get(k).getValue()<5)
+                    if(grades.get(i).getValue()<5)
                     {
                         nrFailedSubj++;
                     }
@@ -179,10 +166,12 @@ public class Employee extends JsonParser {
             if(nrFailedSubj==1)
             {
                 nr++;
-                students2.add(students.get(i));
+                grades.get(i).setDate(null);
+                grades2.add(grades.get(i));
+
             }
         }
-        return students2;
+        return grades2;
     }
 
     public String viewCourses()

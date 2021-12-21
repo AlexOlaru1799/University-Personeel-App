@@ -184,4 +184,64 @@ public class RouteAdmin {
         return "{\"status\" : \"FAILED\"}";
     }
 
+    @PostMapping(value = "/admin/get-courses", produces = "application/json")
+    public String getCourses(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            ArrayList<Course> courses = Database.getInstance().getAllCourses();
+
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(courses));
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+    @PostMapping(value = "/admin/get-study-groups", produces = "application/json")
+    public String getStudyGroups(@CookieValue(value = "uid", defaultValue = "test") Cookie C) {
+        try
+        {
+            ArrayList<StudyGroup> studyGroups = Database.getInstance().getAllStudyGroups();
+
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(studyGroups));
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
+    @PostMapping(value = "/admin/update-schedule", produces = "application/json")
+    @ResponseBody
+    public String updateSchedule(@CookieValue(value = "uid", defaultValue = "test") Cookie C, @RequestBody String payload) {
+        try
+        {
+            HashMap<String, Object> parameters = ParamsParser.parse(payload);
+            Classroom classroom = new Classroom();
+            String name = parameters.get("name").toString();
+            int capacity = Integer.parseInt(parameters.get("capacity").toString());
+            int kind = Integer.parseInt(parameters.get("kind").toString());
+
+            classroom.setCapacity(capacity);
+            classroom.setName(name);
+            if(kind == 1)
+                classroom.setKind(true);
+            else
+                classroom.setKind(false);
+
+            Admin A = Admin.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
+            if (Database.getInstance().update(classroom))
+                return "{\"status\" : \"SUCCESS\"}";
+        }
+        catch (Exception exc){}
+
+        return "{\"status\" : \"FAILED\"}";
+    }
+
 }
+

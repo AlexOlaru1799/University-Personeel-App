@@ -1,15 +1,11 @@
 package mta.universitate.Model;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.jetbrains.annotations.NotNull;
 
-
-import javax.print.Doc;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static Database dbObject;
@@ -165,7 +161,7 @@ public class Database {
     }
     public boolean add(Grade G) {
         if(this.execute(String.format("INSERT INTO Grades(Value, Course, [[Date]]], Student) VALUES " +
-                "(%d, %d, '%s', %d", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
+                "(%d, %d, '%s', %d)", G.getValue(), G.getCourse().getId(), G.getDate(), G.getStudent().getId())))
             return true;
 
         return false;
@@ -226,10 +222,8 @@ public class Database {
     }
 
     public Student get(Student S){
-        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId()));
-
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId())); //asta returneaza userul,nu student??
         try{
-
             Student to_return = new Student();
 
             rs.next();
@@ -249,6 +243,30 @@ public class Database {
         }
 
     }
+
+    public Student getStudentfromUser(int UserID){
+        //System.out.println(U.getId());
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE User_ID = %d", UserID)); //asta returneaza student din user
+        try{
+            Student to_return = new Student();
+
+            rs.next();
+
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setSurname(rs.getString("Surname"));
+            to_return.setIncome(rs.getInt("Pay"));
+            to_return.setUser(User.fromDB(rs.getInt("User_ID")));
+            to_return.setStudyGroup(StudyGroup.fromDB(rs.getInt("StudyGroup")));
+            to_return.setMajor(Major.fromDB(rs.getInt("Major")));
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+
+
     public Employee get(Employee E){
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Employees WHERE ID = %d", E.getId()));
 
@@ -829,6 +847,72 @@ public class Database {
 
         return null;
     }
+
+    public ArrayList<Schedule> getGroupSchedule(String grupa){
+        ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT S.ID AS S_ID, S.[[Time]]] AS S_Time,\n" +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear,\n" +
+                    "C.Name AS C_Name, C.Capacity AS C_Capacity,\n" +
+                    "M.Kind AS M_Kind,    \n" +
+                    "C2.Name AS C2_Name, C2.Credits AS C2_Credits,  \n" +
+                    "E.Name AS E_Name, E.Surname AS E_Surname   \n" +
+                    "FROM Schedule AS S   \n" +
+                    "INNER JOIN Modules AS M ON M.ID=S.Module   \n" +
+                    "INNER JOIN StudyGroups AS SG ON SG.ID=S.StudyGroup   \n" +
+                    "INNER JOIN Classrooms AS C ON C.ID=S.Classroom   \n" +
+                    "INNER JOIN Courses AS C2 ON M.Course=C2.ID   \n" +
+                    "INNER JOIN Employees AS E ON M.Professor=E.ID \n" +
+                    "INNER JOIN Employees AS E2 ON SG.Mentor=E2.ID "+
+                    "WHERE SG.Name='" + grupa + "'"
+            );
+
+
+            while(rs.next())
+            {
+                Module M=new Module();
+                M.setKind(rs.getString("M_Kind"));
+
+                StudyGroup SG=new StudyGroup();
+                SG.setName(rs.getString("SG_Name"));
+                SG.setStudy_year(rs.getInt("SG_StudyYear"));
+
+                Classroom C=new Classroom();
+                C.setName(rs.getString("C_Name"));
+                C.setCapacity(rs.getInt("C_Capacity"));
+
+                Course C2=new Course();
+                C2.setName(rs.getString("C2_Name"));
+                C2.setCredits(rs.getInt("C2_Credits"));
+                M.setCourse(C2);
+
+                Employee E=new Employee();
+                E.setName(rs.getString("E_Name"));
+                E.setSurname(rs.getString("E_Surname"));
+                M.setProfessor(new Professor(E));
+                C2.setProfessor(new Professor(E));
+
+                Schedule S=new Schedule();
+                S.setTime(rs.getTime("S_Time"));
+                S.setDate(rs.getDate("S_Time"));
+                S.setId(rs.getInt("S_ID"));
+
+                S.setModule(M);
+                S.setClassroom(C);
+                S.setStudy_group(SG);
+
+                schedules.add(S);
+            }
+            return schedules;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
+
     public ArrayList<Classroom> getAllClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<Classroom>();
 
@@ -890,6 +974,38 @@ public class Database {
         return null;
     }
 
+    public ArrayList<StudyGroup> getAllStudyGroups()
+    {
+        ArrayList<StudyGroup> studyGroups = new ArrayList<StudyGroup>();
+
+
+        try{
+
+            ResultSet rs = executeQuery("" +
+                    "SELECT * " +
+                    "FROM StudyGroups"
+            );
+
+
+            while(rs.next())
+            {
+                StudyGroup S = new StudyGroup();
+
+
+                S.setStudy_year(rs.getInt("StudyYear"));
+                S.setName(rs.getString("Name"));
+
+                Professor P = Professor.fromEmployee(Employee.fromDB(rs.getInt("Mentor")));
+                S.setMentor(P);
+
+                studyGroups.add(S);
+            }
+            return studyGroups;
+        }
+        catch (SQLException e){}
+
+        return null;
+    }
 
     public boolean update(User U){
         if (this.execute(String.format("UPDATE Users SET Username = '%s', Password = '%s', User_Role = %d WHERE ID = %d",
@@ -897,6 +1013,7 @@ public class Database {
             return true;
         return false;
     }
+
     public boolean update(Classroom C) {
         int type = 0;
         if (C.isKind() == true)
@@ -964,46 +1081,6 @@ public class Database {
     }
 
 
-
-
-    public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException {
-        String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
-                "from Schedule as S\n" +
-                "inner join Classrooms as CR\n" +
-                "on CR.ID=S.Classroom\n" +
-                "inner join Modules as MO\n" +
-                "on MO.ID=S.Module\n" +
-                "inner join Courses as C\n" +
-                "on C.ID=MO.Course\n" +
-                "inner join Employees as E\n" +
-                "on E.ID=MO.Professor\n" +
-                "inner join StudyGroups as SG\n" +
-                "on SG.ID=S.StudyGroup\n" +
-                "inner join Positions as P\n" +
-                "on E.Position_ID=P.ID\n" +
-                "WHERE P.Description='Professor' and E.name='" + nume + "' and E.Surname='" + prenume + "'";
-
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getGroupSchedule(String grupa) throws SQLException {
-      String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
-              "from Schedule as S\n" +
-              "inner join Classrooms as CR\n" +
-              "on CR.ID=S.Classroom\n" +
-              "inner join Modules as MO\n" +
-              "on MO.ID=S.Module\n" +
-              "inner join Courses as C\n" +
-              "on C.ID=MO.Course\n" +
-              "inner join Employees as E\n" +
-              "on E.ID=MO.Professor\n" +
-              "inner join StudyGroups as SG\n" +
-              "on SG.ID=S.StudyGroup\n" +
-              "where SG.Name='" + grupa + "'";
-
-      return executeQuery(query);
-    }
 
 
 }

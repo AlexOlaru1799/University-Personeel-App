@@ -1,6 +1,5 @@
 package com.example.application.views.Professor;
 
-import com.example.application.views.Admin.AdminLayout;
 import com.example.application.views.Secretary.SignOut;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -12,7 +11,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,7 +113,19 @@ public class ProfessorLayout extends AppLayout {
 
                 new MenuItemInfo("Subject Statistics", "la la-search", SubjectStatistics.class), //
 
+
+
+                new MenuItemInfo("Add Grade", "la  la-smile-o", AddGrade.class), //
+
                 new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOut.class), //
+
+                new MenuItemInfo("Add Grade", "la  la-smile-o", AddGrade.class), //
+
+                new MenuItemInfo("Student Grades", "la  la-smile-o", GradesStudent.class), //
+
+
+                new MenuItemInfo("Sign Out", "la la-times-circle-o", SignOutProfessor.class), //
+
         };
 
         List<RouterLink> links = new ArrayList<>();

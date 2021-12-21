@@ -118,6 +118,8 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Delete Teacher Account", "la la-magic", DeleteTeacherAccount.class), //
 
+                new MenuItemInfo("Create Document", "la la-edit", CreateDocument.class), //
+
                 new MenuItemInfo("Add Subject", "la la-leanpub", AddSubject.class), //
 
                 new MenuItemInfo("View Student Account", "la la-certificate", ViewStudent.class), //

@@ -1,6 +1,5 @@
 package com.example.application.views.Admin;
 
-import com.example.application.views.Admin.AdminLayout;
 import com.example.application.views.Utils.ApiRequest;
 import com.example.application.views.Utils.OwnCookieManager;
 import com.vaadin.flow.component.Html;

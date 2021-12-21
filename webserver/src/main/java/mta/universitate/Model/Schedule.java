@@ -24,21 +24,6 @@ public class Schedule extends JsonParser {
     }
 
 
-
-    public ResultSet getTeacherSchedule(String surname, String name) throws SQLException {
-        Database db = Database.getInstance();
-        ResultSet result = db.getTeacherSchedule(surname, name);
-
-        return result;
-    }
-
-    public ResultSet getGroupSchedule(String groupName) throws SQLException {
-        Database db = Database.getInstance();
-        ResultSet result = db.getGroupSchedule(groupName);
-
-        return result;
-    }
-
     public Integer getId() {
         return id;
     }
