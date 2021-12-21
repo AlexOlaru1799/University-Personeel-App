@@ -79,18 +79,18 @@ public class RouteProfessor {
         {
             Professor P = Professor.fromEmployee(Employee.fromUser(CookieManager.getInstance().validateCookie(C)));
 
-            ArrayList<Student>students=P.failedOneSubject();
+            ArrayList<Grade>grades=P.failedOneSubject();
 
-            ArrayList<Student>students2=new ArrayList<>();
+            ArrayList<Grade>grades2=new ArrayList<>();
 
-            if(students.size()>0)
+            if(grades.size()>0)
             {
-                for (Student stud : students) {
-                    students2.add(stud);
+                for (Grade grade : grades) {
+                    grades2.add(grade);
                 }
 
                 ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(students2) );
+                return String.format("{\"status\" : \"SUCCESS\", \"result\" : %s }", ow.writeValueAsString(grades2) );
             }
             else
             {
@@ -118,7 +118,7 @@ public class RouteProfessor {
 
             int nr=0;
             for(int i=0;i<grades.size();i++) {
-                if (grades.get(i).getValue() <5) {
+                if (grades.get(i).getValue() < 5) {
                     nr++;
                 }
             }

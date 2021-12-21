@@ -38,6 +38,7 @@ public class CreateStudentAccount extends VerticalLayout {
         major.setLabel("Student Major");
         major.setItems("Calculatoare", "Cyber", "ESCA", "BAT","AEV");
         major.setValue("Calculatoare");
+        major.setWidth("500px");
 
         TextField study_group = new TextField("Student Study Group");
         study_group.setWidth("500px");

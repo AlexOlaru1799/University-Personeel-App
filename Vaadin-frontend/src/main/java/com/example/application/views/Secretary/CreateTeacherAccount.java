@@ -41,12 +41,13 @@ public class CreateTeacherAccount extends VerticalLayout {
         TextField surname = new TextField("Professor surname");
         surname.setWidth("500px");
         PasswordField password = new PasswordField("Professor password");
-        surname.setWidth("500px");
+        password.setWidth("500px");
 
         Select<String> role = new Select<String>();
         role.setLabel("Employee Role");
         role.setItems("Administrator", "Secretary", "Professor", "Mentor","Janitor");
         role.setValue("Professor");
+        role.setWidth("500px");
 
         IntegerField salary = new IntegerField("Professor salary");
         salary.setWidth("500px");
