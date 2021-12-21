@@ -8,6 +8,8 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -23,24 +25,51 @@ public class AverageGradeSubject extends VerticalLayout {
     private Button showSubjects;
 
     public AverageGradeSubject() {
-
-        subjectName = new TextField("Subject Name");
         showSubjects = new Button("Show Subject Average");
 
+        // Create request and set the endpoint
+        ApiRequest getCourse = new ApiRequest("http://localhost:8080/admin/get-courses");
+        getCourse.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> courses = getCourse.send();
+
+        ArrayList<Object> objResp = new ArrayList<Object>(courses.values());
+
+        ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
+
+        ArrayList<String> coursesName = new ArrayList<String>(objClasses.size());
+
+
+        for (int i = 0; i < objClasses.size(); i++) {
+            String[] set = null;
+            String c = objClasses.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            coursesName.add(set[0]);
+        }
+
+        Select<String> subject = new Select<String>();
+        subject.setLabel("Select Subject");
+        subject.setItems(coursesName);
+        subject.setValue(coursesName.get(0));
 
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Show subject average!"));
-
-        VerticalLayout layout = createLayout("Subject Statistics");
+        VerticalLayout layout = createLayout("Average for a selected subject.");
         layout.setPadding(true);
-        layout.add(subjectName, showSubjects);
+        layout.add(subject, showSubjects);
 
+        TextArea textArea = new TextArea();
+        textArea.setLabel("Average Subject");
+        textArea.setWidth("150px");
+        textArea.isReadOnly();
+        textArea.setHeight("65px");
+        layout.add(textArea);
 
         showSubjects.addClickListener(e -> {
 
-            String name = subjectName.getValue();
+            String name = subject.getValue();
 
             if(name != "")
             {
@@ -55,9 +84,9 @@ public class AverageGradeSubject extends VerticalLayout {
                 if(response.get("status").equals("SUCCESS"))
                 {
                     if(response.get("result") != null ) {
-                        System.out.println(response.get("result"));
+                        textArea.setValue(response.get("result").toString());
                     }
-                    Notification.show("Classroom has been updated");
+                    Notification.show("Average Succes!");
                 }
                 else
                 {

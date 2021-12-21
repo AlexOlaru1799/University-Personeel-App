@@ -33,6 +33,8 @@ public class SubjectFailed extends VerticalLayout{
 
         showSubjects.addClickListener(e -> {
 
+
+
             //Database DB = Database.getInstance();
 
             //ResultSet res2 = DB.getStudentInfo(ID);

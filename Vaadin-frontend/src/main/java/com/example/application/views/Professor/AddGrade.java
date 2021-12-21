@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,6 +18,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @PageTitle("Add Grade")
@@ -33,9 +35,34 @@ public class AddGrade extends VerticalLayout {
     {
         studentName = new TextField("Student Name");
         studentSurname = new TextField("Student Surname");
-        courseName = new TextField("Course Name");
         gradeToAdd = new IntegerField("Add Grade");
         addGrade = new Button("Add Grade");
+
+        // Create request and set the endpoint
+        ApiRequest getCourse = new ApiRequest("http://localhost:8080/admin/get-courses");
+        getCourse.addCookie(OwnCookieManager.getInstance().getCookie());
+
+        HashMap<String, Object> courses = getCourse.send();
+
+        ArrayList<Object> objResp = new ArrayList<Object>(courses.values());
+
+        ArrayList<Object> objClasses = (ArrayList<Object>)objResp.get(0);
+
+        ArrayList<String> coursesName = new ArrayList<String>(objClasses.size());
+
+
+        for (int i = 0; i < objClasses.size(); i++) {
+            String[] set = null;
+            String c = objClasses.get(i).toString();
+            set = c.split("=");
+            set = set[1].split(",");
+            coursesName.add(set[0]);
+        }
+
+        Select<String> courseName = new Select<String>();
+        courseName.setLabel("Select Subject");
+        courseName.setItems(coursesName);
+        courseName.setValue(coursesName.get(0));
 
         setPadding(true);
         setSpacing(true);
@@ -74,12 +101,15 @@ public class AddGrade extends VerticalLayout {
             {
                 req.addParameter("name", name);
                 req.addParameter("surname", surname);
+                req.addParameter("grade", String.valueOf(grade));
                 req.addParameter("course", course);
                 req.addParameter("date", date);
-                req.addParameter("grade", String.valueOf(grade));
+
 
                 // Send the request and get the response
                 HashMap<String, Object> response = req.send();
+
+                System.out.println(response);
 
                 if(response.get("status").equals("SUCCESS")) {
                     Notification.show("Grade: " + grade + "on date: " + date + "for student: " + name +
