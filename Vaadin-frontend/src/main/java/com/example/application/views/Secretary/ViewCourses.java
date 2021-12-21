@@ -24,15 +24,9 @@ import java.util.HashMap;
 public class ViewCourses extends VerticalLayout {
     private ArrayList<Course> students;
     private Grid<Course> grid;
-    private Select<String> facultySelect;
-    private Select<String> majorSelect;
-    private Select<String> studyGroupSelect;
-    private Select<String> yearSelect;
 
-    private Registration facultySelectListener;
-    private Registration majorSelectListener;
-    private Registration studyGroupSelectListener;
-    private Registration yearSelectListener;
+
+
 
 
     public ViewCourses() {
@@ -45,6 +39,11 @@ public class ViewCourses extends VerticalLayout {
         grid.addColumn(Course::getName).setHeader("Professor Name").setSortable(true);
         grid.addColumn(Course::getSurname).setHeader("Professor Surname").setSortable(true);
 
+        //grid.getStyle().set("color","blue");
+        //grid.getHeaderRows()
+
+        grid.setHeight("600px");
+
 
         ApiRequest req = new ApiRequest("http://localhost:8080/secretary/view-courses");
         req.addCookie(OwnCookieManager.getInstance().getCookie());
@@ -55,7 +54,7 @@ public class ViewCourses extends VerticalLayout {
 
         students = new ArrayList<Course>(studs_json.size());
 
-        System.out.println("------------> " + studs_json.size());
+       // System.out.println("------------> " + studs_json.size());
 
         for (Object stud_json : studs_json) {
             Course S = new Course();
@@ -78,10 +77,10 @@ public class ViewCourses extends VerticalLayout {
                 S.setName(obj.getJSONObject("professor").get("name").toString());
                 S.setSurname(obj.getJSONObject("professor").get("surname").toString());
                 students.add(S);
-                System.out.println(S.getCourse());
-                System.out.println(S.getCredits());
-                System.out.println(S.getName());
-                System.out.println(S.getSurname());
+                //System.out.println(S.getCourse());
+               // System.out.println(S.getCredits());
+               // System.out.println(S.getName());
+               // System.out.println(S.getSurname());
             } catch (Exception exc) {
                 System.out.println("exc");
             }
