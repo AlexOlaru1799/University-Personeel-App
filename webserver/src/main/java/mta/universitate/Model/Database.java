@@ -222,10 +222,8 @@ public class Database {
     }
 
     public Student get(Student S){
-        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId()));
-
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE ID = %d", S.getId())); //asta returneaza userul,nu student??
         try{
-
             Student to_return = new Student();
 
             rs.next();
@@ -245,6 +243,30 @@ public class Database {
         }
 
     }
+
+    public Student getStudentfromUser(int UserID){
+        //System.out.println(U.getId());
+        ResultSet rs = this.executeQuery(String.format("SELECT * FROM Students WHERE User_ID = %d", UserID)); //asta returneaza student din user
+        try{
+            Student to_return = new Student();
+
+            rs.next();
+
+            to_return.setId(rs.getInt("ID"));
+            to_return.setName(rs.getString("Name"));
+            to_return.setSurname(rs.getString("Surname"));
+            to_return.setIncome(rs.getInt("Pay"));
+            to_return.setUser(User.fromDB(rs.getInt("User_ID")));
+            to_return.setStudyGroup(StudyGroup.fromDB(rs.getInt("StudyGroup")));
+            to_return.setMajor(Major.fromDB(rs.getInt("Major")));
+            return to_return;
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+
+
     public Employee get(Employee E){
         ResultSet rs = this.executeQuery(String.format("SELECT * FROM Employees WHERE ID = %d", E.getId()));
 
@@ -825,25 +847,26 @@ public class Database {
         return null;
     }
 
-    public ArrayList<Schedule> getScheduleofGroups(String grupa){
+    public ArrayList<Schedule> getGroupSchedule(String grupa){
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
         try{
 
             ResultSet rs = executeQuery("" +
-                    "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
-                    "from Schedule as S\n" +
-                    "inner join Classrooms as CR\n" +
-                    "on CR.ID=S.Classroom\n" +
-                    "inner join Modules as MO\n" +
-                    "on MO.ID=S.Module\n" +
-                    "inner join Courses as C\n" +
-                    "on C.ID=MO.Course\n" +
-                    "inner join Employees as E\n" +
-                    "on E.ID=MO.Professor\n" +
-                    "inner join StudyGroups as SG\n" +
-                    "on SG.ID=S.StudyGroup\n" +
-                    "where SG.Name='" + grupa + "'"
+                    "SELECT S.ID AS S_ID, S.[[Time]]] AS S_Time,\n" +
+                    "SG.Name AS SG_Name, SG.StudyYear AS SG_StudyYear,\n" +
+                    "C.Name AS C_Name, C.Capacity AS C_Capacity,\n" +
+                    "M.Kind AS M_Kind,    \n" +
+                    "C2.Name AS C2_Name, C2.Credits AS C2_Credits,  \n" +
+                    "E.Name AS E_Name, E.Surname AS E_Surname   \n" +
+                    "FROM Schedule AS S   \n" +
+                    "INNER JOIN Modules AS M ON M.ID=S.Module   \n" +
+                    "INNER JOIN StudyGroups AS SG ON SG.ID=S.StudyGroup   \n" +
+                    "INNER JOIN Classrooms AS C ON C.ID=S.Classroom   \n" +
+                    "INNER JOIN Courses AS C2 ON M.Course=C2.ID   \n" +
+                    "INNER JOIN Employees AS E ON M.Professor=E.ID \n" +
+                    "INNER JOIN Employees AS E2 ON SG.Mentor=E2.ID "+
+                    "WHERE SG.Name='" + grupa + "'"
             );
 
 
@@ -1057,46 +1080,6 @@ public class Database {
     }
 
 
-
-
-    public ResultSet getTeacherSchedule(String nume, String prenume) throws SQLException, SQLServerException {
-        String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
-                "from Schedule as S\n" +
-                "inner join Classrooms as CR\n" +
-                "on CR.ID=S.Classroom\n" +
-                "inner join Modules as MO\n" +
-                "on MO.ID=S.Module\n" +
-                "inner join Courses as C\n" +
-                "on C.ID=MO.Course\n" +
-                "inner join Employees as E\n" +
-                "on E.ID=MO.Professor\n" +
-                "inner join StudyGroups as SG\n" +
-                "on SG.ID=S.StudyGroup\n" +
-                "inner join Positions as P\n" +
-                "on E.Position_ID=P.ID\n" +
-                "WHERE P.Description='Professor' and E.name='" + nume + "' and E.Surname='" + prenume + "'";
-
-
-        return executeQuery(query);
-    }
-
-    public ResultSet getGroupSchedule(String grupa) throws SQLException {
-      String query= "select S.Module, CR.Name as 'Sala', MO.Kind, C.Name, E.Name + ' ' + E.Surname as 'Profesor', SG.Name\n" +
-              "from Schedule as S\n" +
-              "inner join Classrooms as CR\n" +
-              "on CR.ID=S.Classroom\n" +
-              "inner join Modules as MO\n" +
-              "on MO.ID=S.Module\n" +
-              "inner join Courses as C\n" +
-              "on C.ID=MO.Course\n" +
-              "inner join Employees as E\n" +
-              "on E.ID=MO.Professor\n" +
-              "inner join StudyGroups as SG\n" +
-              "on SG.ID=S.StudyGroup\n" +
-              "where SG.Name='" + grupa + "'";
-
-      return executeQuery(query);
-    }
 
 
 }

@@ -55,7 +55,7 @@ public class RouteStudent {
      try
      {
          HashMap<String, Object> parameters = ParamsParser.parse(payload);
-         Student S = Student.fromDB(CookieManager.getInstance().validateCookie(C).getId());
+         Student S = Student.fromUser(CookieManager.getInstance().validateCookie(C));
          String initDate=parameters.get("date").toString();
 
          StringBuilder response=new StringBuilder();
@@ -72,8 +72,10 @@ public class RouteStudent {
          exc.printStackTrace();
      }
 
-     return "{'status' : 'FAILED'}";
+     return "{\"status\" : \"FAILED\"}";
  }
+
+
 
 
 
