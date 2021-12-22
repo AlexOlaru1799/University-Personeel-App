@@ -111,11 +111,11 @@ public class AddGrade extends VerticalLayout {
                 System.out.println(response);
 
                 if(response.get("status").equals("SUCCESS")) {
-                    Notification.show("Grade: " + grade + "on date: " + date + "for student: " + name +
+                    Notification.show("Grade: " + grade + " on date: " + date + " for student: " + name +
                             surname + "at course: " + course + " has been added");
                 }
                 else {
-                    Notification.show("Failed :(");
+                    Notification.show("You don't have permission to add grade at this subject! :(");
                 }
             }
             else
