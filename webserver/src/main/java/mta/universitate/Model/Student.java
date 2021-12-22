@@ -124,7 +124,7 @@ public class Student extends JsonParser {
             String dateDB = schedules.get(i).getDate().toString();
 
             if(dateDB.equals(initDate)) {
-                if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                if (schedules.get(i).getStudy_group().getName().equals(this.getStudyGroup().getName())) {
                     schedulesforReturn.add(schedules.get(i));
                 }
             }
