@@ -59,12 +59,12 @@ public class SubjectStatistics extends VerticalLayout {
         setPadding(true);
         setSpacing(true);
 
-        VerticalLayout layout = createLayout("Show number of students who failed on a subject");
+        VerticalLayout layout = createLayout("Number of students who failed this exam");
         layout.setPadding(true);
         layout.add(subject, showSubjects);
 
         TextArea textArea = new TextArea();
-        textArea.setLabel("Number of outstanding students:");
+        textArea.setLabel("Number of outstanding students: ");
         textArea.setWidth("250px");
         textArea.isReadOnly();
         textArea.setHeight("65px");
@@ -93,7 +93,7 @@ public class SubjectStatistics extends VerticalLayout {
                 }
                 else
                 {
-                    Notification.show("Failed :(");
+                    Notification.show("No one failed :(");
                 }
             }
             else
@@ -102,7 +102,6 @@ public class SubjectStatistics extends VerticalLayout {
             }
         });
     }
-
 
     private VerticalLayout createLayout(String caption) {
         VerticalLayout hl = new VerticalLayout();

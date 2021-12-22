@@ -74,12 +74,14 @@ public class GradesStudent extends VerticalLayout {
                     String[] set = null;
                     String c = objClasses.get(i).toString();
                     set = c.split("=");
-                    String materie_name_cality = set[3].split(",")[0];
-                    set = set[1].split(",");
-                    grades.add(set[0]);
+                    String nota = set[2].split(",")[0];
+                    String materie_name_cality = set[4].split(",")[0];
+                    grades.add(nota);
                     courseName.add(materie_name_cality);
-                }
+                    System.out.println(nota);
 
+                    System.out.println(materie_name_cality);
+                }
 
                 String gradesMaterii = "";
                 for(int i = 0;i < grades.size(); i++)
@@ -96,7 +98,7 @@ public class GradesStudent extends VerticalLayout {
                     if(response.get("result") != null ) {
                         textArea.setValue(gradesMaterii);
                     }
-                    Notification.show("Outstanding succes!");
+                    Notification.show("View Grades succes!");
                 }
                 else
                 {

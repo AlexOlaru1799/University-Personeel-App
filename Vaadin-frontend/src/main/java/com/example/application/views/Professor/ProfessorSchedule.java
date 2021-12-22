@@ -34,12 +34,10 @@ public class ProfessorSchedule extends VerticalLayout {
         setPadding(true);
         setSpacing(true);
 
-        add(new H2("Show professor schedule. What days you want?"));
+        add(new H2("Show professor schedule. What day you want?"));
 
-        DatePicker initialDate = new DatePicker("Start date");
+        DatePicker initialDate = new DatePicker("Enter your date");
         add(initialDate);
-
-
 
         VerticalLayout layout = createLayout("Professor Schedule");
         layout.setPadding(true);
@@ -84,6 +82,7 @@ public class ProfessorSchedule extends VerticalLayout {
                 ArrayList<String> courseName = new ArrayList<String>(objClasses.size());
                 ArrayList<String> studyGroup = new ArrayList<String>(objClasses.size());
                 ArrayList<String> classroom = new ArrayList<String>(objClasses.size());
+                ArrayList<String> time = new ArrayList<String>(objClasses.size());
 
                 for (int i = 0; i < objClasses.size(); i++) {
                     String[] set = null;
@@ -94,18 +93,20 @@ public class ProfessorSchedule extends VerticalLayout {
                     String materie = set[14].split(",")[0];
                     String grupa = set[5].split(",")[0];
                     String clasa = set[9].split(",")[0];
-                    set = set[1].split(",");
+                    String ora = set[3].split(",")[0];
                     name.add(nume);
                     surname.add(prenume);
                     courseName.add(materie);
                     studyGroup.add(grupa);
                     classroom.add(clasa);
+                    time.add(ora);
 
                     System.out.println(nume);
                     System.out.println(prenume);
                     System.out.println(materie);
                     System.out.println(grupa);
                     System.out.println(clasa);
+                    System.out.println(ora);
                 }
 
                 String scheduleFinal = "";
@@ -120,6 +121,8 @@ public class ProfessorSchedule extends VerticalLayout {
                     scheduleFinal += courseName.get(i);
                     scheduleFinal += "\t";
                     scheduleFinal += classroom.get(i);
+                    scheduleFinal += "\t";
+                    scheduleFinal += time.get(i);
                     scheduleFinal += "\n";
                 }
 

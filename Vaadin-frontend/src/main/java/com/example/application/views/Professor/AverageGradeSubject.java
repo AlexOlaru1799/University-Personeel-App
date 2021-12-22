@@ -90,7 +90,7 @@ public class AverageGradeSubject extends VerticalLayout {
                 }
                 else
                 {
-                    Notification.show("Failed :(");
+                    Notification.show("No one has graded at this subject :(");
                 }
             }
             else

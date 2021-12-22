@@ -1139,6 +1139,8 @@ public class Database {
         rs.next();
         return rs.getInt("ID");
     }
+<<<<<<< HEAD
+=======
     public int getRequestTypeID(String reqType) throws SQLException, SQLServerException {
         ResultSet rs = this.executeQuery(String.format("SELECT ID FROM RequestTypes WHERE Kind = '%s'", reqType));
         rs.next();
@@ -1146,5 +1148,6 @@ public class Database {
     }
 
 
+>>>>>>> master
 
 }
