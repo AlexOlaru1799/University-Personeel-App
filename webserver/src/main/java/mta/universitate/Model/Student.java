@@ -124,11 +124,52 @@ public class Student extends JsonParser {
             String dateDB = schedules.get(i).getDate().toString();
 
             if(dateDB.equals(initDate)) {
-                if (schedules.get(i).getModule().getProfessor().getName().equals(name) && schedules.get(i).getModule().getProfessor().getSurname().equals(surname)) {
+                if (schedules.get(i).getStudy_group().getName().equals(this.getStudyGroup().getName())) {
                     schedulesforReturn.add(schedules.get(i));
                 }
             }
         }
         return schedulesforReturn;
+    }
+
+    public ArrayList getGradesForStudent(String courseName) throws SQLException
+    {
+        Database db = Database.getInstance();
+
+        ArrayList<Grade> gradesfromDB = db.getAllGrades();
+
+        ArrayList<Grade> gradesforStudent=new ArrayList<>();
+
+
+        for(Grade g :gradesfromDB)
+        {
+            if(g.getStudent().getSurname().equals(this.getSurname())&& g.getStudent().getName().equals(this.getName())  && g.getCourse().getName().equals(courseName) )
+            {
+                g.setDate(null);
+                gradesforStudent.add(g);
+            }
+        }
+        return gradesforStudent;
+    }
+
+
+    public boolean createRequest(String type,String supervizorName,String supervizerSurname)
+    {
+        try
+        {
+            Database db = Database.getInstance();
+            Request req=new Request();
+            req.setIssuer(this.user);
+            req.setKind(RequestType.fromDB(db.getRequestTypeID(type)));
+            req.setApproved(false);
+            req.setSupervisor(Employee.fromDB(db.getEmployeeID(supervizorName,supervizerSurname)));
+            long millis=System.currentTimeMillis();
+            java.sql.Date date=new java.sql.Date(millis);
+            req.setDate(date);
+            if(db.add(req))
+                return true;
+        }
+        catch(Exception exc){ exc.printStackTrace(); }
+        return false;
     }
 }

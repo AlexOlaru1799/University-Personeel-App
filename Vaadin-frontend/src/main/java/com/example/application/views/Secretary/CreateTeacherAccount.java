@@ -44,8 +44,8 @@ public class CreateTeacherAccount extends VerticalLayout {
         password.setWidth("500px");
 
         Select<String> role = new Select<String>();
-        role.setLabel("Employee Role");
-        role.setItems("Administrator", "Secretary", "Professor", "Mentor","Janitor");
+        role.setLabel("Professor Role");
+        role.setItems("Administrator", "Secretary", "Professor", "Mentor");
         role.setValue("Professor");
         role.setWidth("500px");
 
